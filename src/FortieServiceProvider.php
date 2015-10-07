@@ -27,6 +27,10 @@ class FortieServiceProvider extends ServiceProvider
   public function boot()
   {
     //$this->package('wetcat/fortie');
+
+    $this->publishes([
+      __DIR__.'/config/config.php' => config_path('fortie.php'),
+    ]);
   }
 
   /**
@@ -36,6 +40,10 @@ class FortieServiceProvider extends ServiceProvider
    */
   public function register()
   {
+    $this->mergeConfigFrom(
+      __DIR__.'/config/config.php', 'fortie'
+    );
+
     $this->registerAccountProvider();
     
     $this->registerCommands();
@@ -82,12 +90,14 @@ class FortieServiceProvider extends ServiceProvider
       $endpoint       = Config::get('fortie.default.endpoint', Config::get('fortie::default.endpoint'));
 
       $client = new \GuzzleHttp\Client([
-        'headers' => [
+        'base_uri'  => $endpoint,
+        'headers'   => [
           'Access-Token'  => $access_token,
           'Client-Secret' => $client_secret,
           'Content-Type'  => $content_type,
           'Accept'        => $accepts
-        ]
+        ],
+        'timeout'   => 3.0,
       ]);
 
       return new Fortie(

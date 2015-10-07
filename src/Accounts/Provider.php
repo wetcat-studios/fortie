@@ -1,10 +1,10 @@
 <?php namespace Wetcat\Fortie\Accounts;
 
 
-use Wetcat\Fortie\ProviderInterface;
+use Wetcat\Fortie\ProviderBase;
 
 
-class Provider implements ProviderInterface {
+class Provider extends ProviderBase {
 
 
   protected $attributes = [
@@ -26,46 +26,10 @@ class Provider implements ProviderInterface {
   ];
 
 
-  protected $hidden = [
-  ];
-
-  protected $client = null;
-
-  protected $url = '';
-
   /**
-   * Create a new account provider.
-   *
-   * @return void
+   * Override the 
    */
-  public function __construct(&$client)
-  {
-    $this->client = $client;
-  }
-
-  public function sendRequest ($method = 'GET')
-  {
-    $request = $this->client->createRequest($method, 'https://api.fortnox.se/3/accounts/1010');
-
-    try {
-        $request->addHeaders([
-            'Access-Token'=>'61cf63ae-4ab9-4a95-9db5-753781c4f41f',
-            'Client-Secret'=>'3Er4kHXZTJ',
-            'Content-Type'=>'application/json',
-            'Accept'=>'application/json',
-        ]);
-
-        $response = $client->send($request);
-        echo "Response HTTP : " . $response->getStatusCode();
-    }
-    catch (RequestException $e) {
-        echo "HTTP Request failed\n";
-        echo $e->getRequest();
-        if ($e->hasResponse()) {
-            echo $e->getResponse();
-        }
-    }
-  }
+  protected $path = 'accounts';
 
 
   /**
@@ -76,7 +40,17 @@ class Provider implements ProviderInterface {
    */
   public function listAllAccounts ()
   {
+    try {
+      $response = $this->client->get($this->path);
 
+      return $this->handleResponse($response);
+    }
+    catch (\GuzzleHttp\Exception\ClientException $e) {
+      $response = $e->getResponse();
+      $responseBodyAsString = $response->getBody()->getContents();
+      echo $responseBodyAsString;
+    }
+    //
   }
 
 
