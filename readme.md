@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/wetcat-studios/fortie.svg)](https://travis-ci.org/wetcat-studios/fortie)
+
 # Fortie
 
 A simple [Fortnox](https://www.fortnox.se/) PHP package, including Laravel Service Providers.
