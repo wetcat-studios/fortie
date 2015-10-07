@@ -2,6 +2,8 @@
 
 use Illuminate\Support\ServiceProvider;
 
+use Wetcat\Fortie\Config;
+
 use Wetcat\Fortie\Accounts\Provider as AccountsProvider;
 
 class FortieServiceProvider extends ServiceProvider
@@ -24,7 +26,7 @@ class FortieServiceProvider extends ServiceProvider
    */
   public function boot()
   {
-    $this->package('wetcat/fortie');
+    //$this->package('wetcat/fortie');
   }
 
   /**
@@ -37,12 +39,21 @@ class FortieServiceProvider extends ServiceProvider
     $this->registerAccountProvider();
     
     $this->registerCommands();
-    
+
+    $this->registerFortie();
+
+/*
     $this->app->booting(function()
     {
       $loader = \Illuminate\Foundation\AliasLoader::getInstance();
       $loader->alias('Fortie', 'Wetcat\Fortie\Facades\Fortie');
     });
+*/
+/*
+    $this->app->singleton('Wetcat\Fortie\Fortie', function ($app) {
+        return new Fortie(config('riak'));
+    });
+*/
   }
 
   /**
@@ -62,14 +73,14 @@ class FortieServiceProvider extends ServiceProvider
    */
   protected function registerFortie()
   {
-    $this->app['fortie'] = $this->app->share(function($app)
-    {
+    $this->app->singleton('Wetcat\Fortie\Fortie', function ($app) 
+    {  
       $access_token   = Config::get('fortie.default.access_token', Config::get('fortie::default.access_token'));
       $client_secret  = Config::get('fortie.default.client_secret', Config::get('fortie::default.client_secret'));
       $content_type   = Config::get('fortie.default.content_type', Config::get('fortie::default.content_type'));
       $accepts        = Config::get('fortie.default.accepts', Config::get('fortie::default.accepts'));
       $endpoint       = Config::get('fortie.default.endpoint', Config::get('fortie::default.endpoint'));
-    
+
       $client = new GuzzleHttp\Client();
 
       // Set all headers
@@ -93,10 +104,12 @@ class FortieServiceProvider extends ServiceProvider
    */
   protected function registerAccountProvider()
   {
+/*
     $this->app['fortie.accounts'] = $this->app->share(function ($app)
     {
       return new AccountsProvider();
     });
+*/
   }
 
   protected function registerCommands()
