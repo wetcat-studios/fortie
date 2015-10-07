@@ -1,0 +1,23 @@
+{
+  "name": "wetcat/fortnox",
+  "description": "Enable simple Fortnox integration",
+  "license": "MIT",
+  "keywords": ["fortie", "Fortnox"],
+  "authors": [
+    {
+      "name": "Andreas Göransson",
+      "email": "andreasgoransson0@gmail.com"
+    }
+  ],
+  "require": {
+    "guzzlehttp/guzzle": "~6.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.0.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Wetcat\\Fortie\\": "src"
+    }
+  }
+}
