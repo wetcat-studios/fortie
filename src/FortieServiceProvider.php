@@ -2,7 +2,7 @@
 
 use Illuminate\Support\ServiceProvider;
 
-use Wetcat\Fortie\Config;
+use Config;
 
 use Wetcat\Fortie\Accounts\Provider as AccountsProvider;
 
@@ -81,14 +81,13 @@ class FortieServiceProvider extends ServiceProvider
       $accepts        = Config::get('fortie.default.accepts', Config::get('fortie::default.accepts'));
       $endpoint       = Config::get('fortie.default.endpoint', Config::get('fortie::default.endpoint'));
 
-      $client = new GuzzleHttp\Client();
-
-      // Set all headers
-      $client->setDefaultOption('headers', [
-        'Access-Token'  => $access_token,
-        'Client-Secret' => $client_secret,
-        'Content-Type'  => $content_type,
-        'Accept'        => $accepts
+      $client = new \GuzzleHttp\Client([
+        'headers' => [
+          'Access-Token'  => $access_token,
+          'Client-Secret' => $client_secret,
+          'Content-Type'  => $content_type,
+          'Accept'        => $accepts
+        ]
       ]);
 
       return new Fortie(
