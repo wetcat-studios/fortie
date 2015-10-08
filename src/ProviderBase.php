@@ -13,19 +13,29 @@ class ProviderBase
   /**
    * The base path for the Provider, defaults to 'accounts'.
    */
-  protected $path = 'accounts';
+  protected $path = null;
 
 
   /**
-   * List of allowed attributes in the provider, any other
-   * attributes will be filtered. Defaults to empty.
+   * List of readable attributes.
    */
-  protected $attributes = [];
+  protected $attributes = [
+  ];
 
 
   /**
-   *
+   * The writeable attributes.
    */
+  protected $writeable = [
+  ];
+
+
+  /**
+   * The minimum required attributes for a write request.
+   */
+  protected $required = [
+  ];
+
 
   /**
    * Create a new provider instance, pass the Guzzle client
@@ -51,39 +61,84 @@ class ProviderBase
       }
 
       else if (in_array('application/xml', $content_type)) {
-        return $response->getBody();
+        $reader = new \Sabre\Xml\Reader();
+        $reader->xml($response->getBody());
+        return $reader->parse();
       } 
   }
 
-
-  public function sendRequest ($method = 'GET', $params = [])
+  /**
+   * Send a HTTP request to Fortnox.
+   */
+  public function sendRequest ($method = 'GET', $paths = null, $bodyWrapper = null, $params = null)
   {
     // Start building the URL
-//    $URL = 'https://api.fortnox.se/3/' . $this->path . '/';
+    $URL = 'https://api.fortnox.se/3/' . $this->path . '/';
     // Add the extra paths, if there are any
-    if (count($params) > 0) {
-      foreach ($params as $param) {
-        $URL .= $param . '/';
+    if (!is_null($paths)) {
+      // If array, add all paths
+      if (is_array($paths)) {
+        foreach ($paths as $path) {
+          $URL .= $path . '/';
+        }
+      }
+      // Otherwise, add just the first
+      else {
+        $URL .= $paths . '/';
       }
     }
 
+    $response = null;
+
     try {
-        //$request = $this->client->request($method, $URL, []);
-
-        $response = $this->client->request($method, $this->path);
-
-
-        //$response = $client->send($request);
-        echo "Response HTTP : " . $response->getStatusCode();
+      switch ($method) {
+        case 'get':
+        case 'GET':
+          $response = $this->client->get($URL);
+          break;
+        
+        case 'post':
+        case 'POST':
+          $body = $this->handleParams($bodyWrapper, $params);
+          if (is_array($body)) {
+            $response = $this->client->request($method, $URL, $body);
+          } else {
+            return 'ERROR!';
+          }
+          break;
+      }
+      
+      return $this->handleResponse($response);
     }
-    catch (RequestException $e) {
-      return "ERROR!";
-        echo "HTTP Request failed\n";
-        echo $e->getRequest();
-        if ($e->hasResponse()) {
-            echo $e->getResponse();
-        }
+    catch (\GuzzleHttp\Exception\ClientException $e) {
+      $response = $e->getResponse();
+      $responseBodyAsString = $response->getBody()->getContents();
+      echo $responseBodyAsString;
     }
+  }
+
+
+  /**
+   * This will perform filtering on the supplied parameters, used
+   * when uploading data to Fortnox.
+   */
+  protected function handleParams ($bodyWrapper, $params)
+  {
+    // Filter invalid params
+    $filtered = array_intersect_key($params, array_flip($this->attributes));;
+
+    // Filter non-writeable params
+    $writeable = array_intersect_key($filtered, array_flip($this->writeable));
+
+    // Make sure all required params are set
+    if (count(array_intersect_key(array_flip($this->required), $writeable)) === count($this->required)) {
+      $body = [
+        $bodyWrapper => $writeable
+      ];
+      return $body;
+    }
+
+    return false;
   }
 
 }

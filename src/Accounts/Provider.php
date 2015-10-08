@@ -8,23 +8,42 @@ class Provider extends ProviderBase {
 
 
   protected $attributes = [
-    'url', 
-    'active', 
-    'balanceBroughtForward', 
-    'balanceCarriedForward',
-    'costCenter', 
-    'costCenterSettings', 
-    'description', 
-    'number',
-    'project', 
-    'projectSettings', 
-    'sru', 
-    'transactionInformation',
-    'transactionInformationSettings', 
-    'vatCode', 
-    'year',
+    'Url',
+    'Active',
+    'BalanceBroughtForward',
+    'BalanceCarriedForward',
+    'CostCenter',
+    'CostCenterSettings',
+    'Description',
+    'Number',
+    'Project',
+    'ProjectSettings',
+    'SRU',
+    'TransactionInformation',
+    'TransactionInformationSettings',
+    'VATCode',
+    'Year',
   ];
 
+  protected $writeable = [
+    'Active',
+    'BalanceBroughtForward',
+    'CostCenter',
+    'CostCenterSettings',
+    'Description',
+    'Number',
+    'Project',
+    'ProjectSettings',
+    'SRU',
+    'TransactionInformation',
+    'TransactionInformationSettings',
+    'VATCode',
+  ];
+
+  protected $required = [
+    'Description', 
+    'Number',
+  ];
 
   /**
    * Override the 
@@ -40,17 +59,7 @@ class Provider extends ProviderBase {
    */
   public function listAllAccounts ()
   {
-    try {
-      $response = $this->client->get($this->path);
-
-      return $this->handleResponse($response);
-    }
-    catch (\GuzzleHttp\Exception\ClientException $e) {
-      $response = $e->getResponse();
-      $responseBodyAsString = $response->getBody()->getContents();
-      echo $responseBodyAsString;
-    }
-    //
+    return $this->sendRequest('GET');
   }
 
 
@@ -59,12 +68,12 @@ class Provider extends ProviderBase {
    * account number that was returned when the account was created or 
    * retrieved from the list of accounts.
    *
-   * @param array   $params
+   * @param $id
    * @return array
    */
-  public function retrieveAccount(array $params)
+  public function retrieveAccount($id)
   {
-
+    return $this->sendRequest('GET', $id);
   }
 
 
@@ -77,7 +86,7 @@ class Provider extends ProviderBase {
    */
   public function createAccount(array $params)
   {
-
+    return $this->sendRequest('POST', '', 'Account', $params);
   }
 
 
@@ -93,7 +102,7 @@ class Provider extends ProviderBase {
    */
   public function updateAccount (array $params)
   {
-
+    return $this->sendRequest('PUT', null, $params);
   }
 
 
