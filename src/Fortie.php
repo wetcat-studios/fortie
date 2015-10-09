@@ -50,4 +50,14 @@ class Fortie
     return $this->articleProvider;
   }
 
+  /**
+   * Get the articles provider.
+   *
+   * @return ArticleProvider
+   */
+  public function companySettings ()
+  {
+    return $this->companySettingsProvider;
+  }
+
 }
