@@ -46,7 +46,7 @@ class Provider extends ProviderBase {
   ];
 
   /**
-   * Override the 
+   * Override the REST path
    */
   protected $path = 'accounts';
 

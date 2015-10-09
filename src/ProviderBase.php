@@ -14,7 +14,7 @@ class ProviderBase
 
 
   /**
-   * The base path for the Provider, defaults to 'accounts'.
+   * The base path for the Provider.
    */
   protected $path = null;
 
