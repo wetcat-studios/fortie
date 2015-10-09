@@ -4,6 +4,7 @@
 use Wetcat\Fortie\Accounts\Provider as AccountProvider;
 use Wetcat\Fortie\Articles\Provider as ArticleProvider;
 use Wetcat\Fortie\CompanySettings\Provider as CompanySettingsProvider;
+use Wetcat\Fortie\Invoice\Provider as InvoiceProvider;
 
 
 class Fortie
@@ -13,6 +14,7 @@ class Fortie
   protected $accountProvider;
   protected $articleProvider;
   protected $companySettingsProvider;
+  protected $invoiceProvider;
 
 
   /**
@@ -26,6 +28,7 @@ class Fortie
     $this->accountProvider = $accountProvider ?: new AccountProvider;
     $this->articleProvider = $articleProvider ?: new ArticleProvider;
     $this->companySettingsProvider = $companySettingsProvider ?: new CompanySettingsProvider;
+    $this->invoiceProvider = $invoiceProvider ?: new InvoiceProvider;
   }
 
 
@@ -58,6 +61,17 @@ class Fortie
   public function companySettings ()
   {
     return $this->companySettingsProvider;
+  }
+
+
+  /**
+   * Get the invoice provider.
+   *
+   * @return InvoiceProvider
+   */
+  public function invoices ()
+  {
+    return $this->invoiceProvider;
   }
 
 }

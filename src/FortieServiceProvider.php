@@ -7,6 +7,7 @@ use Config;
 use Wetcat\Fortie\Accounts\Provider as AccountsProvider;
 use Wetcat\Fortie\Articles\Provider as ArticlesProvider;
 use Wetcat\Fortie\CompanySettings\Provider as CompanySettingsProvider;
+use Wetcat\Fortie\Invoices\Provider as InvoiceProvider;
 
 class FortieServiceProvider extends ServiceProvider
 {
@@ -90,7 +91,8 @@ class FortieServiceProvider extends ServiceProvider
       return new Fortie(
         new AccountsProvider($client),
         new ArticlesProvider($client),
-        new CompanySettingsProvider($client)
+        new CompanySettingsProvider($client),
+        new InvoiceProvider($client)
       );
     });
   }
