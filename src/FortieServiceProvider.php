@@ -45,25 +45,10 @@ class FortieServiceProvider extends ServiceProvider
     $this->mergeConfigFrom(
       __DIR__.'/config/config.php', 'fortie'
     );
-
-    $this->registerAccountProvider();
     
     $this->registerCommands();
 
     $this->registerFortie();
-
-/*
-    $this->app->booting(function()
-    {
-      $loader = \Illuminate\Foundation\AliasLoader::getInstance();
-      $loader->alias('Fortie', 'Wetcat\Fortie\Facades\Fortie');
-    });
-*/
-/*
-    $this->app->singleton('Wetcat\Fortie\Fortie', function ($app) {
-        return new Fortie(config('riak'));
-    });
-*/
   }
 
   /**
