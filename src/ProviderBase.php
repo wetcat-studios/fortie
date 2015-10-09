@@ -1,6 +1,9 @@
 <?php namespace Wetcat\Fortie;
 
 
+use Wetcat\Fortie\MissingRequiredAttributeException;
+
+
 class ProviderBase
 {
 
@@ -56,15 +59,15 @@ class ProviderBase
   {
     $content_type = $response->getHeader('Content-Type');
 
-      if (in_array('application/json', $content_type)) {
-        return json_decode($response->getBody());
-      }
+    if (in_array('application/json', $content_type)) {
+      return json_decode($response->getBody());
+    }
 
-      else if (in_array('application/xml', $content_type)) {
-        $reader = new \Sabre\Xml\Reader();
-        $reader->xml($response->getBody());
-        return $reader->parse();
-      } 
+    else if (in_array('application/xml', $content_type)) {
+      $reader = new \Sabre\Xml\Reader();
+      $reader->xml($response->getBody());
+      return $reader->parse();
+    }
   }
 
   /**
@@ -101,13 +104,11 @@ class ProviderBase
         case 'POST':
           $body = $this->handleParams($bodyWrapper, $params);
           if (is_array($body)) {
-            $response = $this->client->request($method, $URL, $body);
-          } else {
-            return 'ERROR!';
+            $response = $this->client->post($URL, ['json' => $body,]);
           }
           break;
       }
-      
+
       return $this->handleResponse($response);
     }
     catch (\GuzzleHttp\Exception\ClientException $e) {
@@ -122,7 +123,7 @@ class ProviderBase
    * This will perform filtering on the supplied parameters, used
    * when uploading data to Fortnox.
    */
-  protected function handleParams ($bodyWrapper, $params)
+  protected function handleParams ($bodyWrapper, $params, $sanitize = true)
   {
     // Filter invalid params
     $filtered = array_intersect_key($params, array_flip($this->attributes));;
@@ -131,14 +132,24 @@ class ProviderBase
     $writeable = array_intersect_key($filtered, array_flip($this->writeable));
 
     // Make sure all required params are set
-    if (count(array_intersect_key(array_flip($this->required), $writeable)) === count($this->required)) {
-      $body = [
-        $bodyWrapper => $writeable
-      ];
-      return $body;
+    if (! count(array_intersect_key(array_flip($this->required), $writeable)) === count($this->required)) {
+      throw new MissingRequiredAttributeException;
     }
 
-    return false;
+    // Sanitize input (See: http://guzzle3.readthedocs.org/http-client/request.html#post-requests)
+    if ($sanitize) {
+      foreach ($writeable as $key => $value) {
+        $value = str_replace('@', '', $value);
+      }
+    }
+
+    // Wrap the body as required by Fortnox
+    $body = [
+      $bodyWrapper => $writeable
+    ];
+
+    print_r($body);
+    return $body;
   }
 
 }
