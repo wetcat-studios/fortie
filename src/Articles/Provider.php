@@ -110,7 +110,7 @@ class Provider extends ProviderBase {
    * @param $id
    * @return array
    */
-  public function retrieveArticle($id)
+  public function retrieveArticle ($id)
   {
     return $this->sendRequest('GET', $id);
   }
@@ -123,7 +123,7 @@ class Provider extends ProviderBase {
    * @param array   $params
    * @return array
    */
-  public function createArticle(array $params)
+  public function createArticle (array $params)
   {
     return $this->sendRequest('POST', null, 'Article', $params);
   }

@@ -4,7 +4,8 @@
 use Wetcat\Fortie\Accounts\Provider as AccountProvider;
 use Wetcat\Fortie\Articles\Provider as ArticleProvider;
 use Wetcat\Fortie\CompanySettings\Provider as CompanySettingsProvider;
-use Wetcat\Fortie\Invoice\Provider as InvoiceProvider;
+use Wetcat\Fortie\Invoices\Provider as InvoiceProvider;
+use Wetcat\Fortie\Customers\Provider as CustomerProvider;
 
 
 class Fortie
@@ -15,6 +16,7 @@ class Fortie
   protected $articleProvider;
   protected $companySettingsProvider;
   protected $invoiceProvider;
+  protected $customerProvider;
 
 
   /**
@@ -23,12 +25,15 @@ class Fortie
   public function __construct(
     AccountProvider $accountProvider = null,
     ArticleProvider $articleProvider = null,
-    CompanySettingsProvider $companySettingsProvider = null
+    CompanySettingsProvider $companySettingsProvider = null,
+    InvoiceProvider $invoiceProvider = null,
+    CustomerProvider $customerProvider = null
   ) {
     $this->accountProvider = $accountProvider ?: new AccountProvider;
     $this->articleProvider = $articleProvider ?: new ArticleProvider;
     $this->companySettingsProvider = $companySettingsProvider ?: new CompanySettingsProvider;
     $this->invoiceProvider = $invoiceProvider ?: new InvoiceProvider;
+    $this->customerProvider = $customerProvider ?: new CustomerProvider;
   }
 
 
@@ -54,9 +59,9 @@ class Fortie
   }
 
   /**
-   * Get the articles provider.
+   * Get the company settings provider.
    *
-   * @return ArticleProvider
+   * @return CompanySettingsProvider
    */
   public function companySettings ()
   {
@@ -72,6 +77,17 @@ class Fortie
   public function invoices ()
   {
     return $this->invoiceProvider;
+  }
+
+
+  /**
+   * Get the customer provider.
+   *
+   * @return CustomerProvider
+   */
+  public function customers ()
+  {
+    return $this->customerProvider;
   }
 
 }

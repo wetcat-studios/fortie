@@ -71,7 +71,7 @@ class Provider extends ProviderBase {
    * @param $id
    * @return array
    */
-  public function retrieveAccount($id)
+  public function retrieveAccount ($id)
   {
     return $this->sendRequest('GET', $id);
   }
@@ -84,7 +84,7 @@ class Provider extends ProviderBase {
    * @param array   $params
    * @return array
    */
-  public function createAccount(array $params)
+  public function createAccount (array $params)
   {
     return $this->sendRequest('POST', null, 'Account', $params);
   }
