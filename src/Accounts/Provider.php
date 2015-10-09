@@ -86,7 +86,7 @@ class Provider extends ProviderBase {
    */
   public function createAccount(array $params)
   {
-    return $this->sendRequest('POST', '', 'Account', $params);
+    return $this->sendRequest('POST', null, 'Account', $params);
   }
 
 
@@ -100,9 +100,9 @@ class Provider extends ProviderBase {
    * @param array   $params
    * @return array
    */
-  public function updateAccount (array $params)
+  public function updateAccount ($id, array $params)
   {
-    return $this->sendRequest('PUT', null, $params);
+    return $this->sendRequest('PUT', $id, 'Account', $params);
   }
 
 

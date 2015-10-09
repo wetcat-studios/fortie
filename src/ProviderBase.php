@@ -104,9 +104,16 @@ class ProviderBase
         case 'POST':
           $body = $this->handleParams($bodyWrapper, $params);
           if (is_array($body)) {
-            $response = $this->client->post($URL, ['json' => $body,]);
+            $response = $this->client->post($URL, ['json' => $body]);
           }
           break;
+
+        case 'put':
+        case 'PUT':
+          $body = $this->handleParams($bodyWrapper, $params);
+          if (is_array($body)) {
+            $response = $this->client->put($URL, ['json' => $body]);
+          }
       }
 
       return $this->handleResponse($response);
