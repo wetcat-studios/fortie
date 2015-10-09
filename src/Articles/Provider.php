@@ -1,4 +1,4 @@
-<?php namespace Wetcat\Fortie\Accounts;
+<?php namespace Wetcat\Fortie\Articles;
 
 
 use Wetcat\Fortie\ProviderBase;
@@ -125,7 +125,7 @@ class Provider extends ProviderBase {
    */
   public function createArticle(array $params)
   {
-    return $this->sendRequest('POST', null, 'Account', $params);
+    return $this->sendRequest('POST', null, 'Article', $params);
   }
 
 
@@ -144,7 +144,7 @@ class Provider extends ProviderBase {
    */
   public function updateArticle ($id, array $params)
   {
-    return $this->sendRequest('PUT', $id, 'Account', $params);
+    return $this->sendRequest('PUT', $id, 'Article', $params);
   }
 
   /**

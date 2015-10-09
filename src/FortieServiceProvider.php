@@ -5,6 +5,7 @@ use Illuminate\Support\ServiceProvider;
 use Config;
 
 use Wetcat\Fortie\Accounts\Provider as AccountsProvider;
+use Wetcat\Fortie\Articles\Provider as ArticlesProvider;
 
 class FortieServiceProvider extends ServiceProvider
 {
@@ -101,7 +102,8 @@ class FortieServiceProvider extends ServiceProvider
       ]);
 
       return new Fortie(
-        new AccountsProvider($client)
+        new AccountsProvider($client),
+        new ArticlesProvider($client)
       );
     });
   }
