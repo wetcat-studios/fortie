@@ -3,6 +3,7 @@
 
 use Wetcat\Fortie\Accounts\Provider as AccountProvider;
 use Wetcat\Fortie\Articles\Provider as ArticleProvider;
+use Wetcat\Fortie\CompanySettings\Provider as CompanySettingsProvider;
 
 
 class Fortie
@@ -11,6 +12,7 @@ class Fortie
 
   protected $accountProvider;
   protected $articleProvider;
+  protected $companySettingsProvider;
 
 
   /**
@@ -18,10 +20,12 @@ class Fortie
    */
   public function __construct(
     AccountProvider $accountProvider = null,
-    ArticleProvider $articleProvider = null
+    ArticleProvider $articleProvider = null,
+    CompanySettingsProvider $companySettingsProvider = null
   ) {
     $this->accountProvider = $accountProvider ?: new AccountProvider;
     $this->articleProvider = $articleProvider ?: new ArticleProvider;
+    $this->companySettingsProvider = $companySettingsProvider ?: new CompanySettingsProvider;
   }
 
 
@@ -35,6 +39,7 @@ class Fortie
     return $this->accountProvider;
   }
 
+
   /**
    * Get the articles provider.
    *
@@ -44,6 +49,5 @@ class Fortie
   {
     return $this->articleProvider;
   }
-
 
 }

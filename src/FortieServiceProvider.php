@@ -6,6 +6,7 @@ use Config;
 
 use Wetcat\Fortie\Accounts\Provider as AccountsProvider;
 use Wetcat\Fortie\Articles\Provider as ArticlesProvider;
+use Wetcat\Fortie\CompanySettings\Provider as CompanySettingsProvider;
 
 class FortieServiceProvider extends ServiceProvider
 {
@@ -103,24 +104,10 @@ class FortieServiceProvider extends ServiceProvider
 
       return new Fortie(
         new AccountsProvider($client),
-        new ArticlesProvider($client)
+        new ArticlesProvider($client),
+        new CompanySettingsProvider($client)
       );
     });
-  }
-
-  /**
-   * Register the accounts provider used by Fortie.
-   *
-   * @return void
-   */
-  protected function registerAccountProvider()
-  {
-/*
-    $this->app['fortie.accounts'] = $this->app->share(function ($app)
-    {
-      return new AccountsProvider();
-    });
-*/
   }
 
   protected function registerCommands()
