@@ -87,6 +87,7 @@ For details on the usage of all providers you should consult [the Wiki](https://
 * Price lists
 * Prices
 * Projects
+* Suppliers
 
 #### Not implemented yet
 
@@ -110,7 +111,6 @@ For details on the usage of all providers you should consult [the Wiki](https://
 * Supplier Invoice File Connections
 * Supplier Invoice Payments
 * Supplier Invoices
-* Suppliers
 * Tax reductions
 * Terms of Deliveries
 * Terms of payments
@@ -129,7 +129,7 @@ This package is built with the following dependencies.
 
 ## License
 
-Copyright [2015] [Andreas Göransson]
+Copyright 2015 Andreas Göransson
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -1,4 +1,4 @@
-<?php namespace Wetcat\Fortie\Projects;
+<?php namespace Wetcat\Fortie\Units;
 
 /*
 
@@ -26,24 +26,13 @@ class Provider extends ProviderBase {
 
   protected $attributes = [
     'Url',
-    'Comments',
-    'ContactPerson',
+    'Code',
     'Description',
-    'EndDate',
-    'ProjectLeader',
-    'ProjectNumber',
-    'Status',
-    'StartDate',
   ];
 
   protected $writeable = [
-    'ContactPerson',
+    'Code',
     'Description',
-    'EndDate',
-    'ProjectLeader',
-    'ProjectNumber',
-    'Status',
-    'StartDate',
   ];
 
   protected $required = [
@@ -52,11 +41,11 @@ class Provider extends ProviderBase {
   /**
    * Override the REST path
    */
-  protected $path = 'projects';
+  protected $path = 'units';
 
 
   /**
-   * Retrieves a list of projects.
+   * Retrieves a list of units.
    *
    * @return array
    */
@@ -67,7 +56,7 @@ class Provider extends ProviderBase {
 
 
   /**
-   * Retrieves a single project.
+   * Retrieves a single unit.
    *
    * @param $id
    * @return array
@@ -79,31 +68,31 @@ class Provider extends ProviderBase {
 
 
   /**
-   * Creates a project.
+   * Creates a unit.
    *
    * @param array   $params
    * @return array
    */
   public function create (array $params)
   {
-    return $this->sendRequest('POST', null, 'Project', $params);
+    return $this->sendRequest('POST', null, 'Unit', $params);
   }
 
 
   /**
-   * Updates a project.
+   * Updates a unit.
    *
    * @param array   $params
    * @return array
    */
   public function update ($id, array $params)
   {
-    return $this->sendRequest('PUT', $id, 'Project', $params);
+    return $this->sendRequest('PUT', $id, 'Unit', $params);
   }
 
 
   /**
-   * Removes a project.
+   * Removes a unit.
    */
   public function delete ($id)
   {
