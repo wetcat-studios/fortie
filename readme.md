@@ -84,6 +84,8 @@ For details on the usage of all providers you should consult [the Wiki](https://
 * Customers
 * Invoices
 * Orders
+* Price lists
+* Prices
 
 #### Not implemented yet
 
@@ -101,8 +103,6 @@ For details on the usage of all providers you should consult [the Wiki](https://
 * Locked period
 * Modes of payment
 * Offers
-* Price lists
-* Prices
 * Print templates
 * Projects
 * Supplier Invoice Accruals
