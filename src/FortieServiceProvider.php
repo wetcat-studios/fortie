@@ -105,14 +105,4 @@ class FortieServiceProvider extends ServiceProvider
     });
   }
 
-
-  /**
-   * Register all the Artisan commands for Fortie.
-   */
-  protected function registerCommands()
-  {
-    // Activation command (get access token from authorization code)
-
-  }
-
 }

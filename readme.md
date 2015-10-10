@@ -83,6 +83,7 @@ For details on the usage of all providers you should consult [the Wiki](https://
 * Currencies
 * Customers
 * Invoices
+* Orders
 
 #### Not implemented yet
 
@@ -100,7 +101,6 @@ For details on the usage of all providers you should consult [the Wiki](https://
 * Locked period
 * Modes of payment
 * Offers
-* Orders
 * Price lists
 * Prices
 * Print templates

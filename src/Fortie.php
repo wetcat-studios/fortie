@@ -24,6 +24,7 @@ use Wetcat\Fortie\CompanySettings\Provider as CompanySettingsProvider;
 use Wetcat\Fortie\Invoices\Provider as InvoiceProvider;
 use Wetcat\Fortie\Customers\Provider as CustomerProvider;
 use Wetcat\Fortie\Currencies\Provider as CurrencyProvider;
+use Wetcat\Fortie\Orders\Provider as OrderProvider;
 
 /**
  * Starting point for all interactions with the Fortnox API. After
@@ -63,6 +64,11 @@ class Fortie
    */
   protected $currencyProvider;
 
+  /**
+   * Provides access to orders.
+   */
+  protected $orderProvider;
+
 
   /**
    * Create a new Neo object.
@@ -93,6 +99,7 @@ class Fortie
     $this->invoiceProvider = new InvoiceProvider($client);
     $this->customerProvider = new CustomerProvider($client);
     $this->currencyProvider = new CurrencyProvider($client);
+    $this->orderProvider = new OrderProvider($client);
   }
 
 
@@ -158,6 +165,17 @@ class Fortie
   public function currencies ()
   {
     return $this->currencyProvider;
+  }
+
+
+  /**
+   * Get the order provider.
+   *
+   * @return OrderProvider
+   */
+  public function orders ()
+  {
+    return $this->orderProvider;
   }
 
 }
