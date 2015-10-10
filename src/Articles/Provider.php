@@ -113,7 +113,7 @@ class Provider extends ProviderBase {
    *
    * @return array
    */
-  public function listAllArticles ()
+  public function all ()
   {
     return $this->sendRequest('GET');
   }
@@ -127,7 +127,7 @@ class Provider extends ProviderBase {
    * @param $id
    * @return array
    */
-  public function retrieveArticle ($id)
+  public function find ($id)
   {
     return $this->sendRequest('GET', $id);
   }
@@ -140,7 +140,7 @@ class Provider extends ProviderBase {
    * @param array   $params
    * @return array
    */
-  public function createArticle (array $params)
+  public function create (array $params)
   {
     return $this->sendRequest('POST', null, 'Article', $params);
   }
@@ -159,7 +159,7 @@ class Provider extends ProviderBase {
    * @param array   $params
    * @return array
    */
-  public function updateArticle ($id, array $params)
+  public function update ($id, array $params)
   {
     return $this->sendRequest('PUT', $id, 'Article', $params);
   }
@@ -170,7 +170,7 @@ class Provider extends ProviderBase {
    * You need to supply the unique article number that was returned when the 
    * article was created or retrieved from the list of articles.
    */
-  public function deleteArticle ($id)
+  public function delete ($id)
   {
     throw new Exception('Not implemented');
   }

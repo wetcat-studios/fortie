@@ -180,7 +180,7 @@ class Provider extends ProviderBase {
    *
    * @return array
    */
-  public function listAllCustomers ()
+  public function all ()
   {
     return $this->sendRequest('GET');
   }
@@ -194,7 +194,7 @@ class Provider extends ProviderBase {
    * @param $id
    * @return array
    */
-  public function retrieveCustomer ($id)
+  public function find ($id)
   {
     return $this->sendRequest('GET', $id);
   }
@@ -207,7 +207,7 @@ class Provider extends ProviderBase {
    * @param array   $params
    * @return array
    */
-  public function createCustomer (array $params)
+  public function create (array $params)
   {
     return $this->sendRequest('POST', null, 'Customer', $params);
   }
@@ -226,7 +226,7 @@ class Provider extends ProviderBase {
    * @param array   $params
    * @return array
    */
-  public function updateCustomer ($id, array $params)
+  public function update ($id, array $params)
   {
     return $this->sendRequest('PUT', $id, 'Customer', $params);
   }
@@ -241,7 +241,7 @@ class Provider extends ProviderBase {
    * You need to supply the unique customer number of the customer
    * that you want to delete.
    */
-  public function deleteCustomer ($id)
+  public function delete ($id)
   {
     throw new Exception('Not implemented');
   }

@@ -32,6 +32,10 @@ class FortieServiceProvider extends ServiceProvider
    */
   protected $defer = false;
   
+  protected $commands = [
+    'Wetcat\Fortie\Commands\ActivateCommand',
+  ];
+
 
   /**
    * Bootstrap any application services.
@@ -59,7 +63,7 @@ class FortieServiceProvider extends ServiceProvider
       __DIR__.'/config/config.php', 'fortie'
     );
     
-    $this->registerCommands();
+    $this->commands($this->commands);
 
     $this->registerFortie();
   }
@@ -84,7 +88,7 @@ class FortieServiceProvider extends ServiceProvider
   protected function registerFortie()
   {
     $this->app->singleton('Wetcat\Fortie\Fortie', function ($app) 
-    {  
+    {
       $access_token   = Config::get('fortie.default.access_token', Config::get('fortie::default.access_token'));
       $client_secret  = Config::get('fortie.default.client_secret', Config::get('fortie::default.client_secret'));
       $content_type   = Config::get('fortie.default.content_type', Config::get('fortie::default.content_type'));
@@ -107,7 +111,8 @@ class FortieServiceProvider extends ServiceProvider
    */
   protected function registerCommands()
   {
-    // Register Fortnox commands
+    // Activation command (get access token from authorization code)
+
   }
 
 }

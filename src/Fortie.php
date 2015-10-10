@@ -23,6 +23,7 @@ use Wetcat\Fortie\Articles\Provider as ArticleProvider;
 use Wetcat\Fortie\CompanySettings\Provider as CompanySettingsProvider;
 use Wetcat\Fortie\Invoices\Provider as InvoiceProvider;
 use Wetcat\Fortie\Customers\Provider as CustomerProvider;
+use Wetcat\Fortie\Currencies\Provider as CurrencyProvider;
 
 /**
  * Starting point for all interactions with the Fortnox API. After
@@ -57,6 +58,11 @@ class Fortie
    */
   protected $customerProvider;
 
+  /**
+   * Provides access to currencies.
+   */
+  protected $currencyProvider;
+
 
   /**
    * Create a new Neo object.
@@ -86,6 +92,7 @@ class Fortie
     $this->companySettingsProvider = new CompanySettingsProvider($client);
     $this->invoiceProvider = new InvoiceProvider($client);
     $this->customerProvider = new CustomerProvider($client);
+    $this->currencyProvider = new CurrencyProvider($client);
   }
 
 
@@ -140,6 +147,17 @@ class Fortie
   public function customers ()
   {
     return $this->customerProvider;
+  }
+
+
+  /**
+   * Get the currency provider.
+   *
+   * @return CustomerProvider
+   */
+  public function currencies ()
+  {
+    return $this->currencyProvider;
   }
 
 }

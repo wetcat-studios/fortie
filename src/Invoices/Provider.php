@@ -232,7 +232,7 @@ class Provider extends ProviderBase {
    *
    * @return array
    */
-  public function listAllInvoices ()
+  public function all ()
   {
     return $this->sendRequest('GET');
   }
@@ -246,7 +246,7 @@ class Provider extends ProviderBase {
    * @param $id
    * @return array
    */
-  public function retrieveInvoice ($id)
+  public function find ($id)
   {
     return $this->sendRequest('GET', $id);
   }
@@ -268,7 +268,7 @@ class Provider extends ProviderBase {
    * @param array   $params
    * @return array
    */
-  public function createInvoice (array $params)
+  public function create (array $params)
   {
     return $this->sendRequest('POST', null, 'Invoice', $params);
   }
@@ -288,7 +288,7 @@ class Provider extends ProviderBase {
    * @param array   $params
    * @return array
    */
-  public function updateInvoice ($id, array $params)
+  public function update ($id, array $params)
   {
     return $this->sendRequest('PUT', $id, 'Invoice', $params);
   }
@@ -340,7 +340,7 @@ class Provider extends ProviderBase {
    * that is used by the specific document. Note that this action
    * also sets the property Sent as true.
    */
-  public function pdf ($id)
+  public function write ($id)
   {
     return $this->sendRequest('GET', [$id, 'print']);
   }
@@ -351,7 +351,7 @@ class Provider extends ProviderBase {
    * template that is used by the specific document. Note that
    * this action also sets the property Sent as true.
    */
-  public function pdfReminder ($id)
+  public function reminder ($id)
   {
     return $this->sendRequest('GET', [$id, 'printreminder']);
   }
@@ -361,7 +361,7 @@ class Provider extends ProviderBase {
    * This action is used to set the field Sent as true from an 
    * external system without generating a PDF.
    */
-  public function pdfExternal ($id)
+  public function external ($id)
   {
     return $this->sendRequest('GET', [$id, 'externalprint']);
   }

@@ -74,7 +74,7 @@ class Provider extends ProviderBase {
    *
    * @return array
    */
-  public function listAllAccounts ()
+  public function all ()
   {
     return $this->sendRequest('GET');
   }
@@ -88,7 +88,7 @@ class Provider extends ProviderBase {
    * @param $id
    * @return array
    */
-  public function retrieveAccount ($id)
+  public function find ($id)
   {
     return $this->sendRequest('GET', $id);
   }
@@ -101,7 +101,7 @@ class Provider extends ProviderBase {
    * @param array   $params
    * @return array
    */
-  public function createAccount (array $params)
+  public function create (array $params)
   {
     return $this->sendRequest('POST', null, 'Account', $params);
   }
@@ -117,7 +117,7 @@ class Provider extends ProviderBase {
    * @param array   $params
    * @return array
    */
-  public function updateAccount ($id, array $params)
+  public function update ($id, array $params)
   {
     return $this->sendRequest('PUT', $id, 'Account', $params);
   }

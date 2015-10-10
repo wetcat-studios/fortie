@@ -74,7 +74,7 @@ class Provider extends ProviderBase {
    *
    * @return array
    */
-  public function listCompanySettings ()
+  public function all ()
   {
     return $this->sendRequest('GET');
   }
