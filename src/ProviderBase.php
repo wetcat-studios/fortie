@@ -1,9 +1,39 @@
 <?php namespace Wetcat\Fortie;
 
+/*
+
+   Copyright 2015 Andreas Göransson
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+*/
 
 use Wetcat\Fortie\MissingRequiredAttributeException;
 
 
+/**
+ * Base provider for the all Fortnox providers, each provider includes a
+ * path (the URL extension for the provider, for example "accounts") and
+ * a set of attributes (both writeable and required).
+ *
+ * Before a request is sent to Fortnox the supplied parameter array will
+ * be sanitized according to the rules in Fortnox defined by the online
+ * documentation (http://developer.fortnox.se/documentation/). When the
+ * data has been verified the data is sent to the Guzzle client.
+ *
+ * The response (either XML or JSON) is then turned into an array and
+ * retured to the caller.
+ */
 class ProviderBase
 {
 
@@ -121,7 +151,7 @@ class ProviderBase
     catch (\GuzzleHttp\Exception\ClientException $e) {
       $response = $e->getResponse();
       $responseBodyAsString = $response->getBody()->getContents();
-      echo $responseBodyAsString;
+      //echo $responseBodyAsString;
     }
   }
 

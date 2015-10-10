@@ -1,14 +1,26 @@
 <?php namespace Wetcat\Fortie;
 
+/*
+
+   Copyright 2015 Andreas Göransson
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+*/
+
 use Illuminate\Support\ServiceProvider;
 
 use Config;
-
-use Wetcat\Fortie\Accounts\Provider as AccountsProvider;
-use Wetcat\Fortie\Articles\Provider as ArticlesProvider;
-use Wetcat\Fortie\CompanySettings\Provider as CompanySettingsProvider;
-use Wetcat\Fortie\Invoices\Provider as InvoiceProvider;
-use Wetcat\Fortie\Customers\Provider as CustomerProvider;
 
 class FortieServiceProvider extends ServiceProvider
 {
@@ -21,8 +33,6 @@ class FortieServiceProvider extends ServiceProvider
   protected $defer = false;
   
 
-  protected $accountsProvider = null;
-  
   /**
    * Bootstrap any application services.
    *
@@ -36,6 +46,7 @@ class FortieServiceProvider extends ServiceProvider
       __DIR__.'/config/config.php' => config_path('fortie.php'),
     ]);
   }
+
 
   /**
    * Register any application services.
@@ -53,6 +64,7 @@ class FortieServiceProvider extends ServiceProvider
     $this->registerFortie();
   }
 
+
   /**
    * Get the services provided by the provider.
    *
@@ -62,6 +74,7 @@ class FortieServiceProvider extends ServiceProvider
   {
     return array();
   }
+
 
   /**
    * Creates a new Fortie object
@@ -78,29 +91,23 @@ class FortieServiceProvider extends ServiceProvider
       $accepts        = Config::get('fortie.default.accepts', Config::get('fortie::default.accepts'));
       $endpoint       = Config::get('fortie.default.endpoint', Config::get('fortie::default.endpoint'));
 
-      $client = new \GuzzleHttp\Client([
-        'base_uri'  => $endpoint,
-        'headers'   => [
-          'Access-Token'  => $access_token,
-          'Client-Secret' => $client_secret,
-          'Content-Type'  => $content_type,
-          'Accept'        => $accepts
-        ],
-        'timeout'   => 3.0,
-      ]);
-
       return new Fortie(
-        new AccountsProvider($client),
-        new ArticlesProvider($client),
-        new CompanySettingsProvider($client),
-        new InvoiceProvider($client),
-        new CustomerProvider($client)
+        $endpoint,
+        $access_token,
+        $client_secret,
+        $content_type,
+        $accepts
       );
     });
   }
 
+
+  /**
+   * Register all the Artisan commands for Fortie.
+   */
   protected function registerCommands()
   {
     // Register Fortnox commands
   }
+
 }
