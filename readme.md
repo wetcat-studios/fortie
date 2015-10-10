@@ -2,7 +2,7 @@
 
 # Fortie
 
-A simple [Fortnox](https://www.fortnox.se/) PHP package, including Laravel Service Providers.
+A simple [Fortnox](https://www.fortnox.se/) PHP package, including Laravel Service Provider for easy integration in Laravel.
 
 ## Installation
 
@@ -16,27 +16,75 @@ Or add `"wetcat/fortie": "dev-master"` to your `composer.json`.
 
 If you don't have Composer you should [install it](https://getcomposer.org/download/).
 
-## Configure
+## Configuration
 
-Todo
+In Laravel you change use the published configuration file found at `config/fortie.php`, it should look something like the following. Fill this in with the details provided by Fortnox when you signed up.
+
+The **Access Token** is not provided when signing up, you need to get that seperately using your **Auth Code** and **Client Secret**. Read more about this process [here](http://developer.fortnox.se/documentation/general/authentication/).
+
+```php
+<?php 
+
+return [
+
+  'default' => [
+
+    // Your specific access token
+    'access_token'   => '<your access token>',
+
+    // Your specific client secret
+    'client_secret'  => '<your client secret>',
+
+    // The type you're sending
+    'content_type'   => 'application/json',
+
+    // The type you're accepting as response
+    'accepts'        => 'application/json', 
+
+    // The URL to the Fortnox API
+    'endpoint'       => 'https://api.fortnox.se/3/',
+
+  ],
+
+];
+```
+
+Note that XML is not fully supported yet, the package can read and will attempt to translate the responses from Fortnox into XML structures, but when sending data to Fortnox it will always send in json.
 
 ## Usage
 
-Each Fortnox provider is registered as a chainable method within the Fortnox object, to access a provider you would call its method and then call the needed method on that provider.
+### Configuration
 
-To create a new object in Fortnox you would also need to supply an array with the data you want to save. Each provider knows what is acceptable (readable and writeable) and will perform some simple sanitizing on your array to remove illegal keys. You should however always consult the [Fortnox developer documentation](http://developer.fortnox.se/documentation/) to understand what is legal data.
+### Access tokens
 
-For details usage you should consult [the Wiki](https://github.com/wetcat-studios/fortie/wiki).
+To get an access token (for use with your integration) you need to request it using a `authroization-code`.
 
-#### Implemented
+In Laravel you can use the Artisan command to easily get the access token.
+
+```
+php artisan fortie:activate code=<your authorization code>
+```
+
+### Providers
+
+The package is set up with multiple providers, each provider is mapped towards a specific endpoint in the REST api. For example **accounts** are mapped to the **accounts()** method.
+
+```php
+$arrayOfAccounts = $fortie->accounts()->all();
+```
+
+For details on the usage of all providers you should consult [the Wiki](https://github.com/wetcat-studios/fortie/wiki).
+
+#### Currently implemented providers
 
 * Accounts
 * Articles
 * Company Settings
+* Currencies
 * Customers
 * Invoices
 
-#### Not implemented (Comming soon...)
+#### Not implemented yet
 
 * Archive
 * Article File Connections
@@ -45,7 +93,6 @@ For details usage you should consult [the Wiki](https://github.com/wetcat-studio
 * Contract Templates
 * Contracts
 * Cost Centres
-* Currencies
 * Financial years
 * Inbox
 * Invoice accruals
@@ -73,6 +120,12 @@ For details usage you should consult [the Wiki](https://github.com/wetcat-studio
 * Vouchers
 * Way of Deliveries
 
+## Dependencies
+
+This package is built with the following dependencies.
+
+* [Guzzle](https://github.com/guzzle/guzzle)
+* [sabre/xml](https://github.com/fruux/sabre-xml)
 
 ## License
 

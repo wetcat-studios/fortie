@@ -48,21 +48,31 @@ class ActivateCommand extends Command {
     $accepts        = Config::get('fortie.default.accepts', Config::get('fortie::default.accepts'));
     $endpoint       = Config::get('fortie.default.endpoint', Config::get('fortie::default.endpoint'));
 
-    // Construct the Guzzle client
-    $client = new \GuzzleHttp\Client([
-      'base_uri'  => $endpoint,
-      'headers'   => [
-        'Authorization-Code'  => $auth_code,
-        'Client-Secret'       => $client_secret,
-        'Content-Type'        => $content_type,
-        'Accept'              => $accepts
-      ],
-      'timeout'   => 3.0,
-    ]);
+    try {
+      // Construct the Guzzle client
+      $client = new \GuzzleHttp\Client([
+        'base_uri'  => $endpoint,
+        'headers'   => [
+          'Authorization-Code'  => $auth_code,
+          'Client-Secret'       => $client_secret,
+          'Content-Type'        => $content_type,
+          'Accept'              => $accepts
+        ],
+        'timeout'   => 3.0,
+      ]);
 
-    $res = $client->get();
+      $res = $client->get();
 
-    $this->info('Your access token is: ' . $res); 
+      $this->info($res); 
+    }
+    catch (\GuzzleHttp\Exception\ClientException $e) {
+      $response = $e->getResponse();
+      $responseBodyAsString = $response->getBody()->getContents();
+      
+      $this->error('Failed to generate access token!');
+      $this->error($responseBodyAsString);
+    }
+    
   }
 
   /**
