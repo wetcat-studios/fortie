@@ -86,6 +86,7 @@ For details on the usage of all providers you should consult [the Wiki](https://
 * Orders
 * Price lists
 * Prices
+* Projects
 
 #### Not implemented yet
 
@@ -104,7 +105,6 @@ For details on the usage of all providers you should consult [the Wiki](https://
 * Modes of payment
 * Offers
 * Print templates
-* Projects
 * Supplier Invoice Accruals
 * Supplier Invoice External URL connections
 * Supplier Invoice File Connections

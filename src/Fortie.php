@@ -27,6 +27,7 @@ use Wetcat\Fortie\Currencies\Provider as CurrencyProvider;
 use Wetcat\Fortie\Orders\Provider as OrderProvider;
 use Wetcat\Fortie\PriceLists\Provider as PriceListProvider;
 use Wetcat\Fortie\Prices\Provider as PriceProvider;
+use Wetcat\Fortie\Projects\Provider as ProjectProvider;
 
 /**
  * Starting point for all interactions with the Fortnox API. After
@@ -81,6 +82,11 @@ class Fortie
    */
   protected $priceProvider;
 
+  /**
+   * Provides access to projects.
+   */
+  protected $projectProvider;
+
 
   /**
    * Create a new Neo object.
@@ -114,6 +120,7 @@ class Fortie
     $this->orderProvider = new OrderProvider($client);
     $this->priceListProvider = new PriceListProvider($client);
     $this->priceProvider = new PriceProvider($client);
+    $this->projectProvider = new ProjectProvider($client);
   }
 
 
@@ -196,7 +203,7 @@ class Fortie
   /**
    * Get the price lists provider.
    *
-   * @return OrderProvider
+   * @return PriceListProvider
    */
   public function priceLists ()
   {
@@ -207,11 +214,22 @@ class Fortie
   /**
    * Get the price provider.
    *
-   * @return OrderProvider
+   * @return PriceProvider
    */
   public function prices ()
   {
     return $this->priceProvider;
+  }
+
+
+  /**
+   * Get the project provider.
+   *
+   * @return ProjectProvider
+   */
+  public function projects ()
+  {
+    return $this->projectProvider;
   }
 
 }
