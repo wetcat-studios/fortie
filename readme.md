@@ -4,6 +4,44 @@
 
 A simple [Fortnox](https://www.fortnox.se/) PHP package, including Laravel Service Providers.
 
+## Installation
+
+The easiest way to install this package is through Composer.
+
+```
+composer require wetcat/fortie dev-master
+```
+
+Or add `"wetcat/fortie": "dev-master"` to your `composer.json`.
+
+If you don't have Composer you should [install it](https://getcomposer.org/download/).
+
+## Configure
+
+Todo
+
+## Usage
+
+Each Fortnox provider is registered as a chainable method within the Fortnox object, to access a provider you would call its method and then call the needed method on that provider.
+
+To get a list of the available accounts in your Fortnox user you would call:
+
+```php
+$accounts = $fortie->accounts()->listAllAccounts();
+```
+
+To create a new object in Fortnox you would also need to supply an array with the data you want to save. Each provider knows what is acceptable (readable and writeable) and will perform some simple sanitizing on your array to remove illegal keys. You should however always consult the [Fortnox developer documentation](http://developer.fortnox.se/documentation/) to understand what is legal data.
+
+If you want to create a new account in your Fortnox user you would call:
+
+```php
+$params = [
+  'Number' => 6666,
+  'Description' => 'Goodwill'
+];
+$account = $fortie->accounts()->createAccount($params);
+```
+
 ## License
 
 Copyright [2015] [Andreas Göransson]
