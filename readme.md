@@ -53,7 +53,84 @@ Note that XML is not fully supported yet, the package can read and will attempt 
 
 ## Usage
 
-### Configuration
+### Laravel
+
+In laravel the easiest way to use Fortie is to add the ServiceProvider 
+
+
+When you've included the Service Provider you can then use dependency injection in your BaseController to make fortie available in all controllers.
+
+```php
+abstract class Controller extends BaseController
+{
+    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    protected $fortie;
+
+    public function __construct(Fortie $fortie)
+    {
+        $this->fortie = $fortie;
+    }
+
+}
+```
+
+Just call `$this->fortie->...` to access Fortie.
+
+```php
+class MyController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        dd($this->fortie->accounts()->listAllAccounts());
+    }
+
+    ...
+
+}
+```
+
+Of course you can also inject Fortie into any Laravel controller method to limit application wide access to Fortnox.
+
+```php
+
+use Wetcat\Fortie\Fortie as Fortie;
+
+class MyController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Fortie $fortie)
+    {
+        dd($fortie->accounts()->listAllAccounts());
+    }
+
+    ...
+
+}
+```
+
+### Non-laravel
+
+In Laravel the ServiceProvider takes care of setting up Fortie using the configuration file, if used outside of Laravel you need to instantiate Fortie using the configuration provided by Fortnox.
+
+```php
+$fortie = new Fortie(
+    $endpoint,
+    $access_token,
+    $client_secret,
+    $content_type,
+    $accepts
+);
+```
 
 ### Access tokens
 
