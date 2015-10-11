@@ -57,6 +57,26 @@ Note that XML is not fully supported yet, the package can read and will attempt 
 
 In laravel the easiest way to use Fortie is to add the ServiceProvider 
 
+```php
+<?php
+
+return [
+    
+    ...
+
+    'providers' => [
+
+        ...
+
+        Wetcat\Fortie\FortieServiceProvider::class,
+
+    ],
+
+    ...
+    
+];
+
+```
 
 When you've included the Service Provider you can then use dependency injection in your BaseController to make fortie available in all controllers.
 
