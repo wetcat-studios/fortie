@@ -146,6 +146,13 @@ class Provider extends ProviderBase {
   ];
 
   protected $required = [
+    'ContractLength',
+    'CustomerNumber',
+    'InvoiceInterval',
+    'InvoiceRows',
+    'PeriodEnd',
+    'PeriodStart',
+    'Total',
   ];
 
   /**

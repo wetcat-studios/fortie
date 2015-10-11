@@ -1,4 +1,4 @@
-<?php namespace Wetcat\Fortie\Orders;
+<?php namespace Wetcat\Fortie\Providers\Offers;
 
 /*
 
@@ -18,7 +18,7 @@
 
 */
 
-use Wetcat\Fortie\ProviderBase;
+use Wetcat\Fortie\Providers\ProviderBase;
 
 
 class Provider extends ProviderBase {
@@ -52,17 +52,17 @@ class Provider extends ProviderBase {
     'DeliveryName',
     'DeliveryZipCode',
     'DocumentNumber',
-    'ExternalInvoiceReference1',
-    'ExternalInvoiceReference2',
+    'EmailInformation',
+    'ExpireDate',
     'Freight',
     'FreightVAT',
     'Gross',
     'HouseWork',
-    'InvoiceReference',
+    'OrderReference',
     'Net',
-    'NotCompleted',
-    'OrderDate',
-    'OfferReference',
+    'Completed',
+    'OfferDate',
+    'OrderReference',
     'OrganisationNumber',
     'OurReference',
     'Phone1',
@@ -72,16 +72,16 @@ class Provider extends ProviderBase {
     'Project',
     'Remarks',
     'RoundOff',
+    'OfferRows',
     'Sent',
     'TaxReduction',
     'TermsOfDelivery',
     'TermsOfPayment',
     'Total',
     'TotalVat',
-    'VATIncluded',
+    'VatIncluded',
     'WayOfDelivery',
     'YourReference',
-    'YourOrderNumber',
     'ZipCode',
     // Email
     'EmailAddressTo',
@@ -89,22 +89,21 @@ class Provider extends ProviderBase {
     'EmailAddressBCC',
     'EmailSubject',
     'EmailBody',
-    // Order row
+    // Offers
     'AccountNumber',
     'ArticleNumber',
     'ContributionPercent',
     'ContributionValue',
     'CostCenter',
-    'DeliveredQuantity',
     'Description',
     'Discount',
     'DiscountType',
     'HouseWork',
     'HouseWorkHoursToReport',
     'HouseWorkType',
-    'OrderedQuantity',
     'Price',
     'Project',
+    'Quantity',
     'Total',
     'Unit',
     'VAT',
@@ -132,11 +131,12 @@ class Provider extends ProviderBase {
     'DeliveryName',
     'DeliveryZipCode',
     'DocumentNumber',
-    'ExternalInvoiceReference1',
-    'ExternalInvoiceReference2',
+    'EmailInformation',
+    'ExpireDate',
     'Freight',
-    'NotCompleted',
-    'OrderDate',
+    'Completed',
+    'OfferDate',
+    'OrganisationNumber',
     'OurReference',
     'Phone1',
     'Phone2',
@@ -144,12 +144,12 @@ class Provider extends ProviderBase {
     'PrintTemplate',
     'Project',
     'Remarks',
+    'OfferRows',
     'TermsOfDelivery',
     'TermsOfPayment',
-    'VATIncluded',
+    'VatIncluded',
     'WayOfDelivery',
     'YourReference',
-    'YourOrderNumber',
     'ZipCode',
     // Email
     'EmailAddressTo',
@@ -157,38 +157,34 @@ class Provider extends ProviderBase {
     'EmailAddressBCC',
     'EmailSubject',
     'EmailBody',
-    // Order row
+    // Offers
     'AccountNumber',
     'ArticleNumber',
     'CostCenter',
-    'DeliveredQuantity',
     'Description',
     'Discount',
     'DiscountType',
     'HouseWork',
     'HouseWorkHoursToReport',
     'HouseWorkType',
-    'OrderedQuantity',
     'Price',
     'Project',
+    'Quantity',
     'Unit',
     'VAT',
   ];
 
   protected $required = [
-    'CustomerNumber',
-    'Description',
-    'OrderedQuantity',
   ];
 
   /**
    * Override the REST path
    */
-  protected $path = 'orders';
+  protected $path = 'offers';
 
 
   /**
-   * Retrieves a list of orders.
+   * Retrieves a list of offers.
    *
    * @return array
    */
@@ -199,7 +195,7 @@ class Provider extends ProviderBase {
 
 
   /**
-   * Retrieves a single order.
+   * Retrieves a single offer.
    *
    * @param $id
    * @return array
@@ -211,36 +207,87 @@ class Provider extends ProviderBase {
 
 
   /**
-   * Creates a currency.
+   * Creates an offer.
    *
    * @param array   $params
    * @return array
    */
   public function create (array $params)
   {
-    return $this->sendRequest('POST', null, 'Order', $params);
+    return $this->sendRequest('POST', null, 'Offer', $params);
   }
 
 
   /**
-   * Updates a currency.
+   * Updates an offer.
    *
    * @param array   $params
    * @return array
    */
   public function update ($id, array $params)
   {
-    return $this->sendRequest('PUT', $id, 'Order', $params);
+    return $this->sendRequest('PUT', $id, 'Offer', $params);
   }
 
 
   /**
-   * Removes a currency.
+   * Creates an order from the offer.
    */
-  public function delete ($id)
+  public function createorder ($id)
   {
-    throw new Exception('Not implemented');
+    return $this->sendRequest('PUT', [$id, 'createorder']);
   }
 
+
+  /**
+   * Cancels an offer.
+   */
+  public function cancel ($id)
+  {
+    return $this->sendRequest('PUT', [$id, 'cancel']);
+  }
+
+
+  /**
+   * Sends an e-mail to the customer with an attached PDF document of the 
+   * offer. You can use the fieldEmailInformation to customize the e-mail
+   * message on each offer.
+   */
+  public function email ($id)
+  {
+    return $this->sendRequest('PUT', [$id, 'email']);
+  }
+
+
+  /**
+   * This action returns a PDF document with the current template that is 
+   * used by the specific document. Note that this action also sets the 
+   * field Sent as true.
+   */
+  public function pdf ($id)
+  {
+    return $this->sendRequest('GET', [$id, 'print']);
+  }
+
+
+  /**
+   * This action is used to set the field Sent as true from an external 
+   * system without generating a PDF.
+   */
+  public function external ($id)
+  {
+    return $this->sendRequest('PUT', [$id, 'externalprint']);
+  }
+
+
+  /**
+   * This action returns a PDF document with the current template that 
+   * is used by the specific document. Apart from the action print, this 
+   * action doesn’t set the field Sent as true.
+   */
+  public function preview ($id)
+  {
+    return $this->sendRequest('GET', [$id, 'preview']);
+  }
 
 }

@@ -24,6 +24,7 @@ use Wetcat\Fortie\Providers\Articles\Provider as ArticleProvider;
 use Wetcat\Fortie\Providers\CompanySettings\Provider as CompanySettingsProvider;
 use Wetcat\Fortie\Providers\Contracts\Provider as ContractProvider;
 use Wetcat\Fortie\Providers\Invoices\Provider as InvoiceProvider;
+use Wetcat\Fortie\Providers\Offers\Provider as OfferProvider;
 use Wetcat\Fortie\Providers\Customers\Provider as CustomerProvider;
 use Wetcat\Fortie\Providers\Currencies\Provider as CurrencyProvider;
 use Wetcat\Fortie\Providers\Orders\Provider as OrderProvider;
@@ -71,6 +72,11 @@ class Fortie
    * Provides access to invoices actions and endpoints.
    */
   protected $invoiceProvider;
+
+  /**
+   * Provides access to offers actions and endpoints.
+   */
+  protected $offerProvider;
 
   /**
    * Provides access to customer endpoints.
@@ -147,6 +153,7 @@ class Fortie
     $this->companySettingsProvider = new CompanySettingsProvider($client);
     $this->contracts = new ContractProvider($client);
     $this->invoiceProvider = new InvoiceProvider($client);
+    $this->offerProvider = new OfferProvider($client);
     $this->customerProvider = new CustomerProvider($client);
     $this->currencyProvider = new CurrencyProvider($client);
     $this->orderProvider = new OrderProvider($client);
@@ -218,6 +225,17 @@ class Fortie
   public function invoices ()
   {
     return $this->invoiceProvider;
+  }
+
+
+  /**
+   * Get the offer provider.
+   *
+   * @return OfferProvider
+   */
+  public function offers ()
+  {
+    return $this->offerProvider;
   }
 
 
