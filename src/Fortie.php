@@ -18,18 +18,21 @@
 
 */
 
-use Wetcat\Fortie\Accounts\Provider as AccountProvider;
-use Wetcat\Fortie\Articles\Provider as ArticleProvider;
-use Wetcat\Fortie\CompanySettings\Provider as CompanySettingsProvider;
-use Wetcat\Fortie\Invoices\Provider as InvoiceProvider;
-use Wetcat\Fortie\Customers\Provider as CustomerProvider;
-use Wetcat\Fortie\Currencies\Provider as CurrencyProvider;
-use Wetcat\Fortie\Orders\Provider as OrderProvider;
-use Wetcat\Fortie\PriceLists\Provider as PriceListProvider;
-use Wetcat\Fortie\Prices\Provider as PriceProvider;
-use Wetcat\Fortie\Projects\Provider as ProjectProvider;
-use Wetcat\Fortie\Suppliers\Provider as SupplierProvider;
-use Wetcat\Fortie\Units\Provider as UnitProvider;
+use Wetcat\Fortie\Providers\Accounts\Provider as AccountProvider;
+use Wetcat\Fortie\Providers\Archive\Provider as ArchiveProvider;
+use Wetcat\Fortie\Providers\Articles\Provider as ArticleProvider;
+use Wetcat\Fortie\Providers\CompanySettings\Provider as CompanySettingsProvider;
+use Wetcat\Fortie\Providers\Contracts\Provider as ContractProvider;
+use Wetcat\Fortie\Providers\Invoices\Provider as InvoiceProvider;
+use Wetcat\Fortie\Providers\Customers\Provider as CustomerProvider;
+use Wetcat\Fortie\Providers\Currencies\Provider as CurrencyProvider;
+use Wetcat\Fortie\Providers\Orders\Provider as OrderProvider;
+use Wetcat\Fortie\Providers\PriceLists\Provider as PriceListProvider;
+use Wetcat\Fortie\Providers\Prices\Provider as PriceProvider;
+use Wetcat\Fortie\Providers\Projects\Provider as ProjectProvider;
+use Wetcat\Fortie\Providers\Suppliers\Provider as SupplierProvider;
+use Wetcat\Fortie\Providers\Units\Provider as UnitProvider;
+use Wetcat\Fortie\Providers\Vouchers\Provider as VoucherProvider;
 
 /**
  * Starting point for all interactions with the Fortnox API. After
@@ -45,6 +48,11 @@ class Fortie
   protected $accountProvider;
 
   /**
+   * Provides access to archives endpoints.
+   */
+  protected $archiveProvider;
+
+  /**
    * Provides access to article endpoints.
    */
   protected $articleProvider;
@@ -53,6 +61,11 @@ class Fortie
    * Provides access to the company settings endpoint. This is read-only.
    */
   protected $companySettingsProvider;
+
+  /**
+   * Provides access to the contracts endpoint.
+   */
+  protected $contractProvider;
 
   /**
    * Provides access to invoices actions and endpoints.
@@ -99,6 +112,11 @@ class Fortie
    */
   protected $unitProvider;
 
+  /**
+   * Provides access to vouchers.
+   */
+  protected $voucherProvider;
+
 
   /**
    * Create a new Neo object.
@@ -124,8 +142,10 @@ class Fortie
 
     // Set up providers
     $this->accountProvider = new AccountProvider($client);
+    $this->archiveProvider = new ArchiveProvider($client);
     $this->articleProvider = new ArticleProvider($client);
     $this->companySettingsProvider = new CompanySettingsProvider($client);
+    $this->contracts = new ContractProvider($client);
     $this->invoiceProvider = new InvoiceProvider($client);
     $this->customerProvider = new CustomerProvider($client);
     $this->currencyProvider = new CurrencyProvider($client);
@@ -135,6 +155,7 @@ class Fortie
     $this->projectProvider = new ProjectProvider($client);
     $this->supplierProvider = new SupplierProvider($client);
     $this->unitProvider = new UnitProvider($client);
+    $this->voucherProvider = new VoucherProvider($client);
   }
 
 
@@ -147,6 +168,15 @@ class Fortie
   {
     return $this->accountProvider;
   }
+
+  /**
+   * Get the archive provider.
+   *
+   * @return ArchiveProvider
+   */
+  public function archive ()
+  {
+    return $this->archiveProvider; }
 
 
   /**
@@ -167,6 +197,16 @@ class Fortie
   public function companySettings ()
   {
     return $this->companySettingsProvider;
+  }
+
+  /**
+   * Get the contracts provider.
+   *
+   * @return ContractProvider
+   */
+  public function contracts ()
+  {
+    return $this->contractProvider;
   }
 
 
@@ -266,6 +306,17 @@ class Fortie
   public function units ()
   {
     return $this->unitProvider;
+  }
+
+
+  /**
+   * Get the voucher provider.
+   *
+   * @return VoucherProvider
+   */
+  public function vouchers ()
+  {
+    return $this->voucherProvider;
   }
 
 }

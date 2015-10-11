@@ -78,8 +78,10 @@ For details on the usage of all providers you should consult [the Wiki](https://
 #### Currently implemented providers
 
 * Accounts
+* Archive
 * Articles
 * Company Settings
+* Contracts
 * Currencies
 * Customers
 * Invoices
@@ -88,15 +90,15 @@ For details on the usage of all providers you should consult [the Wiki](https://
 * Prices
 * Projects
 * Suppliers
+* Units
+* Vouchers
 
 #### Not implemented yet
 
-* Archive
 * Article File Connections
 * Article URL Connections
 * Contract Accruals
 * Contract Templates
-* Contracts
 * Cost Centres
 * Financial years
 * Inbox
@@ -114,10 +116,8 @@ For details on the usage of all providers you should consult [the Wiki](https://
 * Tax reductions
 * Terms of Deliveries
 * Terms of payments
-* Units
 * Voucher File Connections
 * Voucher Series
-* Vouchers
 * Way of Deliveries
 
 ## Dependencies
