@@ -310,7 +310,7 @@ class Fortie
    *
    * @return SupplierProvider
    */
-  public function projects ()
+  public function suppliers ()
   {
     return $this->supplierProvider;
   }

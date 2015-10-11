@@ -1,7 +1,7 @@
 {
   "name": "wetcat/fortie",
   "description": "Enable simple Fortnox integration",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "keywords": ["fortie", "Fortnox", "Laravel"],
   "authors": [
     {
