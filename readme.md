@@ -55,7 +55,7 @@ Note that XML is not fully supported yet, the package can read and will attempt 
 
 ### Laravel
 
-In laravel the easiest way to use Fortie is to add the ServiceProvider 
+In laravel the easiest way to use Fortie is to add the ServiceProvider, in `config/app.php` add the following line to `providers` array.
 
 ```php
 <?php
@@ -73,7 +73,7 @@ return [
     ],
 
     ...
-    
+
 ];
 
 ```
