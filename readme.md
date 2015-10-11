@@ -85,6 +85,7 @@ For details on the usage of all providers you should consult [the Wiki](https://
 * Currencies
 * Customers
 * Invoices
+* Offers
 * Orders
 * Price lists
 * Prices
@@ -106,7 +107,6 @@ For details on the usage of all providers you should consult [the Wiki](https://
 * Invoice payments
 * Locked period
 * Modes of payment
-* Offers
 * Print templates
 * Supplier Invoice Accruals
 * Supplier Invoice External URL connections
