@@ -217,7 +217,6 @@ class ProviderBase
       $bodyWrapper => $writeable
     ];
 
-    print_r($body);
     return $body;
   }
 
