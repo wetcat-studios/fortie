@@ -90,6 +90,7 @@ class Provider extends ProviderBase {
     'EmailSubject',
     'EmailBody',
     // Order row
+    'OrderRows',
     'AccountNumber',
     'ArticleNumber',
     'ContributionPercent',
@@ -158,6 +159,7 @@ class Provider extends ProviderBase {
     'EmailSubject',
     'EmailBody',
     // Order row
+    'OrderRows',
     'AccountNumber',
     'ArticleNumber',
     'CostCenter',
