@@ -1,5 +1,6 @@
 <?php namespace Wetcat\Fortie\Providers\Customers;
 
+
 /*
 
    Copyright 2015 Andreas Göransson
@@ -18,11 +19,12 @@
 
 */
 
+
 use Wetcat\Fortie\Providers\ProviderBase;
+use Wetcat\Fortie\FortieRequest;
 
 
 class Provider extends ProviderBase {
-
 
   protected $attributes = [
     'Url',
@@ -96,6 +98,7 @@ class Provider extends ProviderBase {
     'CashInvoice',
   ];
 
+
   protected $writeable = [
     'Address1',
     'Address2',
@@ -164,14 +167,21 @@ class Provider extends ProviderBase {
     'CashInvoice',
   ];
 
-  protected $required = [
+
+  protected $required_create = [
     'Name',
   ];
+
+
+  protected $required_update = [
+    // 'CustomerNumber',
+  ];
+
 
   /**
    * Override the REST path
    */
-  protected $path = 'customers';
+  protected $basePath = 'customers';
 
 
   /**
@@ -182,7 +192,11 @@ class Provider extends ProviderBase {
    */
   public function all ()
   {
-    return $this->sendRequest('GET');
+    $req = new FortieRequest();
+    $req->method('GET');
+    $req->path($this->basePath);
+
+    return $this->send($req->build());
   }
 
 
@@ -196,7 +210,11 @@ class Provider extends ProviderBase {
    */
   public function find ($id)
   {
-    return $this->sendRequest('GET', $id);
+    $req = new FortieRequest();
+    $req->method('GET');
+    $req->path($this->basePath)->path($id);
+
+    return $this->send($req->build());
   }
 
 
@@ -204,12 +222,19 @@ class Provider extends ProviderBase {
    * The created customer will be returned if everything succeeded,
    * if there was any problems an error will be returned.
    *
-   * @param array   $params
+   * @param array   $data
    * @return array
    */
-  public function create (array $params)
+  public function create (array $data)
   {
-    return $this->sendRequest('POST', null, 'Customer', $params);
+    $req = new FortieRequest();
+    $req->method('POST');
+    $req->path($this->basePath);
+    $req->wrapper('Customer');
+    $req->setRequired($this->required_create);
+    $req->data($data);
+
+    return $this->send($req->build());
   }
 
 
@@ -223,12 +248,19 @@ class Provider extends ProviderBase {
    * Only the properties provided in the request body will be updated,
    * properties not provided will left unchanged.
    *
-   * @param array   $params
+   * @param array   $data
    * @return array
    */
-  public function update ($id, array $params)
+  public function update ($id, array $data)
   {
-    return $this->sendRequest('PUT', $id, 'Customer', $params);
+    $req = new FortieRequest();
+    $req->method('PUT');
+    $req->path($this->basePath)->path($id);
+    $req->wrapper('Customer');
+    $req->setRequired($this->required_update);
+    $req->data($data);
+
+    return $this->send($req->build());
   }
 
 
@@ -243,8 +275,12 @@ class Provider extends ProviderBase {
    */
   public function delete ($id)
   {
-    throw new Exception('Not implemented');
-  }
+    $req = new FortieRequest();
+    $req->method('DELETE');
+    $req->path($this->basePath);
+    $req->path($id);
 
+    return $this->send($req->build());
+  }
 
 }
