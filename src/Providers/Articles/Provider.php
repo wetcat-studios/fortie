@@ -18,11 +18,12 @@
 
 */
 
+
 use Wetcat\Fortie\Providers\ProviderBase;
+use Wetcat\Fortie\FortieRequest;
 
 
 class Provider extends ProviderBase {
-
 
   protected $attributes = [
     'Url',
@@ -63,6 +64,7 @@ class Provider extends ProviderBase {
     'Expired',
   ];
 
+
   protected $writeable = [
     'ArticleNumber',
     'Bulky',
@@ -97,14 +99,21 @@ class Provider extends ProviderBase {
     'Expired',
   ];
 
-  protected $required = [
+
+  protected $required_create = [
     'Description', 
   ];
+
+
+  protected $required_update = [
+    'ArticleNumber', 
+  ];
+
 
   /**
    * Override the REST path
    */
-  protected $path = 'articles';
+  protected $basePath = 'articles';
 
 
   /**
@@ -115,7 +124,11 @@ class Provider extends ProviderBase {
    */
   public function all ()
   {
-    return $this->sendRequest('GET');
+    $req = new FortieRequest();
+    $req->method('GET');
+    $req->path($this->basePath);
+
+    return $this->send($req->build());
   }
 
 
@@ -129,7 +142,11 @@ class Provider extends ProviderBase {
    */
   public function find ($id)
   {
-    return $this->sendRequest('GET', $id);
+    $req = new FortieRequest();
+    $req->method('GET');
+    $req->path($this->basePath)->path($id);
+
+    return $this->send($req->build());
   }
 
 
@@ -137,12 +154,19 @@ class Provider extends ProviderBase {
    * The created article will be returned if everything succeeded, if 
    * there was any problems an error will be returned.
    *
-   * @param array   $params
+   * @param array   $data
    * @return array
    */
-  public function create (array $params)
+  public function create (array $data)
   {
-    return $this->sendRequest('POST', null, 'Article', $params);
+    $req = new FortieRequest();
+    $req->method('POST');
+    $req->path($this->basePath);
+    $req->wrapper('Article');
+    $req->setRequired($this->required_create);
+    $req->data($data);
+
+    return $this->send($req->build());
   }
 
 
@@ -156,13 +180,21 @@ class Provider extends ProviderBase {
    * Note that even though the article number is writeable you can’t change the
    * number of an existing article.
    *
-   * @param array   $params
+   * @param array   $data
    * @return array
    */
-  public function update ($id, array $params)
+  public function update ($id, array $data)
   {
-    return $this->sendRequest('PUT', $id, 'Article', $params);
+    $req = new FortieRequest();
+    $req->method('PUT');
+    $req->path($this->basePath)->path($id);
+    $req->wrapper('Article');
+    $req->setRequired($this->required_update);
+    $req->data($data);
+
+    return $this->send($req->build());
   }
+
 
   /**
    * Deletes the article permanently.
@@ -172,7 +204,12 @@ class Provider extends ProviderBase {
    */
   public function delete ($id)
   {
-    throw new Exception('Not implemented');
+    $req = new FortieRequest();
+    $req->method('DELETE');
+    $req->path($this->basePath);
+    $req->path($id);
+
+    return $this->send($req->build());
   }
 
 }
