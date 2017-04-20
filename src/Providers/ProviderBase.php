@@ -49,7 +49,7 @@ class ProviderBase
   /**
    * The base path for the Provider.
    */
-  protected $path = null;
+  protected $basePath = null;
 
 
   /**
@@ -67,9 +67,16 @@ class ProviderBase
 
 
   /**
-   * The minimum required attributes for a write request.
+   * The minimum required attributes for a create request.
    */
-  protected $required = [
+  protected $required_create = [
+  ];
+
+
+  /**
+   * The minimum required attributes for an update request.
+   */
+  protected $required_update = [
   ];
 
 
@@ -101,6 +108,40 @@ class ProviderBase
       $reader->xml($response->getBody());
       return $reader->parse();
     }
+  }
+
+
+  /**
+   * This will perform filtering on the supplied data, used when uploading data
+   * to Fortnox.
+   */
+  protected function handleData ($requiredArr = null, $bodyWrapper, $data, $sanitize = true)
+  {
+    // Filter invalid data
+    $filtered = array_intersect_key($data, array_flip($this->attributes));;
+
+    // Filter non-writeable data
+    $writeable = array_intersect_key($filtered, array_flip($this->writeable));
+
+    // Make sure all required data are set
+    if (! (count(array_intersect_key(array_flip($requiredArr), $writeable)) === count($requiredArr))) {
+      throw new MissingRequiredAttributeException($requiredArr);
+    }
+
+    // Sanitize input 
+    // See: http://guzzle3.readthedocs.org/http-client/request.html#post-requests
+    if ($sanitize) {
+      foreach ($writeable as $key => $value) {
+        $value = str_replace('@', '', $value);
+      }
+    }
+
+    // Wrap the body as required by Fortnox
+    $body = [
+      $bodyWrapper => $writeable
+    ];
+
+    return $body;
   }
 
 
@@ -182,40 +223,6 @@ class ProviderBase
         );
       }
     }
-  }
-
-
-  /**
-   * This will perform filtering on the supplied data, used when uploading data
-   * to Fortnox.
-   */
-  protected function handleData ($requiredArr = null, $bodyWrapper, $data, $sanitize = true)
-  {
-    // Filter invalid data
-    $filtered = array_intersect_key($data, array_flip($this->attributes));;
-
-    // Filter non-writeable data
-    $writeable = array_intersect_key($filtered, array_flip($this->writeable));
-
-    // Make sure all required data are set
-    if (! (count(array_intersect_key(array_flip($requiredArr), $writeable)) === count($requiredArr))) {
-      throw new MissingRequiredAttributeException($requiredArr);
-    }
-
-    // Sanitize input 
-    // See: http://guzzle3.readthedocs.org/http-client/request.html#post-requests
-    if ($sanitize) {
-      foreach ($writeable as $key => $value) {
-        $value = str_replace('@', '', $value);
-      }
-    }
-
-    // Wrap the body as required by Fortnox
-    $body = [
-      $bodyWrapper => $writeable
-    ];
-
-    return $body;
   }
 
 }
