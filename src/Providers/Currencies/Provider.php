@@ -1,5 +1,6 @@
 <?php namespace Wetcat\Fortie\Providers\Currencies;
 
+
 /*
 
    Copyright 2015 Andreas Göransson
@@ -18,11 +19,12 @@
 
 */
 
+
 use Wetcat\Fortie\Providers\ProviderBase;
+use Wetcat\Fortie\FortieRequest;
 
 
 class Provider extends ProviderBase {
-
 
   protected $attributes = [
     'Url',
@@ -34,6 +36,7 @@ class Provider extends ProviderBase {
     'Unit',
   ];
 
+
   protected $writeable = [
     'BuyRate',
     'Code',
@@ -42,15 +45,22 @@ class Provider extends ProviderBase {
     'Unit',
   ];
 
-  protected $required = [
+
+  protected $required_create = [
     'Code',
     'Description',
   ];
 
+
+  protected $required_update = [
+    'Code',
+  ];
+
+
   /**
    * Override the REST path
    */
-  protected $path = 'currencies';
+  protected $basePath = 'currencies';
 
 
   /**
@@ -60,7 +70,11 @@ class Provider extends ProviderBase {
    */
   public function all ()
   {
-    return $this->sendRequest('GET');
+    $req = new FortieRequest();
+    $req->method('GET');
+    $req->path($this->basePath);
+
+    return $this->send($req->build());
   }
 
 
@@ -72,31 +86,49 @@ class Provider extends ProviderBase {
    */
   public function find ($id)
   {
-    return $this->sendRequest('GET', $id);
+    $req = new FortieRequest();
+    $req->method('GET');
+    $req->path($this->basePath)->path($id);
+
+    return $this->send($req->build());
   }
 
 
   /**
    * Creates a currency.
    *
-   * @param array   $params
+   * @param array   $data
    * @return array
    */
-  public function create (array $params)
+  public function create (array $data)
   {
-    return $this->sendRequest('POST', null, 'Currency', $params);
+    $req = new FortieRequest();
+    $req->method('POST');
+    $req->path($this->basePath);
+    $req->wrapper('Currency');
+    $req->data($data);
+    $req->setRequired($this->required_create);
+
+    return $this->send($req->build());
   }
 
 
   /**
    * Updates a currency.
    *
-   * @param array   $params
+   * @param array   $data
    * @return array
    */
-  public function update ($id, array $params)
+  public function update ($id, array $data)
   {
-    return $this->sendRequest('PUT', $id, 'Currency', $params);
+    $req = new FortieRequest();
+    $req->method('PUT');
+    $req->path($this->basePath)->path($id);
+    $req->wrapper('Currency');
+    $req->setRequired($this->required_update);
+    $req->data($data);
+
+    return $this->send($req->build());
   }
 
 
@@ -105,8 +137,12 @@ class Provider extends ProviderBase {
    */
   public function delete ($id)
   {
-    throw new Exception('Not implemented');
-  }
+    $req = new FortieRequest();
+    $req->method('DELETE');
+    $req->path($this->basePath);
+    $req->path($id);
 
+    return $this->send($req->build());
+  }
 
 }
