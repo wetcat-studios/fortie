@@ -1,4 +1,4 @@
-<?php namespace Wetcat\Fortie;
+<?php namespace Wetcat\Fortie\Exceptions;
 
 /*
 
@@ -18,4 +18,23 @@
 
 */
 
-class MissingRequiredAttributeException extends Exception { }
+class FortnoxException extends \Exception {
+    
+    public $error;
+
+    public $message;
+
+    public $code;
+
+    public function __construct($error = null, $message = null, $code = null)
+    {
+        parent::__construct($message . ' (' . $code . ')');
+        
+        $this->error = $error;
+
+        $this->message = $message;
+
+        $this->code = $code;
+    }
+
+}

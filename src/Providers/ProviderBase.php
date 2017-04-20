@@ -18,7 +18,9 @@
 
 */
 
-use Wetcat\Fortie\MissingRequiredAttributeException;
+
+use Wetcat\Fortie\Exceptions\MissingRequiredAttributeException;
+use Wetcat\Fortie\Exceptions\FortnoxException;
 
 
 /**
@@ -182,16 +184,31 @@ class ProviderBase
     catch (\GuzzleHttp\Exception\ClientException $e) {
       $response = $e->getResponse();
       $responseBodyAsString = $response->getBody()->getContents();
-      //echo $responseBodyAsString;
+      $jsonError = json_decode($responseBodyAsString);
+
+      // Because Fortnox API can use both non-capitalized and capitalized parameters.
+      if (property_exists($jsonError->ErrorInformation, 'error')) {
+        throw new FortnoxException(
+          $jsonError->ErrorInformation->error,
+          $jsonError->ErrorInformation->message,
+          $jsonError->ErrorInformation->code
+        );
+      } else {
+        throw new FortnoxException(
+          $jsonError->ErrorInformation->Error,
+          $jsonError->ErrorInformation->Message,
+          $jsonError->ErrorInformation->Code
+        );
+      }
     }
   }
 
 
   /**
-   * This will perform filtering on the supplied data, used when 
-   * uploading data to Fortnox.
+   * This will perform filtering on the supplied data, used when uploading data
+   * to Fortnox.
    */
-  protected function handleData ($bodyWrapper, $data, $sanitize = true)
+  protected function handleData ($requiredArr = null, $bodyWrapper, $data, $sanitize = true)
   {
     // Filter invalid data
     $filtered = array_intersect_key($data, array_flip($this->attributes));;
@@ -200,8 +217,8 @@ class ProviderBase
     $writeable = array_intersect_key($filtered, array_flip($this->writeable));
 
     // Make sure all required data are set
-    if (! count(array_intersect_key(array_flip($this->required), $writeable)) === count($this->required)) {
-      throw new MissingRequiredAttributeException;
+    if (! (count(array_intersect_key(array_flip($requiredArr), $writeable)) === count($requiredArr))) {
+      throw new MissingRequiredAttributeException($requiredArr);
     }
 
     // Sanitize input 
