@@ -21,9 +21,7 @@
 use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\FortieRequest;
 
-
 class Provider extends ProviderBase {
-
 
   protected $attributes = [
     'Url',
@@ -152,6 +150,5 @@ class Provider extends ProviderBase {
 
     return $this->send($req->build());
   }
-
 
 }

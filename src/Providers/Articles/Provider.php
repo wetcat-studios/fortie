@@ -18,10 +18,8 @@
 
 */
 
-
 use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\FortieRequest;
-
 
 class Provider extends ProviderBase {
 

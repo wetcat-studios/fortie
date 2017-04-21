@@ -1,6 +1,5 @@
 <?php namespace Wetcat\Fortie\Providers\Contracts;
 
-
 /*
 
    Copyright 2015 Andreas Göransson
@@ -19,11 +18,9 @@
 
 */
 
-
 use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\FortieRequest;
 use Wetcat\Fortie\Providers\Contracts\Filter;
-
 
 class Provider extends ProviderBase {
 

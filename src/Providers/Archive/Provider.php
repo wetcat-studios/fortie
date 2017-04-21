@@ -20,9 +20,7 @@
 
 use Wetcat\Fortie\Providers\ProviderBase;
 
-
 class Provider extends ProviderBase {
-
 
   protected $attributes = [
     'Url',
@@ -40,11 +38,18 @@ class Provider extends ProviderBase {
     'Name',
   ];
 
+
   protected $writeable = [
     'Name',
   ];
 
-  protected $required = [
+
+  protected $required_create = [
+    'Name',
+  ];
+
+
+  protected $required_update = [
     'Name',
   ];
 
@@ -55,26 +60,35 @@ class Provider extends ProviderBase {
 
 
   /**
-   * Retrieves a list of files.
+   * Retrieve the root folder.
    *
    * @param $dir
    * @return array
    */
-  public function all ($dir)
+  public function root ()
   {
-    return $this->sendRequest('GET', null, null, null, ['path' => $dir]);
+    $req = new FortieRequest();
+    $req->method('GET');
+    $req->path($this->basePath);
+
+    return $this->send($req->build());
   }
 
 
   /**
-   * Retrieves a list of files and folders or a single file or folder.
+   * Retrieve the folder or file at the path.
    *
-   * @param $file
+   * @param $path
    * @return array
    */
-  public function find ($file)
+  public function findPath ($path)
   {
-    return $this->sendRequest('GET', $file);
+    $req = new FortieRequest();
+    $req->method('GET');
+    $req->path($this->basePath);
+    $req->param('path', $path);
+
+    return $this->send($req->build());
   }
 
 
@@ -126,6 +140,5 @@ class Provider extends ProviderBase {
       return $this->sendRequest('DELETE', null, null, null, ['path' => $folder]);
     }
   }
-
 
 }

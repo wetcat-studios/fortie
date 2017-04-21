@@ -1,6 +1,5 @@
 <?php namespace Wetcat\Fortie\Providers\Currencies;
 
-
 /*
 
    Copyright 2015 Andreas Göransson
@@ -19,10 +18,8 @@
 
 */
 
-
 use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\FortieRequest;
-
 
 class Provider extends ProviderBase {
 
