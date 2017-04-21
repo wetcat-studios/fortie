@@ -19,10 +19,9 @@
 */
 
 use Wetcat\Fortie\Providers\ProviderBase;
-
+use Wetcat\Fortie\FortieRequest;
 
 class Provider extends ProviderBase {
-
 
   protected $attributes = [
     'Url',
@@ -138,6 +137,7 @@ class Provider extends ProviderBase {
     'VAT',
   ];
 
+
   protected $writeable = [
     'AdministrationFee',
     'Address1',
@@ -216,14 +216,22 @@ class Provider extends ProviderBase {
     'VAT',
   ];
 
-  protected $required = [
+
+  protected $required_create = [
+    'CustomerNumber',
+    'InvoiceRows' 
+  ];
+
+
+  protected $required_update = [
     'CustomerNumber', 
   ];
+
 
   /**
    * Override the REST path
    */
-  protected $path = 'invoices';
+  protected $basePath = 'invoices';
 
 
   /**
@@ -232,9 +240,17 @@ class Provider extends ProviderBase {
    *
    * @return array
    */
-  public function all ()
+  public function all ($filter = null)
   {
-    return $this->sendRequest('GET');
+    $req = new FortieRequest();
+    $req->method('GET');
+    $req->path($this->basePath);
+
+    if (!is_null($filter)) {
+      $req->filter($filter);
+    }
+
+    return $this->send($req->build());
   }
 
 
@@ -248,7 +264,11 @@ class Provider extends ProviderBase {
    */
   public function find ($id)
   {
-    return $this->sendRequest('GET', $id);
+    $req = new FortieRequest();
+    $req->method('GET');
+    $req->path($this->basePath)->path($id);
+
+    return $this->send($req->build());
   }
 
 
@@ -265,12 +285,19 @@ class Provider extends ProviderBase {
    * Predefined values will always be overwritten by values provided 
    * through the API.
    *
-   * @param array   $params
+   * @param array   $data
    * @return array
    */
-  public function create (array $params)
+  public function create (array $data)
   {
-    return $this->sendRequest('POST', null, 'Invoice', $params);
+    $req = new FortieRequest();
+    $req->method('POST');
+    $req->path($this->basePath);
+    $req->wrapper('Invoice');
+    $req->setRequired($this->required_create);
+    $req->data($data);
+
+    return $this->send($req->build());
   }
 
 
@@ -288,9 +315,16 @@ class Provider extends ProviderBase {
    * @param array   $params
    * @return array
    */
-  public function update ($id, array $params)
+  public function update ($id, array $data)
   {
-    return $this->sendRequest('PUT', $id, 'Invoice', $params);
+    $req = new FortieRequest();
+    $req->method('PUT');
+    $req->path($this->basePath)->path($id);
+    $req->wrapper('Invoice');
+    $req->setRequired($this->required_update);
+    $req->data($data);
+
+    return $this->send($req->build());
   }
 
 
@@ -299,7 +333,12 @@ class Provider extends ProviderBase {
    */
   public function bookkeep ($id)
   {
-    return $this->sendRequest('PUT', [$id, 'bookkeep']);
+    $req = new FortieRequest();
+    $req->method('PUT');
+    $req->path($this->basePath)->path($id)->path('bookkeep');
+    $req->wrapper('Invoice');
+
+    return $this->send($req->build());
   }
 
 
@@ -308,7 +347,12 @@ class Provider extends ProviderBase {
    */
   public function cancel ($id)
   {
-    return $this->sendRequest('PUT', [$id, 'cancel']);
+    $req = new FortieRequest();
+    $req->method('PUT');
+    $req->path($this->basePath)->path($id)->path('cancel');
+    $req->wrapper('Invoice');
+
+    return $this->send($req->build());
   }
 
 
@@ -319,7 +363,12 @@ class Provider extends ProviderBase {
    */
   public function credit ($id)
   {
-    return $this->sendRequest('PUT', [$id, 'credit']);
+    $req = new FortieRequest();
+    $req->method('PUT');
+    $req->path($this->basePath)->path($id)->path('credit');
+    $req->wrapper('Invoice');
+
+    return $this->send($req->build());
   }
 
 
@@ -331,7 +380,12 @@ class Provider extends ProviderBase {
    */
   public function email ($id)
   {
-    return $this->sendRequest('PUT', [$id, 'email']);
+    $req = new FortieRequest();
+    $req->method('PUT');
+    $req->path($this->basePath)->path($id)->path('email');
+    $req->wrapper('Invoice');
+
+    return $this->send($req->build());
   }
 
 
@@ -342,7 +396,12 @@ class Provider extends ProviderBase {
    */
   public function write ($id)
   {
-    return $this->sendRequest('GET', [$id, 'print']);
+    $req = new FortieRequest();
+    $req->method('PUT');
+    $req->path($this->basePath)->path($id)->path('print');
+    $req->wrapper('Invoice');
+
+    return $this->send($req->build());
   }
 
 
@@ -353,7 +412,12 @@ class Provider extends ProviderBase {
    */
   public function reminder ($id)
   {
-    return $this->sendRequest('GET', [$id, 'printreminder']);
+    $req = new FortieRequest();
+    $req->method('PUT');
+    $req->path($this->basePath)->path($id)->path('printreminder');
+    $req->wrapper('Invoice');
+
+    return $this->send($req->build());
   }
 
 
@@ -363,7 +427,12 @@ class Provider extends ProviderBase {
    */
   public function external ($id)
   {
-    return $this->sendRequest('GET', [$id, 'externalprint']);
+    $req = new FortieRequest();
+    $req->method('PUT');
+    $req->path($this->basePath)->path($id)->path('externalprint');
+    $req->wrapper('Invoice');
+
+    return $this->send($req->build());
   }
 
 
@@ -374,7 +443,12 @@ class Provider extends ProviderBase {
    */
   public function preview ($id)
   {
-    return $this->sendRequest('GET', [$id, 'credit']);
+    $req = new FortieRequest();
+    $req->method('GET');
+    $req->path($this->basePath)->path($id)->path('credit');
+    $req->wrapper('Invoice');
+
+    return $this->send($req->build());
   }
 
 }
