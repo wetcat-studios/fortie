@@ -336,7 +336,6 @@ class Provider extends ProviderBase {
     $req = new FortieRequest();
     $req->method('PUT');
     $req->path($this->basePath)->path($id)->path('bookkeep');
-    $req->wrapper('Invoice');
 
     return $this->send($req->build());
   }
@@ -350,7 +349,6 @@ class Provider extends ProviderBase {
     $req = new FortieRequest();
     $req->method('PUT');
     $req->path($this->basePath)->path($id)->path('cancel');
-    $req->wrapper('Invoice');
 
     return $this->send($req->build());
   }
@@ -366,7 +364,6 @@ class Provider extends ProviderBase {
     $req = new FortieRequest();
     $req->method('PUT');
     $req->path($this->basePath)->path($id)->path('credit');
-    $req->wrapper('Invoice');
 
     return $this->send($req->build());
   }
@@ -383,7 +380,6 @@ class Provider extends ProviderBase {
     $req = new FortieRequest();
     $req->method('PUT');
     $req->path($this->basePath)->path($id)->path('email');
-    $req->wrapper('Invoice');
 
     return $this->send($req->build());
   }
@@ -399,7 +395,6 @@ class Provider extends ProviderBase {
     $req = new FortieRequest();
     $req->method('PUT');
     $req->path($this->basePath)->path($id)->path('print');
-    $req->wrapper('Invoice');
 
     return $this->send($req->build());
   }
@@ -415,7 +410,6 @@ class Provider extends ProviderBase {
     $req = new FortieRequest();
     $req->method('PUT');
     $req->path($this->basePath)->path($id)->path('printreminder');
-    $req->wrapper('Invoice');
 
     return $this->send($req->build());
   }
@@ -430,7 +424,6 @@ class Provider extends ProviderBase {
     $req = new FortieRequest();
     $req->method('PUT');
     $req->path($this->basePath)->path($id)->path('externalprint');
-    $req->wrapper('Invoice');
 
     return $this->send($req->build());
   }
@@ -446,7 +439,6 @@ class Provider extends ProviderBase {
     $req = new FortieRequest();
     $req->method('GET');
     $req->path($this->basePath)->path($id)->path('credit');
-    $req->wrapper('Invoice');
 
     return $this->send($req->build());
   }
