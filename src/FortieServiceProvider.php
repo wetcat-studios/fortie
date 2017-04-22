@@ -47,8 +47,8 @@ class FortieServiceProvider extends ServiceProvider
     //$this->package('wetcat/fortie');
 
     $this->publishes([
-      __DIR__.'/config/config.php' => config_path('fortie.php'),
-    ]);
+        __DIR__.'/config/config.php' => config_path('fortie.php')
+    ], 'config');
   }
 
 

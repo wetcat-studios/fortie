@@ -93,6 +93,71 @@ class ProviderBase
 
 
   /**
+   * Base retrieve function
+   *
+   * @return array
+   */
+  public function all ()
+  {
+    $req = new FortieRequest();
+    $req->method('GET');
+    $req->path($this->basePath);
+
+    return $this->send($req->build());
+  }
+
+
+  /**
+   * Base find function
+   *
+   * @param $id
+   * @return array
+   */
+  public function find ($id)
+  {
+    $req = new FortieRequest();
+    $req->method('GET');
+    $req->path($this->basePath)->path($id);
+
+    return $this->send($req->build());
+  }
+
+
+  /**
+   * Base create function
+   *
+   * @param array   $params
+   * @return array
+   */
+  abstract public function create (array $data);
+
+
+  /**
+   * Updates a project.
+   *
+   * @param array   $params
+   * @return array
+   */
+  abstract public function update ($id, array $data);
+  
+
+  /**
+   * Base delete function
+   *
+   * @param $id   The resource id
+   * @return array
+   */
+  public function delete ($id)
+  {
+    $req = new FortieRequest();
+    $req->method('DELETE');
+    $req->path($this->basePath)->path($id);
+
+    return $this->send($req->build());
+  }
+
+
+  /**
    * Handle the response, whether it's JSON or XML.
    */
   protected function handleResponse (\GuzzleHttp\Psr7\Response $response)
