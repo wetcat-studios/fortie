@@ -46,7 +46,7 @@ class FortieServiceProvider extends ServiceProvider
   {
 
     if ($this->app->runningInConsole()) {
-        $this->commands($commands);
+        $this->commands($this->commands);
     }
 
     $this->publishes([
