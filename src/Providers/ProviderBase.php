@@ -129,7 +129,9 @@ abstract class ProviderBase
    * @param array   $params
    * @return array
    */
-  abstract public function create (array $data);
+  public function create (array $data)
+  {
+  }
 
 
   /**
@@ -138,7 +140,9 @@ abstract class ProviderBase
    * @param array   $params
    * @return array
    */
-  abstract public function update ($id, array $data);
+  public function update ($id, array $data)
+  {
+  }
   
 
   /**
