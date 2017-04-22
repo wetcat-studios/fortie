@@ -33,7 +33,7 @@ class FortieServiceProvider extends ServiceProvider
   protected $defer = false;
   
   protected $commands = [
-    Wetcat\Fortie\Commands\ActivateCommand::class,
+    Commands\ActivateCommand::class,
   ];
 
 
@@ -88,7 +88,7 @@ class FortieServiceProvider extends ServiceProvider
    */
   protected function registerFortie()
   {
-    $this->app->singleton(Wetcat\Fortie\Fortie::class, function ($app) 
+    $this->app->singleton(Fortie::class, function ($app) 
     {
       $access_token   = Config::get('fortie.default.access_token', Config::get('fortie::default.access_token'));
       $client_secret  = Config::get('fortie.default.client_secret', Config::get('fortie::default.client_secret'));
