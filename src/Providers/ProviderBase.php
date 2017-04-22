@@ -93,53 +93,6 @@ abstract class ProviderBase
 
 
   /**
-   * Base retrieve function
-   *
-   * @return array
-   */
-  public function all ()
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Base find function
-   *
-   * @param $id
-   * @return array
-   */
-  public function find ($id)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath)->path($id);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Base delete function
-   *
-   * @param $id   The resource id
-   * @return array
-   */
-  public function delete ($id)
-  {
-    $req = new FortieRequest();
-    $req->method('DELETE');
-    $req->path($this->basePath)->path($id);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
    * Handle the response, whether it's JSON or XML.
    */
   protected function handleResponse (\GuzzleHttp\Psr7\Response $response)
