@@ -48,75 +48,90 @@ class Fortie
    */
   protected $accountProvider;
 
+
   /**
    * Provides access to archives endpoints.
    */
   protected $archiveProvider;
+
 
   /**
    * Provides access to article endpoints.
    */
   protected $articleProvider;
 
+
   /**
    * Provides access to the company settings endpoint. This is read-only.
    */
   protected $companySettingsProvider;
+
 
   /**
    * Provides access to the contracts endpoint.
    */
   protected $contractProvider;
 
+
   /**
    * Provides access to invoices actions and endpoints.
    */
   protected $invoiceProvider;
+
 
   /**
    * Provides access to offers actions and endpoints.
    */
   protected $offerProvider;
 
+
   /**
    * Provides access to customer endpoints.
    */
   protected $customerProvider;
+
 
   /**
    * Provides access to currencies.
    */
   protected $currencyProvider;
 
+
   /**
    * Provides access to orders.
    */
   protected $orderProvider;
+
 
   /**
    * Provides access to price lists.
    */
   protected $priceListProvider;
 
+
   /**
    * Provides access to prices.
    */
   protected $priceProvider;
+
 
   /**
    * Provides access to projects.
    */
   protected $projectProvider;
 
+
   /**
    * Provides access to suppliers.
    */
   protected $supplierProvider;
 
+
   /**
    * Provides access to units.
    */
   protected $unitProvider;
+
 
   /**
    * Provides access to vouchers.
@@ -176,6 +191,7 @@ class Fortie
     return $this->accountProvider;
   }
 
+
   /**
    * Get the archive provider.
    *
@@ -183,7 +199,8 @@ class Fortie
    */
   public function archive ()
   {
-    return $this->archiveProvider; }
+    return $this->archiveProvider;
+  }
 
 
   /**
@@ -196,6 +213,7 @@ class Fortie
     return $this->articleProvider;
   }
 
+
   /**
    * Get the company settings provider.
    *
@@ -205,6 +223,7 @@ class Fortie
   {
     return $this->companySettingsProvider;
   }
+
 
   /**
    * Get the contracts provider.

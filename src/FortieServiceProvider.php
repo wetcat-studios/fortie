@@ -33,7 +33,7 @@ class FortieServiceProvider extends ServiceProvider
   protected $defer = false;
   
   protected $commands = [
-    'Wetcat\Fortie\Commands\ActivateCommand',
+    Wetcat\Fortie\Commands\ActivateCommand::class,
   ];
 
 
@@ -44,7 +44,10 @@ class FortieServiceProvider extends ServiceProvider
    */
   public function boot()
   {
-    //$this->package('wetcat/fortie');
+
+    if ($this->app->runningInConsole()) {
+        $this->commands($commands);
+    }
 
     $this->publishes([
         __DIR__.'/config/config.php' => config_path('fortie.php')
@@ -63,8 +66,6 @@ class FortieServiceProvider extends ServiceProvider
       __DIR__.'/config/config.php', 'fortie'
     );
     
-    $this->commands($this->commands);
-
     $this->registerFortie();
   }
 
@@ -76,7 +77,7 @@ class FortieServiceProvider extends ServiceProvider
    */
   public function provides()
   {
-    return array();
+    return [];
   }
 
 
@@ -87,7 +88,7 @@ class FortieServiceProvider extends ServiceProvider
    */
   protected function registerFortie()
   {
-    $this->app->singleton('Wetcat\Fortie\Fortie', function ($app) 
+    $this->app->singleton(Wetcat\Fortie\Fortie::class, function ($app) 
     {
       $access_token   = Config::get('fortie.default.access_token', Config::get('fortie::default.access_token'));
       $client_secret  = Config::get('fortie.default.client_secret', Config::get('fortie::default.client_secret'));

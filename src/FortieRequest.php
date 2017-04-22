@@ -18,9 +18,7 @@
 
 */
 
-
 use Wetcat\Fortie\BaseProvider;
-
 
 class FortieRequest
 {

@@ -37,7 +37,7 @@ use Wetcat\Fortie\FortieRequest;
  * The response (either XML or JSON) is then turned into an array and
  * retured to the caller.
  */
-class ProviderBase
+abstract class ProviderBase
 {
 
   /**
