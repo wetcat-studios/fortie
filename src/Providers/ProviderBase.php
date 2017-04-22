@@ -124,28 +124,6 @@ abstract class ProviderBase
 
 
   /**
-   * Base create function
-   *
-   * @param array   $params
-   * @return array
-   */
-  public function create (array $data)
-  {
-  }
-
-
-  /**
-   * Updates a project.
-   *
-   * @param array   $params
-   * @return array
-   */
-  public function update ($id, array $data)
-  {
-  }
-  
-
-  /**
    * Base delete function
    *
    * @param $id   The resource id
