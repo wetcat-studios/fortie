@@ -90,4 +90,14 @@ class Provider extends ProviderBase {
     return $this->send($req->build());
   }
 
+  public function create (array $data)
+  {
+    throw new Exception('This is not implemented in Company Settings');
+  }
+
+  public function update ($id, array $data)
+  {
+    throw new Exception('This is not implemented in Company Settings');
+  }
+
 }
