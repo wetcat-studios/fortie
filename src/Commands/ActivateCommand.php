@@ -18,6 +18,8 @@
 
 */
 
+use Illuminate\Console\Command;
+
 class ActivateCommand extends Command {
 
   protected $signature = 'joindin:sync {eventId?}';
