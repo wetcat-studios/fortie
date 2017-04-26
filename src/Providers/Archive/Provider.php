@@ -18,7 +18,9 @@
 
 */
 
+use Wetcat\Fortie\Exceptions\MissingRequiredAttributeException;
 use Wetcat\Fortie\Providers\ProviderBase;
+use Wetcat\Fortie\FortieRequest;
 
 class Provider extends ProviderBase {
 
@@ -53,10 +55,11 @@ class Provider extends ProviderBase {
     'Name',
   ];
 
+
   /**
    * Override the REST path
    */
-  protected $path = 'archive';
+  protected $basePath = 'archive';
 
 
   /**
@@ -83,6 +86,10 @@ class Provider extends ProviderBase {
    */
   public function findPath ($path)
   {
+    if (is_null()) {
+      throw new MissingRequiredAttributeException($requiredArr);
+    }
+
     $req = new FortieRequest();
     $req->method('GET');
     $req->path($this->basePath);
@@ -99,9 +106,20 @@ class Provider extends ProviderBase {
    * @param array $params
    * @return array
    */
-  public function subdir (array $params)
+  public function subdir ($name = null, $parent = null)
   {
-    return $this->sendRequest('POST', null, 'Folder', $params);
+    $req = new FortieRequest();
+    $req->method('POST');
+    $req->path($this->basePath);
+    $req->wrapper('Folder');
+    $req->setRequired($this->required_create);
+    $req->data(['Name' => $name]);
+
+    if (!is_null($parent)) {
+      $req->param('path', $parent);
+    }
+
+    return $this->send($req->build());
   }
 
 

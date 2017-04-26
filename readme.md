@@ -235,6 +235,11 @@ This package is built with the following dependencies.
 * [Guzzle](https://github.com/guzzle/guzzle)
 * [sabre/xml](https://github.com/fruux/sabre-xml)
 
+## Troubleshooting
+
+If you've got troubles with cURL errors (specifically `cURL error 56`) you can check (this)[http://stackoverflow.com/a/26538127/388320] answer at Stackoverflow.
+
+
 ## License
 
 Copyright 2015 Andreas Göransson
