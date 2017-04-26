@@ -48,6 +48,7 @@ class Provider extends ProviderBase {
 
 
   protected $required_create = [
+    'Description'
   ];
 
 
@@ -61,6 +62,36 @@ class Provider extends ProviderBase {
   protected $basePath = 'projects';
 
 
+  /**
+   * Retrieves a list of orders.
+   *
+   * @return array
+   */
+  public function all ()
+  {
+    $req = new FortieRequest();
+    $req->method('GET');
+    $req->path($this->basePath);
+
+    return $this->send($req->build());
+  }
+
+
+  /**
+   * Retrieves a list of orders.
+   *
+   * @return array
+   */
+  public function find ($projectNumber = null)
+  {
+    $req = new FortieRequest();
+    $req->method('GET');
+    $req->path($this->basePath)->path($projectNumber);
+
+    return $this->send($req->build());
+  }
+
+  
   /**
    * Creates a project.
    *
@@ -94,6 +125,19 @@ class Provider extends ProviderBase {
     $req->wrapper('Project');
     $req->setRequired($this->required_update);
     $req->data($data);
+
+    return $this->send($req->build());
+  }
+
+
+  /**
+   * Removes a project
+   */
+  public function delete ($projectNumber)
+  {
+    $req = new FortieRequest();
+    $req->method('DELETE');
+    $req->path($this->basePath)->path($projectNumber);
 
     return $this->send($req->build());
   }
