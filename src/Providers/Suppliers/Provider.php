@@ -19,10 +19,9 @@
 */
 
 use Wetcat\Fortie\Providers\ProviderBase;
-
+use Wetcat\Fortie\FortieRequest;
 
 class Provider extends ProviderBase {
-
 
   protected $attributes = [
     'Url',
@@ -69,6 +68,7 @@ class Provider extends ProviderBase {
     'ZipCode',
   ];
 
+
   protected $writeable = [
     'Url',
     'Active',
@@ -114,14 +114,20 @@ class Provider extends ProviderBase {
     'ZipCode',
   ];
 
-  protected $required = [
+
+  protected $required_create = [
     'Name',
   ];
+
+
+  protected $required_update = [
+  ];
+
 
   /**
    * Override the REST path
    */
-  protected $path = 'suppliers';
+  protected $basePath = 'suppliers';
 
 
   /**
@@ -131,52 +137,78 @@ class Provider extends ProviderBase {
    */
   public function all ()
   {
-    return $this->sendRequest('GET');
+    $req = new FortieRequest();
+    $req->method('GET');
+    $req->path($this->basePath);
+
+    return $this->send($req->build());
   }
 
 
   /**
    * Retrieves a single supplier.
    *
-   * @param $id
+   * @param $supplierNumber
    * @return array
    */
-  public function find ($id)
+  public function find ($supplierNumber)
   {
-    return $this->sendRequest('GET', $id);
+    $req = new FortieRequest();
+    $req->method('GET');
+    $req->path($this->basePath)->path($supplierNumber);
+
+    return $this->send($req->build());
   }
 
 
   /**
    * Creates a supplier.
    *
-   * @param array   $params
+   * @param array   $data
    * @return array
    */
-  public function create (array $params)
+  public function create (array $data)
   {
-    return $this->sendRequest('POST', null, 'Supplier', $params);
+    $req = new FortieRequest();
+    $req->method('POST');
+    $req->path($this->basePath);
+    $req->wrapper('Supplier');
+    $req->setRequired($this->required_create);
+    $req->data($data);
+
+    return $this->send($req->build());
   }
 
 
   /**
    * Updates a supplier.
    *
-   * @param array   $params
+   * @param array   $data
    * @return array
    */
-  public function update ($id, array $params)
+  public function update ($id, array $data)
   {
-    return $this->sendRequest('PUT', $id, 'Supplier', $params);
+    $req = new FortieRequest();
+    $req->method('PUT');
+    $req->path($this->basePath)->path($id);
+    $req->wrapper('Supplier');
+    $req->setRequired($this->required_update);
+    $req->data($data);
+
+    return $this->send($req->build());
   }
 
 
   /**
    * Removes a supplier.
    */
-  public function delete ($id)
+  public function delete ($supplierNumber)
   {
-    throw new Exception('Not implemented');
+    $req = new FortieRequest();
+    $req->method('DELETE');
+    $req->path($this->basePath)->path($supplierNumber);
+
+    return $this->send($req->build());
   }
 
 }

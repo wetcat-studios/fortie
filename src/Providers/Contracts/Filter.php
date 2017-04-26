@@ -1,4 +1,4 @@
-<?php namespace Wetcat\Fortie\Commands;
+<?php namespace Wetcat\Fortie\Providers\Contracts;
 
 /*
 
@@ -18,24 +18,23 @@
 
 */
 
-use Illuminate\Console\Command;
+abstract class Filter {
 
-class ActivateCommand extends Command {
+  /**
+   * Retrieves all active contracts
+   */
+  const ACTIVE = 'active';
 
-  protected $signature = 'joindin:sync {eventId?}';
 
-  protected $description = 'Sync down Joind.in events.';
+  /**
+   * Retrieves all inactive contracts
+   */
+  const INACTIVE = 'inactive';
 
-  public function handle()
-  {
-    if ($eventId = $this->argument('eventId')) {
-      $this->info("Syncing event $eventId");
 
-      return $this->client->syncEvent($eventId);
-    }
+  /**
+   * Retrieves all finished contracts
+   */
+  const FINISHED = 'finished';
 
-    $this->info("Syncing all events");
-
-    return $this->client->syncAllEvents();
-  }
-}
+};

@@ -18,9 +18,11 @@ If you don't have Composer you should [install it](https://getcomposer.org/downl
 
 ## Configuration
 
-In Laravel you change use the published configuration file found at `config/fortie.php`, it should look something like the following. Fill this in with the details provided by Fortnox when you signed up.
+In Laravel you can publish the config file with `php artisan vendor:publish --provider="Wetcat\Fortie\FortieServiceProvider" --tag="config"`, after this the file should be available in `app/fortie.php`. Use the details provided by Fortnox when you signed up.
 
 The **Access Token** is not provided when signing up, you need to get that seperately using your **Auth Code** and **Client Secret**. Read more about this process [here](http://developer.fortnox.se/documentation/general/authentication/).
+
+The configruation file should look something like this:
 
 ```php
 <?php 
@@ -81,6 +83,11 @@ return [
 When you've included the Service Provider you can then use dependency injection in your BaseController to make fortie available in all controllers.
 
 ```php
+
+[...]
+
+use Wetcat\Fortie\Fortie;
+
 abstract class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
@@ -98,6 +105,7 @@ abstract class Controller extends BaseController
 Just call `$this->fortie->...` to access Fortie.
 
 ```php
+
 class MyController extends Controller
 {
     /**
@@ -107,7 +115,7 @@ class MyController extends Controller
      */
     public function index()
     {
-        dd($this->fortie->accounts()->listAllAccounts());
+        dd($this->fortie->accounts()->all());
     }
 
     ...
@@ -119,7 +127,9 @@ Of course you can also inject Fortie into any Laravel controller method to limit
 
 ```php
 
-use Wetcat\Fortie\Fortie as Fortie;
+[...]
+
+use Wetcat\Fortie\Fortie;
 
 class MyController extends Controller
 {
@@ -130,7 +140,7 @@ class MyController extends Controller
      */
     public function index(Fortie $fortie)
     {
-        dd($fortie->accounts()->listAllAccounts());
+        dd($fortie->accounts()->all());
     }
 
     ...
@@ -175,12 +185,14 @@ For details on the usage of all providers you should consult [the Wiki](https://
 #### Currently implemented providers
 
 * Accounts
-* Archive
+* Archive (Needs to be verified)
 * Articles
 * Company Settings
 * Contracts
 * Currencies
 * Customers
+* Employees (Needs to be verified)
+* Financial years
 * Invoices
 * Offers
 * Orders
@@ -198,7 +210,6 @@ For details on the usage of all providers you should consult [the Wiki](https://
 * Contract Accruals
 * Contract Templates
 * Cost Centres
-* Financial years
 * Inbox
 * Invoice accruals
 * Invoice payments
@@ -223,6 +234,11 @@ This package is built with the following dependencies.
 
 * [Guzzle](https://github.com/guzzle/guzzle)
 * [sabre/xml](https://github.com/fruux/sabre-xml)
+
+## Troubleshooting
+
+If you've got troubles with cURL errors (specifically `cURL error 56`) you can check (this)[http://stackoverflow.com/a/26538127/388320] answer at Stackoverflow.
+
 
 ## License
 

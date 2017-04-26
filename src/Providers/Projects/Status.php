@@ -1,4 +1,4 @@
-<?php namespace Wetcat\Fortie\Commands;
+<?php namespace Wetcat\Fortie\Providers\Projects;
 
 /*
 
@@ -18,24 +18,23 @@
 
 */
 
-use Illuminate\Console\Command;
+abstract class Status {
 
-class ActivateCommand extends Command {
+  /**
+   * Project was not started yet
+   */
+  const NOT_STARTED = 'NOTSTARTED';
 
-  protected $signature = 'joindin:sync {eventId?}';
 
-  protected $description = 'Sync down Joind.in events.';
+  /**
+   * Project was started, and is ongoing
+   */
+  const ONGOING = 'ONGOING';
 
-  public function handle()
-  {
-    if ($eventId = $this->argument('eventId')) {
-      $this->info("Syncing event $eventId");
 
-      return $this->client->syncEvent($eventId);
-    }
+  /**
+   * Project was completed
+   */
+  const COMPLETED = 'COMPLETED';
 
-    $this->info("Syncing all events");
-
-    return $this->client->syncAllEvents();
-  }
-}
+};

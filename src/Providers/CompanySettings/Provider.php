@@ -19,7 +19,7 @@
 */
 
 use Wetcat\Fortie\Providers\ProviderBase;
-
+use Wetcat\Fortie\FortieRequest;
 
 class Provider extends ProviderBase {
 
@@ -56,16 +56,23 @@ class Provider extends ProviderBase {
     'ZipCode',
   ];
 
+
   protected $writeable = [
   ];
 
-  protected $required = [
+
+  protected $required_create = [
   ];
+
+
+  protected $required_update = [
+  ];
+
 
   /**
    * Override the REST path
    */
-  protected $path = 'settings/company';
+  protected $basePath = 'settings/company';
 
 
   /**
@@ -76,17 +83,21 @@ class Provider extends ProviderBase {
    */
   public function all ()
   {
-    return $this->sendRequest('GET');
+    $req = new FortieRequest();
+    $req->method('GET');
+    $req->path($this->basePath);
+
+    return $this->send($req->build());
+  }
+
+  public function create (array $data)
+  {
+    throw new Exception('This is not implemented in Company Settings');
+  }
+
+  public function update ($id, array $data)
+  {
+    throw new Exception('This is not implemented in Company Settings');
   }
 
 }
-
-
-
-
-
-
-
-
-
-

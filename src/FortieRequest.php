@@ -18,9 +18,7 @@
 
 */
 
-
 use Wetcat\Fortie\BaseProvider;
-
 
 class FortieRequest
 {
@@ -150,7 +148,7 @@ class FortieRequest
    */
   public function param ($key, $value)
   {
-    if (!is_null($params)) {
+    if (!is_null($key)) {
       $this->params[$key] = $value;
     }
 

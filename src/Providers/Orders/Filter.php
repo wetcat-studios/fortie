@@ -1,4 +1,4 @@
-<?php namespace Wetcat\Fortie\Commands;
+<?php namespace Wetcat\Fortie\Providers\Orders;
 
 /*
 
@@ -18,24 +18,30 @@
 
 */
 
-use Illuminate\Console\Command;
+abstract class Filter {
 
-class ActivateCommand extends Command {
+  /**
+   * Retrieves all orders with the status “cancelled”
+   */
+  const CANCELLED = 'cancelled';
 
-  protected $signature = 'joindin:sync {eventId?}';
 
-  protected $description = 'Sync down Joind.in events.';
+  /**
+   * Retrieves all orders that has been expired
+   */
+  const EXPIRED = 'expired';
 
-  public function handle()
-  {
-    if ($eventId = $this->argument('eventId')) {
-      $this->info("Syncing event $eventId");
 
-      return $this->client->syncEvent($eventId);
-    }
+  /**
+   * Retrieves all offers where an invoice has been created
+   */
+  const CREATED = 'invoicecreated';
 
-    $this->info("Syncing all events");
 
-    return $this->client->syncAllEvents();
-  }
-}
+  /**
+   * Retrieves all orders where an invoice has not been created
+   */
+  const NOT_CREATED = 'invoicenotcreated';
+
+};
+	

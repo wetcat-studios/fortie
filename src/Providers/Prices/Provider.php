@@ -18,11 +18,11 @@
 
 */
 
+use Wetcat\Fortie\Exceptions\MissingRequiredAttributeException;
 use Wetcat\Fortie\Providers\ProviderBase;
-
+use Wetcat\Fortie\FortieRequest;
 
 class Provider extends ProviderBase {
-
 
   protected $attributes = [
     'Url',
@@ -34,6 +34,7 @@ class Provider extends ProviderBase {
     'PriceList',
   ];
 
+
   protected $writeable = [
     'ArticleNumber',
     'FromQuantity',
@@ -42,16 +43,22 @@ class Provider extends ProviderBase {
     'PriceList',
   ];
 
-  protected $required = [
+
+  protected $required_create = [
     'ArticleNumber',
     'FromQuantity',
     'PriceList',
   ];
 
+
+  protected $required_update = [
+  ];
+
+
   /**
    * Override the REST path
    */
-  protected $path = 'prices';
+  protected $basePath = 'prices';
 
 
   /**
@@ -59,9 +66,17 @@ class Provider extends ProviderBase {
    *
    * @return array
    */
-  public function all ($priceList, $articleNumber)
+  public function priceList ($priceList = null, $articleNumber = null)
   {
-    return $this->sendRequest('GET', [$priceList, $articleNumber]);
+    if (is_null($priceList) || is_null($articleNumber)) {
+      throw new MissingRequiredAttributeException(['priceList', 'articleNumber']);
+    }
+
+    $req = new FortieRequest();
+    $req->method('GET');
+    $req->path($this->basePath)->path($priceList)->path($articleNumber);
+
+    return $this->send($req->build());
   }
 
 
@@ -71,43 +86,79 @@ class Provider extends ProviderBase {
    * @param $id
    * @return array
    */
-  public function article ($priceList, $articleNumber, $fromQuantity)
+  public function article ($priceList = null, $articleNumber = null, $fromQuantity = null)
   {
-    return $this->sendRequest('GET', [$priceList, $articleNumber, $fromQuantity]);
+    if (is_null($priceList) || is_null($articleNumber) || is_null($fromQuantity)) {
+      throw new MissingRequiredAttributeException(['priceList', 'articleNumber', 'fromQuantity']);
+    }
+
+    $req = new FortieRequest();
+    $req->method('GET');
+    $req->path($this->basePath)->path($priceList)->path($articleNumber)->oath($fromQuantity);
+
+    return $this->send($req->build());
   }
 
 
   /**
    * Creates a price.
    *
-   * @param array   $params
+   * @param array   $data
    * @return array
    */
-  public function create (array $params)
+  public function create (array $data)
   {
-    return $this->sendRequest('POST', null, 'Price', $params);
+    $req = new FortieRequest();
+    $req->method('POST');
+    $req->path($this->basePath);
+    $req->wrapper('Price');
+    $req->setRequired($this->required_create);
+    $req->data($data);
+
+    return $this->send($req->build());
   }
 
 
   /**
    * Updates a price.
    *
-   * @param array   $params
+   * @param array   $data
    * @return array
    */
-  public function update ($priceList, $articleNumber, $fromQuantity, array $params)
+  public function update ($priceList = null, $articleNumber = null, $fromQuantity = null, array $data)
   {
-    return $this->sendRequest('PUT', [$priceList, $articleNumber, $fromQuantity], 'Price', $params);
+    if (is_null($priceList) || is_null($articleNumber) || is_null($fromQuantity)) {
+      throw new MissingRequiredAttributeException(['priceList', 'articleNumber', 'fromQuantity']);
+    }
+
+    $req = new FortieRequest();
+    $req->method('PUT');
+    $req->path($this->basePath)->path($priceList)->path($articleNumber)->path($fromQuantity);
+    $req->wrapper('Price');
+    $req->setRequired($this->required_update);
+    $req->data($data);
+
+    return $this->send($req->build());
   }
 
 
   /**
    * Removes a price.
    */
-  public function delete ($priceList, $articleNumber, $fromQuantity)
+  public function delete ($priceList = null, $articleNumber = null, $fromQuantity = null)
   {
-    throw new Exception('Not implemented');
-  }
+    if (is_null($priceList) || is_null($articleNumber) || is_null($fromQuantity)) {
+      throw new MissingRequiredAttributeException(['priceList', 'articleNumber', 'fromQuantity']);
+    }
 
+    $req = new FortieRequest();
+    $req->method('DELETE');
+    $req->path($this->basePath)->path($priceList)->path($articleNumber)->path($fromQuantity);
+    $req->wrapper('Price');
+    $req->setRequired($this->required_update);
+    $req->data($data);
+
+    return $this->send($req->build());
+  }
 
 }
