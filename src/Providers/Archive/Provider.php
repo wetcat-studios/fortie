@@ -159,14 +159,4 @@ class Provider extends ProviderBase {
     }
   }
 
-  public function create (array $data)
-  {
-    throw new Exception('This is not implemented in Archive');
-  }
-
-  public function update ($id, array $data)
-  {
-    throw new Exception('This is not implemented in Archive');
-  }
-
 }

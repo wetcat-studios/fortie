@@ -118,7 +118,7 @@ class MyController extends Controller
         dd($this->fortie->accounts()->all());
     }
 
-    ...
+    [...]
 
 }
 ```
@@ -143,7 +143,7 @@ class MyController extends Controller
         dd($fortie->accounts()->all());
     }
 
-    ...
+    [...]
 
 }
 ```
@@ -162,7 +162,7 @@ $fortie = new Fortie(
 );
 ```
 
-### Access tokens
+#### Access token
 
 To get an access token (for use with your integration) you need to request it using a `authroization-code`.
 
@@ -174,7 +174,7 @@ php artisan fortie:activate code=<your authorization code>
 
 ### Providers
 
-The package is set up with multiple providers, each provider is mapped towards a specific endpoint in the REST api. For example **accounts** are mapped to the **accounts()** method.
+The package is set up with multiple providers, each provider is mapped towards a specific endpoint in the REST api. For example **accounts** are mapped to the `accounts()` method.
 
 ```php
 $arrayOfAccounts = $fortie->accounts()->all();
@@ -184,49 +184,55 @@ For details on the usage of all providers you should consult [the Wiki](https://
 
 #### Currently implemented providers
 
+* Absence Transactions
+* Account Charts
 * Accounts
-* Archive (Needs to be verified)
+* Archive
+* Article File Connections
 * Articles
+* Article Url Connections
+* Attendance Transactions
 * Company Settings
+* Contract Accruals
 * Contracts
+* Contract Templates
+* Cost Centers
 * Currencies
 * Customers
-* Employees (Needs to be verified)
-* Financial years
+* Employees
+* Financial Years
+* Inbox
+* Invoice Accruals
+* Invoice Payments
 * Invoices
+* Labels
+* Locked Period
+* Modes Of Payments
 * Offers
 * Orders
-* Price lists
+* Predefined Accounts
+* Predefined Voucher Series
+* Price Lists
 * Prices
+* Print Templates
 * Projects
-* Suppliers
-* Units
-* Vouchers
-
-#### Not implemented yet
-
-* Article File Connections
-* Article URL Connections
-* Contract Accruals
-* Contract Templates
-* Cost Centres
-* Inbox
-* Invoice accruals
-* Invoice payments
-* Locked period
-* Modes of payment
-* Print templates
+* Salary Transactions
+* Schedule Times
 * Supplier Invoice Accruals
-* Supplier Invoice External URL connections
+* Supplier Invoice External URL Connections
 * Supplier Invoice File Connections
 * Supplier Invoice Payments
 * Supplier Invoices
-* Tax reductions
-* Terms of Deliveries
-* Terms of payments
+* Suppliers
+* Tax Reductions
+* Terms Of Deliveries
+* Terms Of Payments
+* Trusted Email Senders
+* Units
 * Voucher File Connections
+* Vouchers
 * Voucher Series
-* Way of Deliveries
+* Way Of Deliveries
 
 ## Dependencies
 
