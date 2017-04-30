@@ -20,16 +20,16 @@
 
 use Wetcat\Fortie\Providers\AbsenceTransactions\Provider as AbsenceTransactionsProvider;
 use Wetcat\Fortie\Providers\AccountCharts\Provider as AccountChartsProvider;
-use Wetcat\Fortie\Providers\Accounts\Provider as AccountProvider;
+use Wetcat\Fortie\Providers\Accounts\Provider as AccountsProvider;
 use Wetcat\Fortie\Providers\Archive\Provider as ArchiveProvider;
 use Wetcat\Fortie\Providers\ArticleFileConnections\Provider as ArticleFileConnectionsProvider;
 use Wetcat\Fortie\Providers\ArticleUrlConnections\Provider as ArticleUrlConnectionsProvider;
-use Wetcat\Fortie\Providers\Articles\Provider as ArticleProvider;
+use Wetcat\Fortie\Providers\Articles\Provider as ArticlesProvider;
 use Wetcat\Fortie\Providers\AttendanceTransactions\Provider as AttendanceTransactionsProvider;
 use Wetcat\Fortie\Providers\CompanySettings\Provider as CompanySettingsProvider;
-use Wetcat\Fortie\Providers\ContactAccruals\Provider as ContactAccrualsProvider;
+use Wetcat\Fortie\Providers\ContractAccruals\Provider as ContractAccrualsProvider;
 use Wetcat\Fortie\Providers\ContractTemplates\Provider as ContractTemplatesProvider;
-use Wetcat\Fortie\Providers\Contracts\Provider as ContractProvider;
+use Wetcat\Fortie\Providers\Contracts\Provider as ContractsProvider;
 use Wetcat\Fortie\Providers\CostCenters\Provider as CostCentersProvider;
 use Wetcat\Fortie\Providers\Currencies\Provider as CurrenciesProvider;
 use Wetcat\Fortie\Providers\Customers\Provider as CustomersProvider;
@@ -57,15 +57,15 @@ use Wetcat\Fortie\Providers\SupplierInvoiceExternalURLConnections\Provider as Su
 use Wetcat\Fortie\Providers\SupplierInvoiceFileConnections\Provider as SupplierInvoiceFileConnectionsProvider;
 use Wetcat\Fortie\Providers\SupplierInvoicePayments\Provider as SupplierInvoicePaymentsProvider;
 use Wetcat\Fortie\Providers\SupplierInvoices\Provider as SupplierInvoicesProvider;
-use Wetcat\Fortie\Providers\Suppliers\Provider as SupplierProvider;
+use Wetcat\Fortie\Providers\Suppliers\Provider as SuppliersProvider;
 use Wetcat\Fortie\Providers\TaxReductions\Provider as TaxReductionsProvider;
 use Wetcat\Fortie\Providers\TermsOfDeliveries\Provider as TermsOfDeliveriesProvider;
 use Wetcat\Fortie\Providers\TermsOfPayments\Provider as TermsOfPaymentsProvider;
 use Wetcat\Fortie\Providers\TrustedEmailSenders\Provider as TrustedEmailSendersProvider;
-use Wetcat\Fortie\Providers\Units\Provider as UnitProvider;
+use Wetcat\Fortie\Providers\Units\Provider as UnitsProvider;
 use Wetcat\Fortie\Providers\VoucherFileConnections\Provider as VoucherFileConnectionsProvider;
 use Wetcat\Fortie\Providers\VoucherSeries\Provider as VoucherSeriesProvider;
-use Wetcat\Fortie\Providers\Vouchers\Provider as VoucherProvider;
+use Wetcat\Fortie\Providers\Vouchers\Provider as VouchersProvider;
 use Wetcat\Fortie\Providers\WayOfDeliveries\Provider as WayOfDeliveriesProvider;
 
 /**
@@ -401,7 +401,7 @@ class Fortie
     $this->articleURLConnectionsProvider = new ArticleURLConnectionsProvider($client);
     $this->articlesProvider = new ArticlesProvider($client);
     $this->attendanceTransactionsProvider = new AttendanceTransactionsProvider($client);
-    $this->companySettingsProvider = new CompantSettingsProvider($client);
+    $this->companySettingsProvider = new CompanySettingsProvider($client);
     $this->contractAccrualsProvider = new ContractAccrualsProvider($client);
     $this->contractTemplatesProvider = new ContractTemplatesProvider($client);
     $this->contractsProvider = new ContractsProvider($client);
