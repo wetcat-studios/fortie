@@ -46,7 +46,7 @@ class Provider extends ProviderBase {
   /**
    * Override the REST path
    */
-  protected $basePath = 'lockedperiod';
+  protected $basePath = 'settings/lockedperiod';
 
 
   /**
