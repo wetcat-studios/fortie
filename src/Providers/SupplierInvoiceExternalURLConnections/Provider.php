@@ -58,21 +58,6 @@ class Provider extends ProviderBase {
   /**
    * Retrieves a single supplier invoice external URL connection.
    *
-   * @return array
-   */
-  public function all ()
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Retrieves a single supplier invoice external URL connection.
-   *
    * @param $id
    * @return array
    */
