@@ -19,10 +19,10 @@
 */
 
 use Wetcat\Fortie\Providers\ProviderBase;
-
+use Wetcat\Fortie\FortieRequest;
+use Wetcat\Fortie\Providers\Contracts\Filter;
 
 class Provider extends ProviderBase {
-
 
   protected $attributes = [
     'Url',
@@ -94,6 +94,7 @@ class Provider extends ProviderBase {
     'VAT',
   ];
 
+
   protected $writeable = [
     'Active',
     'AdministrationFee',
@@ -145,20 +146,27 @@ class Provider extends ProviderBase {
     'VAT',
   ];
 
-  protected $required = [
+
+  protected $required_create = [
     'ContractLength',
     'CustomerNumber',
     'InvoiceInterval',
     'InvoiceRows',
     'PeriodEnd',
     'PeriodStart',
-    'Total',
+    // 'Total',
   ];
+
+
+  protected $required_update = [
+    'InvoiceRows'
+  ];
+
 
   /**
    * Override the REST path
    */
-  protected $path = 'contracts';
+  protected $basePath = 'contracts';
 
 
   /**
@@ -166,9 +174,17 @@ class Provider extends ProviderBase {
    *
    * @return array
    */
-  public function all ()
+  public function all ($filter = null)
   {
-    return $this->sendRequest('GET');
+    $req = new FortieRequest();
+    $req->method('GET');
+    $req->path($this->basePath);
+
+    if (!is_null($filter)) {
+      $req->filter($filter);
+    }
+
+    return $this->send($req->build());
   }
 
 
@@ -180,7 +196,12 @@ class Provider extends ProviderBase {
    */
   public function find ($id)
   {
-    return $this->sendRequest('GET', $id);
+    $req = new FortieRequest();
+    $req->method('GET');
+    $req->path($this->basePath);
+    $req->path($id);
+
+    return $this->send($req->build());
   }
 
 
@@ -190,9 +211,16 @@ class Provider extends ProviderBase {
    * @param array   $params
    * @return array
    */
-  public function create (array $params)
+  public function create (array $data)
   {
-    return $this->sendRequest('POST', null, 'Contract', $params);
+    $req = new FortieRequest();
+    $req->method('POST');
+    $req->path($this->basePath);
+    $req->wrapper('Contract');
+    $req->data($data);
+    $req->setRequired($this->required_create);
+
+    return $this->send($req->build());
   }
 
 
@@ -202,9 +230,16 @@ class Provider extends ProviderBase {
    * @param array   $params
    * @return array
    */
-  public function update ($id, array $params)
+  public function update ($id, array $data)
   {
-    return $this->sendRequest('PUT', $id, 'Contract', $params);
+    $req = new FortieRequest();
+    $req->method('PUT');
+    $req->path($this->basePath)->path($id);
+    $req->wrapper('Contract');
+    $req->setRequired($this->required_update);
+    $req->data($data);
+
+    return $this->send($req->build());
   }
 
 
@@ -213,25 +248,39 @@ class Provider extends ProviderBase {
    */
   public function finish ($id)
   {
-    return $this->sendRequest('PUT', [$id, 'finish']);
+    $req = new FortieRequest();
+    $req->method('PUT');
+    $req->path($this->basePath)->path($id)->path('finish');
+
+    return $this->send($req->build());
   }
 
 
   /**
    * Create invoice from contract.
    */
-  public function createinvoice ($id)
+  public function create_invoice ($id)
   {
-    return $this->sendRequest('PUT', [$id, 'createinvoice']);
+    $req = new FortieRequest();
+    $req->method('PUT');
+    $req->path($this->basePath)->path($id);
+    $req->path('createinvoice');
+
+    return $this->send($req->build());
   }
 
 
   /**
    * Increases the invoice count without creating an invoice.
    */
-  public function increaseinvoicecount ($id)
+  public function increase_invoice_count ($id)
   {
-    return $this->sendRequest('PUT', [$id, 'increaseinvoicecount']);
+    $req = new FortieRequest();
+    $req->method('PUT');
+    $req->path($this->basePath)->path($id);
+    $req->path('increaseinvoicecount');
+
+    return $this->send($req->build());
   }
 
 }

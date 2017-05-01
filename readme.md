@@ -18,9 +18,11 @@ If you don't have Composer you should [install it](https://getcomposer.org/downl
 
 ## Configuration
 
-In Laravel you change use the published configuration file found at `config/fortie.php`, it should look something like the following. Fill this in with the details provided by Fortnox when you signed up.
+In Laravel you can publish the config file with `php artisan vendor:publish --provider="Wetcat\Fortie\FortieServiceProvider" --tag="config"`, after this the file should be available in `app/fortie.php`. Use the details provided by Fortnox when you signed up.
 
 The **Access Token** is not provided when signing up, you need to get that seperately using your **Auth Code** and **Client Secret**. Read more about this process [here](http://developer.fortnox.se/documentation/general/authentication/).
+
+The configruation file should look something like this:
 
 ```php
 <?php 
@@ -81,6 +83,11 @@ return [
 When you've included the Service Provider you can then use dependency injection in your BaseController to make fortie available in all controllers.
 
 ```php
+
+[...]
+
+use Wetcat\Fortie\Fortie;
+
 abstract class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
@@ -98,6 +105,7 @@ abstract class Controller extends BaseController
 Just call `$this->fortie->...` to access Fortie.
 
 ```php
+
 class MyController extends Controller
 {
     /**
@@ -107,10 +115,10 @@ class MyController extends Controller
      */
     public function index()
     {
-        dd($this->fortie->accounts()->listAllAccounts());
+        dd($this->fortie->accounts()->all());
     }
 
-    ...
+    [...]
 
 }
 ```
@@ -119,7 +127,9 @@ Of course you can also inject Fortie into any Laravel controller method to limit
 
 ```php
 
-use Wetcat\Fortie\Fortie as Fortie;
+[...]
+
+use Wetcat\Fortie\Fortie;
 
 class MyController extends Controller
 {
@@ -130,10 +140,10 @@ class MyController extends Controller
      */
     public function index(Fortie $fortie)
     {
-        dd($fortie->accounts()->listAllAccounts());
+        dd($fortie->accounts()->all());
     }
 
-    ...
+    [...]
 
 }
 ```
@@ -152,7 +162,7 @@ $fortie = new Fortie(
 );
 ```
 
-### Access tokens
+#### Access token
 
 To get an access token (for use with your integration) you need to request it using a `authroization-code`.
 
@@ -164,7 +174,7 @@ php artisan fortie:activate code=<your authorization code>
 
 ### Providers
 
-The package is set up with multiple providers, each provider is mapped towards a specific endpoint in the REST api. For example **accounts** are mapped to the **accounts()** method.
+The package is set up with multiple providers, each provider is mapped towards a specific endpoint in the REST api. For example **accounts** are mapped to the `accounts()` method.
 
 ```php
 $arrayOfAccounts = $fortie->accounts()->all();
@@ -174,48 +184,55 @@ For details on the usage of all providers you should consult [the Wiki](https://
 
 #### Currently implemented providers
 
+* Absence Transactions
+* Account Charts
 * Accounts
 * Archive
+* Article File Connections
 * Articles
+* Article Url Connections
+* Attendance Transactions
 * Company Settings
+* Contract Accruals
 * Contracts
+* Contract Templates
+* Cost Centers
 * Currencies
 * Customers
+* Employees
+* Financial Years
+* Inbox
+* Invoice Accruals
+* Invoice Payments
 * Invoices
+* Labels
+* Locked Period
+* Modes Of Payments
 * Offers
 * Orders
-* Price lists
+* Predefined Accounts
+* Predefined Voucher Series
+* Price Lists
 * Prices
+* Print Templates
 * Projects
-* Suppliers
-* Units
-* Vouchers
-
-#### Not implemented yet
-
-* Article File Connections
-* Article URL Connections
-* Contract Accruals
-* Contract Templates
-* Cost Centres
-* Financial years
-* Inbox
-* Invoice accruals
-* Invoice payments
-* Locked period
-* Modes of payment
-* Print templates
+* Salary Transactions
+* Schedule Times
 * Supplier Invoice Accruals
-* Supplier Invoice External URL connections
+* Supplier Invoice External URL Connections
 * Supplier Invoice File Connections
 * Supplier Invoice Payments
 * Supplier Invoices
-* Tax reductions
-* Terms of Deliveries
-* Terms of payments
+* Suppliers
+* Tax Reductions
+* Terms Of Deliveries
+* Terms Of Payments
+* Trusted Email Senders
+* Units
 * Voucher File Connections
+* Vouchers
 * Voucher Series
-* Way of Deliveries
+* Way Of Deliveries
 
 ## Dependencies
 
@@ -223,6 +240,11 @@ This package is built with the following dependencies.
 
 * [Guzzle](https://github.com/guzzle/guzzle)
 * [sabre/xml](https://github.com/fruux/sabre-xml)
+
+## Troubleshooting
+
+If you've got troubles with cURL errors (specifically `cURL error 56`) you can check (this)[http://stackoverflow.com/a/26538127/388320] answer at Stackoverflow.
+
 
 ## License
 

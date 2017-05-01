@@ -19,10 +19,9 @@
 */
 
 use Wetcat\Fortie\Providers\ProviderBase;
-
+use Wetcat\Fortie\FortieRequest;
 
 class Provider extends ProviderBase {
-
 
   protected $attributes = [
     'Url',
@@ -30,18 +29,27 @@ class Provider extends ProviderBase {
     'Description',
   ];
 
+
   protected $writeable = [
     'Code',
     'Description',
   ];
 
-  protected $required = [
+
+  protected $required_create = [
+    'Code',
+    'Description',
   ];
+
+
+  protected $required_update = [
+  ];
+
 
   /**
    * Override the REST path
    */
-  protected $path = 'units';
+  protected $basePath = 'units';
 
 
   /**
@@ -51,52 +59,78 @@ class Provider extends ProviderBase {
    */
   public function all ()
   {
-    return $this->sendRequest('GET');
+    $req = new FortieRequest();
+    $req->method('GET');
+    $req->path($this->basePath);
+
+    return $this->send($req->build());
   }
 
 
   /**
    * Retrieves a single unit.
    *
-   * @param $id
+   * @param $code
    * @return array
    */
-  public function find ($id)
+  public function find ($code)
   {
-    return $this->sendRequest('GET', $id);
+    $req = new FortieRequest();
+    $req->method('GET');
+    $req->path($this->basePath)->path($code);
+
+    return $this->send($req->build());
   }
 
 
   /**
    * Creates a unit.
    *
-   * @param array   $params
+   * @param array   $data
    * @return array
    */
-  public function create (array $params)
+  public function create (array $data)
   {
-    return $this->sendRequest('POST', null, 'Unit', $params);
+    $req = new FortieRequest();
+    $req->method('POST');
+    $req->path($this->basePath);
+    $req->wrapper('Unit');
+    $req->setRequired($this->required_create);
+    $req->data($data);
+
+    return $this->send($req->build());
   }
 
 
   /**
    * Updates a unit.
    *
-   * @param array   $params
+   * @param array   $data
    * @return array
    */
-  public function update ($id, array $params)
+  public function update ($code, array $data)
   {
-    return $this->sendRequest('PUT', $id, 'Unit', $params);
+    $req = new FortieRequest();
+    $req->method('PUT');
+    $req->path($this->basePath)->path($code);
+    $req->wrapper('Unit');
+    $req->setRequired($this->required_update);
+    $req->data($data);
+
+    return $this->send($req->build());
   }
 
 
   /**
    * Removes a unit.
    */
-  public function delete ($id)
+  public function delete ($code)
   {
-    throw new Exception('Not implemented');
+    $req = new FortieRequest();
+    $req->method('DELETE');
+    $req->path($this->basePath)->path($code);
+
+    return $this->send($req->build());
   }
 
 }

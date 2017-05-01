@@ -18,7 +18,10 @@
 
 */
 
-use Wetcat\Fortie\MissingRequiredAttributeException;
+
+use Wetcat\Fortie\Exceptions\MissingRequiredAttributeException;
+use Wetcat\Fortie\Exceptions\FortnoxException;
+use Wetcat\Fortie\FortieRequest;
 
 
 /**
@@ -34,7 +37,7 @@ use Wetcat\Fortie\MissingRequiredAttributeException;
  * The response (either XML or JSON) is then turned into an array and
  * retured to the caller.
  */
-class ProviderBase
+abstract class ProviderBase
 {
 
   /**
@@ -46,7 +49,7 @@ class ProviderBase
   /**
    * The base path for the Provider.
    */
-  protected $path = null;
+  protected $basePath = null;
 
 
   /**
@@ -64,9 +67,16 @@ class ProviderBase
 
 
   /**
-   * The minimum required attributes for a write request.
+   * The minimum required attributes for a create request.
    */
-  protected $required = [
+  protected $required_create = [
+  ];
+
+
+  /**
+   * The minimum required attributes for an update request.
+   */
+  protected $required_update = [
   ];
 
 
@@ -100,98 +110,12 @@ class ProviderBase
     }
   }
 
-  /**
-   * Send a HTTP request to Fortnox.
-   */
-  public function sendRequest ($method = 'GET', $paths = null, $bodyWrapper = null, $data = null, $params = null, $filePath = null)
-  {
-    // Start building the URL
-    $URL = 'https://api.fortnox.se/3/' . $this->path . '/';
-    // Add the extra paths, if there are any
-    if (!is_null($paths)) {
-      // If array, add all paths
-      if (is_array($paths)) {
-        foreach ($paths as $path) {
-          $URL .= $path . '/';
-        }
-      }
-      // Otherwise, add just the first
-      else {
-        $URL .= $paths . '/';
-      }
-    }
-
-    // Apply the URL parameters, this must be an associative array
-    if (!is_null($params) && is_array($params)) {
-      $i = 0;
-      foreach ($params as $key => $param) {
-        // ?
-        if ($i == 0) {
-          $URL .= '?' . $key . '=' . $param;
-        }
-        // &
-        else {
-          $URL .= '&' . $key . '=' . $param;
-        }
-        $i++;
-      }
-    }
-
-    $response = null;
-
-    try {
-      switch ($method) {
-        case 'delete':
-        case 'DELETE':
-          $response = $this->client->delete($URL);
-          break;
-
-        case 'get':
-        case 'GET':
-          $response = $this->client->get($URL);
-          break;
-        
-        case 'post':
-        case 'POST':
-          $body = $this->handleData($bodyWrapper, $data);
-          if (is_null($body)) {
-            // Upload file instead of data
-            $fileData = Guzzle\Http\EntityBody::factory(fopen($filePath, 'r+'));
-            $response = $this->client->post($URL, $fileData);
-          }
-          else if (!is_null($body) && is_array($body)) {
-            $response = $this->client->post($URL, ['json' => $body]);
-          }
-          break;
-
-        case 'put':
-        case 'PUT':
-          $body = $this->handleData($bodyWrapper, $data);
-          if (is_null($body)) {
-            // Upload file instead of data
-            $fileData = Guzzle\Http\EntityBody::factory(fopen($filePath, 'r+'));
-            $response = $this->client->put($URL, $fileData);
-          }
-          else if (!is_null($body) && is_array($body)) {
-            $response = $this->client->put($URL, ['json' => $body]);
-          }
-      }
-
-      return $this->handleResponse($response);
-    }
-    catch (\GuzzleHttp\Exception\ClientException $e) {
-      $response = $e->getResponse();
-      $responseBodyAsString = $response->getBody()->getContents();
-      //echo $responseBodyAsString;
-    }
-  }
-
 
   /**
-   * This will perform filtering on the supplied data, used when 
-   * uploading data to Fortnox.
+   * This will perform filtering on the supplied data, used when uploading data
+   * to Fortnox.
    */
-  protected function handleData ($bodyWrapper, $data, $sanitize = true)
+  protected function handleData ($requiredArr = null, $bodyWrapper, $data, $sanitize = true)
   {
     // Filter invalid data
     $filtered = array_intersect_key($data, array_flip($this->attributes));;
@@ -200,8 +124,8 @@ class ProviderBase
     $writeable = array_intersect_key($filtered, array_flip($this->writeable));
 
     // Make sure all required data are set
-    if (! count(array_intersect_key(array_flip($this->required), $writeable)) === count($this->required)) {
-      throw new MissingRequiredAttributeException;
+    if (! (count(array_intersect_key(array_flip($requiredArr), $writeable)) === count($requiredArr))) {
+      throw new MissingRequiredAttributeException($requiredArr);
     }
 
     // Sanitize input 
@@ -218,6 +142,87 @@ class ProviderBase
     ];
 
     return $body;
+  }
+
+
+  /**
+   * Send a FortieRequest to Fortnox
+   */
+  public function send (FortieRequest $request)
+  {
+    $response = null;
+
+    try {
+      switch ($request->getMethod()) {
+        case 'delete':
+        case 'DELETE':
+          $response = $this->client->delete($request->getUrl());
+          break;
+
+        case 'get':
+        case 'GET':
+          $response = $this->client->get($request->getUrl());
+          break;
+        
+        case 'post':
+        case 'POST':
+          // If there's a file path available then we'll proceed with uploading that file
+          if (!is_null($request->getFile())) {
+            $body = fopen($request->getFile(), 'r');
+            $response = $this->client->post($request->getUrl(), ['body' => $body]);
+          }
+
+          // otherwise assume it's normal POST
+          else {
+            // Get the correct filter, if there is nothing required then set empty array
+            $required = (!is_null($request->getRequired()) ? $request->getRequired() : []);
+
+            $body = $this->handleData($required, $request->getWrapper(), $request->getData());
+            
+            $response = $this->client->post($request->getUrl(), ['json' => $body]);
+          }
+          break;
+
+        case 'put':
+        case 'PUT':
+          // If there's a file path available then we'll proceed with uploading that file
+          if (!is_null($request->getFile())) {
+            $body = fopen($request->getFile(), 'r');
+            $response = $this->client->put($request->getUrl(), ['body' => $body]);
+          }
+
+          // otherwise assume it's normal PUT
+          else {
+            // Get the correct filter, if there is nothing required then set empty array
+            $required = (!is_null($request->getRequired()) ? $request->getRequired() : []);
+
+            $body = $this->handleData($required, $request->getWrapper(), $request->getData());
+            $response = $this->client->put($request->getUrl(), ['json' => $body]);
+          }
+      }
+
+      return $this->handleResponse($response);
+    }
+    catch (\GuzzleHttp\Exception\ClientException $e) {
+      $response = $e->getResponse();
+      $responseBodyAsString = $response->getBody()->getContents();
+      $jsonError = json_decode($responseBodyAsString);
+
+      // Because Fortnox API can use both non-capitalized and capitalized parameters.
+      if (property_exists($jsonError->ErrorInformation, 'error')) {
+        throw new FortnoxException(
+          $jsonError->ErrorInformation->error,
+          $jsonError->ErrorInformation->message,
+          $jsonError->ErrorInformation->code
+        );
+      } else {
+        throw new FortnoxException(
+          $jsonError->ErrorInformation->Error,
+          $jsonError->ErrorInformation->Message,
+          $jsonError->ErrorInformation->Code
+        );
+      }
+    }
   }
 
 }

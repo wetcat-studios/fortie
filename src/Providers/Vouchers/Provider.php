@@ -19,10 +19,9 @@
 */
 
 use Wetcat\Fortie\Providers\ProviderBase;
-
+use Wetcat\Fortie\FortieRequest;
 
 class Provider extends ProviderBase {
-
 
   protected $attributes = [
     'Url',
@@ -48,6 +47,7 @@ class Provider extends ProviderBase {
     'TransactionInformation',
   ];
 
+
   protected $writeable = [
     'Comments',
     'CostCenter',
@@ -66,15 +66,21 @@ class Provider extends ProviderBase {
     'TransactionInformation',
   ];
 
-  protected $required = [
+
+  protected $required_create = [
     'Description',
     'TransactionDate',
   ];
 
+
+  protected $required_update = [
+  ];
+
+
   /**
    * Override the REST path
    */
-  protected $path = 'vouchers';
+  protected $basePath = 'vouchers';
 
 
   /**
@@ -93,9 +99,14 @@ class Provider extends ProviderBase {
    *
    * @return array
    */
-  public function all ()
+  public function all ($year)
   {
-    return $this->sendRequest('GET');
+    $req = new FortieRequest();
+    $req->method('GET');
+    $req->path($this->basePath);
+    $req->param('financialyear', $year);
+
+    return $this->send($req->build());
   }
 
 
@@ -112,10 +123,16 @@ class Provider extends ProviderBase {
    * @param $series
    * @return array
    */
-  public function series ($sublist, $series)
+  public function series ($series, $year)
   {
-    return $this->sendRequest('GET', [$sublist, $series]);
+    $req = new FortieRequest();
+    $req->method('GET');
+    $req->path($this->basePath)->path('sublist')->path($series);
+    $req->param('financialyear', $year);
+
+    return $this->send($req->build());
   }
+
 
   /**
    * Retrieves the details of a voucher. To get a unique voucher you need 
@@ -125,9 +142,14 @@ class Provider extends ProviderBase {
    *
    * @return array
    */
-  public function find ($series, $number)
+  public function find ($series, $number, $year)
   {
-    return $this->sendRequest('GET', [$series, $number]);
+    $req = new FortieRequest();
+    $req->method('GET');
+    $req->path($this->basePath)->path($series)->path($number);
+    $req->param('financialyear', $year);
+
+    return $this->send($req->build());
   }
 
 
@@ -135,12 +157,19 @@ class Provider extends ProviderBase {
    * The created voucher will be returned if everything succeeded, if 
    * there was any problems an error will be returned.
    *
-   * @param array   $params
+   * @param array   $data
    * @return array
    */
-  public function create (array $params)
+  public function create (array $data)
   {
-    return $this->sendRequest('POST', null, 'Voucher', $params);
+    $req = new FortieRequest();
+    $req->method('POST');
+    $req->path($this->basePath);
+    $req->wrapper('Voucher');
+    $req->setRequired($this->required_create);
+    $req->data($data);
+
+    return $this->send($req->build());
   }
 
 }

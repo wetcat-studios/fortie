@@ -19,10 +19,9 @@
 */
 
 use Wetcat\Fortie\Providers\ProviderBase;
-
+use Wetcat\Fortie\FortieRequest;
 
 class Provider extends ProviderBase {
-
 
   protected $attributes = [
     'Url',
@@ -42,6 +41,7 @@ class Provider extends ProviderBase {
     'Year',
   ];
 
+
   protected $writeable = [
     'Active',
     'BalanceBroughtForward',
@@ -57,15 +57,22 @@ class Provider extends ProviderBase {
     'VATCode',
   ];
 
-  protected $required = [
+
+  protected $required_create = [
     'Description', 
     'Number',
   ];
 
+
+  protected $required_update = [
+    'Number',
+  ];
+
+
   /**
    * Override the REST path
    */
-  protected $path = 'accounts';
+  protected $basePath = 'accounts';
 
 
   /**
@@ -76,7 +83,11 @@ class Provider extends ProviderBase {
    */
   public function all ()
   {
-    return $this->sendRequest('GET');
+    $req = new FortieRequest();
+    $req->method('GET');
+    $req->path($this->basePath);
+
+    return $this->send($req->build());
   }
 
 
@@ -90,7 +101,11 @@ class Provider extends ProviderBase {
    */
   public function find ($id)
   {
-    return $this->sendRequest('GET', $id);
+    $req = new FortieRequest();
+    $req->method('GET');
+    $req->path($this->basePath)->path($id);
+
+    return $this->send($req->build());
   }
 
 
@@ -98,12 +113,19 @@ class Provider extends ProviderBase {
    * The created account will be returned if everything succeeded, if 
    * there was any problems an error will be returned.
    *
-   * @param array   $params
+   * @param array   $data
    * @return array
    */
-  public function create (array $params)
+  public function create (array $data)
   {
-    return $this->sendRequest('POST', null, 'Account', $params);
+    $req = new FortieRequest();
+    $req->method('POST');
+    $req->path($this->basePath);
+    $req->wrapper('Account');
+    $req->data($data);
+    $req->setRequired($this->required_create);
+
+    return $this->send($req->build());
   }
 
 
@@ -114,13 +136,19 @@ class Provider extends ProviderBase {
    * Note that even though the account number is writeable you can’t 
    * change the number of an existing account.
    *
-   * @param array   $params
+   * @param array   $data
    * @return array
    */
-  public function update ($id, array $params)
+  public function update ($id, array $data)
   {
-    return $this->sendRequest('PUT', $id, 'Account', $params);
-  }
+    $req = new FortieRequest();
+    $req->method('PUT');
+    $req->path($this->basePath)->path($id);
+    $req->wrapper('Account');
+    $req->setRequired($this->required_update);
+    $req->data($data);
 
+    return $this->send($req->build());
+  }
 
 }

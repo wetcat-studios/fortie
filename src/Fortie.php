@@ -18,22 +18,55 @@
 
 */
 
-use Wetcat\Fortie\Providers\Accounts\Provider as AccountProvider;
+use Wetcat\Fortie\Providers\AbsenceTransactions\Provider as AbsenceTransactionsProvider;
+use Wetcat\Fortie\Providers\AccountCharts\Provider as AccountChartsProvider;
+use Wetcat\Fortie\Providers\Accounts\Provider as AccountsProvider;
 use Wetcat\Fortie\Providers\Archive\Provider as ArchiveProvider;
-use Wetcat\Fortie\Providers\Articles\Provider as ArticleProvider;
+use Wetcat\Fortie\Providers\ArticleFileConnections\Provider as ArticleFileConnectionsProvider;
+use Wetcat\Fortie\Providers\ArticleUrlConnections\Provider as ArticleUrlConnectionsProvider;
+use Wetcat\Fortie\Providers\Articles\Provider as ArticlesProvider;
+use Wetcat\Fortie\Providers\AttendanceTransactions\Provider as AttendanceTransactionsProvider;
 use Wetcat\Fortie\Providers\CompanySettings\Provider as CompanySettingsProvider;
-use Wetcat\Fortie\Providers\Contracts\Provider as ContractProvider;
-use Wetcat\Fortie\Providers\Invoices\Provider as InvoiceProvider;
-use Wetcat\Fortie\Providers\Offers\Provider as OfferProvider;
-use Wetcat\Fortie\Providers\Customers\Provider as CustomerProvider;
-use Wetcat\Fortie\Providers\Currencies\Provider as CurrencyProvider;
-use Wetcat\Fortie\Providers\Orders\Provider as OrderProvider;
-use Wetcat\Fortie\Providers\PriceLists\Provider as PriceListProvider;
-use Wetcat\Fortie\Providers\Prices\Provider as PriceProvider;
-use Wetcat\Fortie\Providers\Projects\Provider as ProjectProvider;
-use Wetcat\Fortie\Providers\Suppliers\Provider as SupplierProvider;
-use Wetcat\Fortie\Providers\Units\Provider as UnitProvider;
-use Wetcat\Fortie\Providers\Vouchers\Provider as VoucherProvider;
+use Wetcat\Fortie\Providers\ContractAccruals\Provider as ContractAccrualsProvider;
+use Wetcat\Fortie\Providers\ContractTemplates\Provider as ContractTemplatesProvider;
+use Wetcat\Fortie\Providers\Contracts\Provider as ContractsProvider;
+use Wetcat\Fortie\Providers\CostCenters\Provider as CostCentersProvider;
+use Wetcat\Fortie\Providers\Currencies\Provider as CurrenciesProvider;
+use Wetcat\Fortie\Providers\Customers\Provider as CustomersProvider;
+use Wetcat\Fortie\Providers\Employees\Provider as EmployeesProvider;
+use Wetcat\Fortie\Providers\FinancialYears\Provider as FinancialYearsProvider;
+use Wetcat\Fortie\Providers\Inbox\Provider as InboxProvider;
+use Wetcat\Fortie\Providers\InvoiceAccruals\Provider as InvoiceAccrualsProvider;
+use Wetcat\Fortie\Providers\InvoicePayments\Provider as InvoicePaymentsProvider;
+use Wetcat\Fortie\Providers\Invoices\Provider as InvoicesProvider;
+use Wetcat\Fortie\Providers\Labels\Provider as LabelsProvider;
+use Wetcat\Fortie\Providers\LockedPeriod\Provider as LockedPeriodProvider;
+use Wetcat\Fortie\Providers\ModesOfPayments\Provider as ModesOfPaymentsProvider;
+use Wetcat\Fortie\Providers\Offers\Provider as OffersProvider;
+use Wetcat\Fortie\Providers\Orders\Provider as OrdersProvider;
+use Wetcat\Fortie\Providers\PredefinedAccounts\Provider as PredefinedAccountsProvider;
+use Wetcat\Fortie\Providers\PredefinedVoucherSeries\Provider as PredefinedVoucherSeriesProvider;
+use Wetcat\Fortie\Providers\PriceLists\Provider as PriceListsProvider;
+use Wetcat\Fortie\Providers\Prices\Provider as PricesProvider;
+use Wetcat\Fortie\Providers\PrintTemplates\Provider as PrintTemplatesProvider;
+use Wetcat\Fortie\Providers\Projects\Provider as ProjectsProvider;
+use Wetcat\Fortie\Providers\SalaryTransactions\Provider as SalaryTransactionsProvider;
+use Wetcat\Fortie\Providers\ScheduleTimes\Provider as ScheduleTimesProvider;
+use Wetcat\Fortie\Providers\SupplierInvoiceAccruals\Provider as SupplierInvoiceAccrualsProvider;
+use Wetcat\Fortie\Providers\SupplierInvoiceExternalURLConnections\Provider as SupplierInvoiceExternalURLConnectionsProvider;
+use Wetcat\Fortie\Providers\SupplierInvoiceFileConnections\Provider as SupplierInvoiceFileConnectionsProvider;
+use Wetcat\Fortie\Providers\SupplierInvoicePayments\Provider as SupplierInvoicePaymentsProvider;
+use Wetcat\Fortie\Providers\SupplierInvoices\Provider as SupplierInvoicesProvider;
+use Wetcat\Fortie\Providers\Suppliers\Provider as SuppliersProvider;
+use Wetcat\Fortie\Providers\TaxReductions\Provider as TaxReductionsProvider;
+use Wetcat\Fortie\Providers\TermsOfDeliveries\Provider as TermsOfDeliveriesProvider;
+use Wetcat\Fortie\Providers\TermsOfPayments\Provider as TermsOfPaymentsProvider;
+use Wetcat\Fortie\Providers\TrustedEmailSenders\Provider as TrustedEmailSendersProvider;
+use Wetcat\Fortie\Providers\Units\Provider as UnitsProvider;
+use Wetcat\Fortie\Providers\VoucherFileConnections\Provider as VoucherFileConnectionsProvider;
+use Wetcat\Fortie\Providers\VoucherSeries\Provider as VoucherSeriesProvider;
+use Wetcat\Fortie\Providers\Vouchers\Provider as VouchersProvider;
+use Wetcat\Fortie\Providers\WayOfDeliveries\Provider as WayOfDeliveriesProvider;
 
 /**
  * Starting point for all interactions with the Fortnox API. After
@@ -44,84 +77,297 @@ class Fortie
 {
 
   /**
+   * Absence transactions
+   */
+  protected $absenceTransactionsProvider;
+
+
+  /**
+   * Account Charts
+   */
+  protected $accountChartsProvider;
+
+
+  /**
    * The Account provider provides access to all the account endpoints.
    */
-  protected $accountProvider;
+  protected $accountsProvider;
+
 
   /**
    * Provides access to archives endpoints.
    */
   protected $archiveProvider;
 
+
+  /**
+   * Article File Connections
+   */
+  protected $articleFileConnectionsProvider;
+
+
+  /**
+   * Article URL Connections
+   */
+  protected $articleURLConnectionsProvider;
+
+
   /**
    * Provides access to article endpoints.
    */
-  protected $articleProvider;
+  protected $articlesProvider;
+
+
+  /**
+   * Attendance transactions
+   */
+  protected $attendanceTransactionsProvider;
+
 
   /**
    * Provides access to the company settings endpoint. This is read-only.
    */
   protected $companySettingsProvider;
 
+
+  /**
+   * Contract Accruals
+   */
+  protected $contractAccrualsProvider;
+
+
+  /**
+   * Contract Templates
+   */
+  protected $contractTemplatesProvider;
+
+
   /**
    * Provides access to the contracts endpoint.
    */
-  protected $contractProvider;
+  protected $contractsProvider;
+
 
   /**
-   * Provides access to invoices actions and endpoints.
+   * Cost Centers
    */
-  protected $invoiceProvider;
+  protected $costCentersProvider;
 
-  /**
-   * Provides access to offers actions and endpoints.
-   */
-  protected $offerProvider;
-
-  /**
-   * Provides access to customer endpoints.
-   */
-  protected $customerProvider;
 
   /**
    * Provides access to currencies.
    */
-  protected $currencyProvider;
+  protected $currenciesProvider;
+
+
+  /**
+   * Provides access to customer endpoints.
+   */
+  protected $customersProvider;
+
+
+  /**
+   * Employees
+   */
+  protected $employeesProvider;
+
+
+  /**
+   * Financial Years
+   */
+  protected $financialYearsProvider;
+
+
+  /**
+   * Inbox
+   */
+  protected $inboxProvider;
+
+
+  /**
+   * Invoice Accruals
+   */
+  protected $invoiceAccrualsProvider;
+
+
+  /**
+   * Invoice Payments
+   */
+  protected $invoicePaymentsProvider;
+
+
+  /**
+   * Provides access to invoices actions and endpoints.
+   */
+  protected $invoicesProvider;
+
+
+  /**
+   * Labels
+   */
+  protected $labelsProvider;
+
+
+  /**
+   * Locked Period
+   */
+  protected $lockedPeriodProvider;
+  
+
+  /**
+   * Modes of Payments
+   */
+  protected $modesOfPaymentsProvider;
+
+
+  /**
+   * Provides access to offers actions and endpoints.
+   */
+  protected $offersProvider;
+
 
   /**
    * Provides access to orders.
    */
-  protected $orderProvider;
+  protected $ordersProvider;
+
+
+  /**
+   * Predefined Accounts
+   */
+  protected $predefinedAccountsProvider;
+
+
+  /**
+   * Predefined Voucher Series
+   */
+  protected $predefinedVoucherSeriesProvider;
+
 
   /**
    * Provides access to price lists.
    */
-  protected $priceListProvider;
+  protected $priceListsProvider;
+
 
   /**
    * Provides access to prices.
    */
-  protected $priceProvider;
+  protected $pricesProvider;
+
+
+  /**
+   * Print Templates
+   */
+  protected $printTemplatesProvider;
+
 
   /**
    * Provides access to projects.
    */
-  protected $projectProvider;
+  protected $projectsProvider;
+
+
+  /**
+   * Salary transactions
+   */
+  protected $salaryTransactionsProvider;
+
+
+  /**
+   * Schedule times
+   */
+  protected $scheduleTimesProvider;
+
+
+  /**
+   * Supplier Invoice Accruals
+   */
+  protected $supplierInvoiceAccrualsProvider;
+
+
+  /**
+   * Supplier Invoice External URL Connections
+   */
+  protected $supplierInvoiceExternalURLConnectionsProvider;
+
+
+  /**
+   * Supplier Invoice File Connections
+   */
+  protected $supplierInvoiceFileConnectionsProvider;
+
+
+  /**
+   * Supplier Invoice Payments
+   */
+  protected $supplierInvoicePaymentsProvider;
+
+
+  /**
+   * Supplier Invoices
+   */
+  protected $supplierInvoicesPRovider;
+
 
   /**
    * Provides access to suppliers.
    */
-  protected $supplierProvider;
+  protected $suppliersProvider;
+
+
+  /**
+   * Tax Reductions
+   */
+  protected $taxReductionsProvider;
+
+
+  /**
+   * Terms of Deliveries
+   */
+  protected $termsOfDeliveriesProvider;
+
+
+  /**
+   * Terms of Payments
+   */
+  protected $termsOfPaymentsProvider;
+
+
+  /**
+   * Trusted Email Senders
+   */
+  protected $trustedEmailSendersProvider;
+  
 
   /**
    * Provides access to units.
    */
-  protected $unitProvider;
+  protected $unitsProvider;
+
+
+  /**
+   * Voucher File Connections
+   */
+  protected $voucherFileConnectionsProvider;
+
+
+  /**
+   * Voucher Series
+   */
+  protected $voucherSeriesProvider;
+  
 
   /**
    * Provides access to vouchers.
    */
-  protected $voucherProvider;
+  protected $vouchersProvider;
+
+
+  /**
+   * Way of Deliveries
+   */
+  protected $wayOfDeliveriesProvider;
 
 
   /**
@@ -147,22 +393,73 @@ class Fortie
     ]);
 
     // Set up providers
-    $this->accountProvider = new AccountProvider($client);
+    $this->absenceTransactionsProvider = new AbsenceTransactionsProvider($client);
+    $this->accountChartsProvider = new AccountChartsProvider($client);
+    $this->accountsProvider = new AccountsProvider($client);
     $this->archiveProvider = new ArchiveProvider($client);
-    $this->articleProvider = new ArticleProvider($client);
+    $this->articleFileConnectionsProvider = new ArticleFileConnectionsProvider($client);
+    $this->articleURLConnectionsProvider = new ArticleURLConnectionsProvider($client);
+    $this->articlesProvider = new ArticlesProvider($client);
+    $this->attendanceTransactionsProvider = new AttendanceTransactionsProvider($client);
     $this->companySettingsProvider = new CompanySettingsProvider($client);
-    $this->contracts = new ContractProvider($client);
-    $this->invoiceProvider = new InvoiceProvider($client);
-    $this->offerProvider = new OfferProvider($client);
-    $this->customerProvider = new CustomerProvider($client);
-    $this->currencyProvider = new CurrencyProvider($client);
-    $this->orderProvider = new OrderProvider($client);
-    $this->priceListProvider = new PriceListProvider($client);
-    $this->priceProvider = new PriceProvider($client);
-    $this->projectProvider = new ProjectProvider($client);
-    $this->supplierProvider = new SupplierProvider($client);
-    $this->unitProvider = new UnitProvider($client);
-    $this->voucherProvider = new VoucherProvider($client);
+    $this->contractAccrualsProvider = new ContractAccrualsProvider($client);
+    $this->contractTemplatesProvider = new ContractTemplatesProvider($client);
+    $this->contractsProvider = new ContractsProvider($client);
+    $this->costCentersProvider = new CostCentersProvider($client);
+    $this->currenciesProvider = new CurrenciesProvider($client);
+    $this->customersProvider = new CustomersProvider($client);
+    $this->employeesProvider = new EmployeesProvider($client);
+    $this->financialYearsProvider = new FinancialYearsProvider($client);
+    $this->inboxProvider = new InboxProvider($client);
+    $this->invoiceAccrualsProvider = new InvoiceAccrualsProvider($client);
+    $this->invoicePaymentsProvider = new InvoicePaymentsProvider($client);
+    $this->invoicesProvider = new InvoicesProvider($client);
+    $this->labelsProvider = new LabelsProvider($client);
+    $this->lockedPeriodProvider = new LockedPeriodProvider($client);
+    $this->modesOfPaymentsProvider = new ModesOfPaymentsProvider($client);
+    $this->offersProvider = new OffersProvider($client);
+    $this->ordersProvider = new OrdersProvider($client);
+    $this->predefinedAccountsProvider = new PredefinedAccountsProvider($client);
+    $this->predefinedVoucherSeriesProvider = new PredefinedVoucherSeriesProvider($client);
+    $this->priceListsProvider = new PriceListsProvider($client);
+    $this->pricesProvider = new PricesProvider($client);
+    $this->printTemplatesProvider = new PrintTemplatesProvider($client);
+    $this->projectsProvider = new ProjectsProvider($client);
+    $this->salaryTransactionsProvider = new SalaryTransactionsProvider($client);
+    $this->scheduleTimesProvider = new ScheduleTimesProvider($client);
+    $this->supplierInvoiceAccrualsProvider = new SupplierInvoiceAccrualsProvider($client);
+    $this->supplierInvoiceExternalURLConnectionsProvider = new SupplierInvoiceExternalURLConnectionsProvider($client);
+    $this->supplierInvoiceFileConnectionsProvider = new SupplierInvoiceFileConnectionsProvider($client);
+    $this->supplierInvoicePaymentsProvider = new SupplierInvoicePaymentsProvider($client);
+    $this->supplierInvoicesProvider = new SupplierInvoicesProvider($client);
+    $this->suppliersProvider = new SuppliersProvider($client);
+    $this->taxReductionsProvider = new TaxReductionsProvider($client);
+    $this->termsOfDeliveriesProvider = new TermsOfDeliveriesProvider($client);
+    $this->termsOfPaymentsProvider = new TermsOfPaymentsProvider($client);
+    $this->trustedEmailSendersProvider = new TrustedEmailSendersProvider($client);
+    $this->unitsProvider = new UnitsProvider($client);
+    $this->voucherFileConnectionsProvider = new VoucherFileConnectionsProvider($client);
+    $this->voucherSeriesProvider = new VoucherSeriesProvider($client);
+    $this->vouchersProvider = new VouchersProvider($client);
+    $this->wayOfDeliveriesProvider = new WayOfDeliveriesProvider($client);
+  }
+
+
+  /**
+   * Absence transactions
+   */
+  public function absenceTransactions ()
+  {
+    return $this->absenceTransactionsProvider;
+  }
+
+
+  /**
+   * Account Charts
+   */
+  public function accountCharts ()
+  {
+    return $this->accountChartsProvider;
   }
 
 
@@ -173,8 +470,9 @@ class Fortie
    */
   public function accounts ()
   {
-    return $this->accountProvider;
+    return $this->accountsProvider;
   }
+
 
   /**
    * Get the archive provider.
@@ -183,7 +481,26 @@ class Fortie
    */
   public function archive ()
   {
-    return $this->archiveProvider; }
+    return $this->archiveProvider;
+  }
+
+
+  /**
+   * Article File Connections
+   */
+  public function articleFileConnections ()
+  {
+    return $this->articleFileConnectionsProvider;
+  }
+
+
+  /**
+   * Article URL Connections
+   */
+  public function articleURLConnections ()
+  {
+    return $this->articleURLConnectionsProvider;
+  }
 
 
   /**
@@ -193,148 +510,385 @@ class Fortie
    */
   public function articles ()
   {
-    return $this->articleProvider;
+    return $this->articlesProvider;
   }
 
+
   /**
-   * Get the company settings provider.
-   *
-   * @return CompanySettingsProvider
+   * Attendance transactions
+   */
+  public function attendanceTransactions ()
+  {
+    return $this->attendanceTransactionsProvider;
+  }
+
+
+  /**
+   * Company Settings
    */
   public function companySettings ()
   {
     return $this->companySettingsProvider;
   }
 
+
   /**
-   * Get the contracts provider.
-   *
-   * @return ContractProvider
+   * Contract Accruals
+   */
+  public function contractAccruals ()
+  {
+    return $this->contractAccrualsProvider;
+  }
+
+
+  /**
+   * Contract Templates
+   */
+  public function contractTemplates ()
+  {
+    return $this->contractTemplatesProvider;
+  }
+
+
+  /**
+   * Contracts
    */
   public function contracts ()
   {
-    return $this->contractProvider;
+    return $this->contractsProvider;
   }
 
 
   /**
-   * Get the invoice provider.
-   *
-   * @return InvoiceProvider
+   * Cost Centers
    */
-  public function invoices ()
+  public function costCenters ()
   {
-    return $this->invoiceProvider;
+    return $this->costCentersProvider;
   }
 
 
   /**
-   * Get the offer provider.
-   *
-   * @return OfferProvider
-   */
-  public function offers ()
-  {
-    return $this->offerProvider;
-  }
-
-
-  /**
-   * Get the customer provider.
-   *
-   * @return CustomerProvider
-   */
-  public function customers ()
-  {
-    return $this->customerProvider;
-  }
-
-
-  /**
-   * Get the currency provider.
-   *
-   * @return CustomerProvider
+   * Currencies
    */
   public function currencies ()
   {
-    return $this->currencyProvider;
+    return $this->currenciesProvider;
   }
 
 
   /**
-   * Get the order provider.
-   *
-   * @return OrderProvider
+   * Customers
+   */
+  public function customers ()
+  {
+    return $this->customersProvider;
+  }
+
+
+  /**
+   * Employees
+   */
+  public function employees ()
+  {
+    return $this->employeesProvider;
+  }
+
+
+  /**
+   * Financial Years
+   */
+  public function financialYears ()
+  {
+    return $this->financialYearsProvider;
+  }
+
+
+  /**
+   * Inbox
+   */
+  public function inbox ()
+  {
+    return $this->inboxProvider;
+  }
+
+
+  /**
+   * Invoice Accruals
+   */
+  public function invoiceAccruals ()
+  {
+    return $this->invoiceAccrualsProvider;
+  }
+
+
+  /**
+   * Invoice Payments
+   */
+  public function invoicePayments ()
+  {
+    return $this->invoicePaymentsProvider;
+  }
+
+
+  /**
+   * Invoices
+   */
+  public function invoices ()
+  {
+    return $this->invoicesProvider;
+  }
+
+
+  /**
+   * Labels
+   */
+  public function labels ()
+  {
+    return $this->labelsProvider;
+  }
+
+
+  /**
+   * Locked Period
+   */
+  public function lockedPeriod ()
+  {
+    return $this->lockedPeriodProvider;
+  }
+
+
+  /**
+   * Modes of Payments
+   */
+  public function modesOfPayments ()
+  {
+    return $this->modesOfPaymentsProvider;
+  }
+
+
+  /**
+   * Offers
+   */
+  public function offers ()
+  {
+    return $this->offersProvider;
+  }
+
+
+  /**
+   * Orders
    */
   public function orders ()
   {
-    return $this->orderProvider;
+    return $this->ordersProvider;
   }
 
 
   /**
-   * Get the price lists provider.
-   *
-   * @return PriceListProvider
+   * Predefined Accounts
+   */
+  public function predefinedAccounts ()
+  {
+    return $this->predefinedAccountsProvider;
+  }
+
+
+  /**
+   * Predefined Voucher Series
+   */
+  public function predefinedVoucherSeries ()
+  {
+    return $this->predefinedVoucherSeriesProvider;
+  }
+
+
+  /**
+   * Price Lists
    */
   public function priceLists ()
   {
-    return $this->priceListProvider;
+    return $this->priceListsProvider;
   }
 
 
   /**
-   * Get the price provider.
-   *
-   * @return PriceProvider
+   * Prices
    */
   public function prices ()
   {
-    return $this->priceProvider;
+    return $this->pricesProvider;
   }
 
 
   /**
-   * Get the project provider.
-   *
-   * @return ProjectProvider
+   * Print Templates
+   */
+  public function printTemplates ()
+  {
+    return $this->printTemplatesProvider;
+  }
+
+
+  /**
+   * Projects
    */
   public function projects ()
   {
-    return $this->projectProvider;
+    return $this->projectsProvider;
   }
 
 
   /**
-   * Get the supplier provider.
-   *
-   * @return SupplierProvider
+   * Salary transactions
+   */
+  public function salaryTransactions ()
+  {
+    return $this->salaryTransactionsProvider;
+  }
+
+
+  /**
+   * Schedule times
+   */
+  public function scheduleTimes ()
+  {
+    return $this->scheduleTimesProvider;
+  }
+
+
+  /**
+   * Supplier Invoice Accruals
+   */
+  public function supplierInvoiceAccruals ()
+  {
+    return $this->supplierInvoiceAccrualsProvider;
+  }
+
+
+  /**
+   * Supplier Invoice External URL Connections
+   */
+  public function supplierInvoiceExternalURLConnections ()
+  {
+    return $this->supplierInvoiceExternalURLConnectionsProvider;
+  }
+
+
+  /**
+   * Supplier Invoice File Connections
+   */
+  public function supplierInvoiceFileConnections ()
+  {
+    return $this->supplierInvoiceFileConnectionsProvider;
+  }
+
+
+  /**
+   * Supplier Invoice Payments
+   */
+  public function supplierInvoicePayments ()
+  {
+    return $this->supplierInvoicePaymentsProvider;
+  }
+
+
+  /**
+   * Supplier Invoices
+   */
+  public function supplierInvoices ()
+  {
+    return $this->supplierInvoicesProvider;
+  }
+
+
+  /**
+   * Suppliers
    */
   public function suppliers ()
   {
-    return $this->supplierProvider;
+    return $this->suppliersProvider;
   }
 
 
   /**
-   * Get the supplier provider.
-   *
-   * @return SupplierProvider
+   * Tax Reductions
+   */
+  public function taxReductions ()
+  {
+    return $this->taxReductionsProvider;
+  }
+
+
+  /**
+   * Terms of Deliveries
+   */
+  public function termsOfDeliveries ()
+  {
+    return $this->termsOfDeliveriesProvider;
+  }
+
+
+  /**
+   * Terms of Payments
+   */
+  public function termsOfPayments ()
+  {
+    return $this->termsOfPaymentsProvider;
+  }
+
+
+  /**
+   * Trusted Email Senders
+   */
+  public function trustedEmailSenders ()
+  {
+    return $this->trustedEmailSendersProvider;
+  }
+
+
+  /**
+   * Units
    */
   public function units ()
   {
-    return $this->unitProvider;
+    return $this->unitsProvider;
   }
 
 
   /**
-   * Get the voucher provider.
-   *
-   * @return VoucherProvider
+   * Voucher File Connections
+   */
+  public function voucherFileConnections ()
+  {
+    return $this->voucherFileConnectionsProvider;
+  }
+
+
+  /**
+   * Voucher Series
+   */
+  public function voucherSeries ()
+  {
+    return $this->voucherSeriesProvider;
+  }
+
+
+  /**
+   * Vouchers
    */
   public function vouchers ()
   {
-    return $this->voucherProvider;
+    return $this->vouchersProvider;
+  }
+
+
+  /**
+   * Way of Deliveries
+   */
+  public function wayOfDeliveries ()
+  {
+    return $this->wayOfDeliveriesProvider;
   }
 
 }

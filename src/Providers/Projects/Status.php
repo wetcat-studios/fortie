@@ -1,4 +1,4 @@
-<?php namespace Wetcat\Fortie;
+<?php namespace Wetcat\Fortie\Providers\Projects;
 
 /*
 
@@ -18,4 +18,23 @@
 
 */
 
-class MissingRequiredAttributeException extends Exception { }
+abstract class Status {
+
+  /**
+   * Project was not started yet
+   */
+  const NOT_STARTED = 'NOTSTARTED';
+
+
+  /**
+   * Project was started, and is ongoing
+   */
+  const ONGOING = 'ONGOING';
+
+
+  /**
+   * Project was completed
+   */
+  const COMPLETED = 'COMPLETED';
+
+};

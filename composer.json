@@ -2,7 +2,7 @@
   "name": "wetcat/fortie",
   "description": "Enable simple Fortnox integration",
   "license": "Apache-2.0",
-  "keywords": ["fortie", "Fortnox", "Laravel"],
+  "keywords": ["fortie", "Fortnox", "Laravel", "Financial", "Economy", "Taxes", "Business", "Business system"],
   "authors": [
     {
       "name": "Andreas Göransson",
@@ -10,7 +10,7 @@
     }
   ],
   "require": {
-    "guzzlehttp/guzzle": "~6.0",
+    "guzzlehttp/guzzle": "6.2.3",
     "sabre/xml": "^1.2"
   },
   "require-dev": {
