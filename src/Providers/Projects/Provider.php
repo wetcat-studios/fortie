@@ -67,11 +67,15 @@ class Provider extends ProviderBase {
    *
    * @return array
    */
-  public function all ()
+  public function all ($page = null)
   {
     $req = new FortieRequest();
     $req->method('GET');
     $req->path($this->basePath);
+
+    if (!is_null($page)) {  
+      $req->param('page', $page);
+    }
 
     return $this->send($req->build());
   }

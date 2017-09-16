@@ -174,7 +174,7 @@ class Provider extends ProviderBase {
    *
    * @return array
    */
-  public function all ($filter = null)
+  public function all ($filter = null, $page = null)
   {
     $req = new FortieRequest();
     $req->method('GET');
@@ -182,6 +182,10 @@ class Provider extends ProviderBase {
 
     if (!is_null($filter)) {
       $req->filter($filter);
+    }
+
+    if (!is_null($page)) {  
+      $req->param('page', $page);
     }
 
     return $this->send($req->build());
