@@ -76,8 +76,7 @@ class Provider extends ProviderBase {
 
 
   /**
-   * Retrieves a list of articles. The articles are returned sorted by 
-   * article number with the lowest number appearing first.
+   * Retrieves the company settings
    *
    * @return array
    */

@@ -99,12 +99,16 @@ class Provider extends ProviderBase {
    *
    * @return array
    */
-  public function all ($year)
+  public function all ($year, $page = null)
   {
     $req = new FortieRequest();
     $req->method('GET');
     $req->path($this->basePath);
     $req->param('financialyear', $year);
+
+    if (!is_null($page)) {  
+      $req->param('page', $page);
+    }
 
     return $this->send($req->build());
   }
