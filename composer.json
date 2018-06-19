@@ -10,7 +10,7 @@
     }
   ],
   "require": {
-    "guzzlehttp/guzzle": "6.2.3",
+    "guzzlehttp/guzzle": "^6.2.3",
     "sabre/xml": "^1.2"
   },
   "require-dev": {
