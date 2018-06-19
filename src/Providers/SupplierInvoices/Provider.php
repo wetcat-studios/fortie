@@ -161,9 +161,11 @@ class Provider extends ProviderBase {
    */
   public function create ($givenNumber, array $data)
   {
+    $data['InvoiceNumber'] = $givenNumber;
+
     $req = new FortieRequest();
     $req->method('POST');
-    $req->path($this->basePath)->path($givenNumber);
+    $req->path($this->basePath);
     $req->wrapper('SupplierInvoice');
     $req->data($data);
     $req->setRequired($this->required_create);
