@@ -94,7 +94,7 @@ class Provider extends ProviderBase {
 
     $req = new FortieRequest();
     $req->method('GET');
-    $req->path($this->basePath)->path($priceList)->path($articleNumber)->oath($fromQuantity);
+    $req->path($this->basePath)->path($priceList)->path($articleNumber)->path($fromQuantity);
 
     return $this->send($req->build());
   }
