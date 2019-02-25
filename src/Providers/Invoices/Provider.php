@@ -442,7 +442,7 @@ class Provider extends ProviderBase {
   {
     $req = new FortieRequest();
     $req->method('GET');
-    $req->path($this->basePath)->path($id)->path('credit');
+    $req->path($this->basePath)->path($id)->path('preview');
 
     return $this->send($req->build());
   }
