@@ -108,6 +108,9 @@ abstract class ProviderBase
       $reader->xml($response->getBody());
       return $reader->parse();
     }
+    else if (in_array('application/pdf', $content_type)) {
+	    return $response->getBody()->getContents();
+    }
   }
 
 
