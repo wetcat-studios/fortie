@@ -397,7 +397,7 @@ class Provider extends ProviderBase {
   public function write ($id)
   {
     $req = new FortieRequest();
-    $req->method('PUT');
+    $req->method('GET');
     $req->path($this->basePath)->path($id)->path('print');
 
     return $this->send($req->build());
@@ -442,7 +442,7 @@ class Provider extends ProviderBase {
   {
     $req = new FortieRequest();
     $req->method('GET');
-    $req->path($this->basePath)->path($id)->path('credit');
+    $req->path($this->basePath)->path($id)->path('preview');
 
     return $this->send($req->build());
   }
