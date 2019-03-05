@@ -16,6 +16,31 @@ Or add `"wetcat/fortie": "dev-master"` to your `composer.json`.
 
 If you don't have Composer you should [install it](https://getcomposer.org/download/).
 
+### Laravel
+
+In laravel the easiest way to use Fortie is to add the ServiceProvider, in `config/app.php` add the following line to `providers` array. This is needed before any artisan commands are available.
+
+```php
+<?php
+
+return [
+    
+    ...
+
+    'providers' => [
+
+        ...
+
+        Wetcat\Fortie\FortieServiceProvider::class,
+
+    ],
+
+    ...
+
+];
+
+```
+
 ## Configuration
 
 In Laravel you can publish the config file with `php artisan vendor:publish --provider="Wetcat\Fortie\FortieServiceProvider" --tag="config"`, after this the file should be available in `app/fortie.php`. Use the details provided by Fortnox when you signed up.
@@ -54,31 +79,6 @@ return [
 Note that XML is not fully supported yet, the package can read and will attempt to translate the responses from Fortnox into XML structures, but when sending data to Fortnox it will always send in json.
 
 ## Usage
-
-### Laravel
-
-In laravel the easiest way to use Fortie is to add the ServiceProvider, in `config/app.php` add the following line to `providers` array.
-
-```php
-<?php
-
-return [
-    
-    ...
-
-    'providers' => [
-
-        ...
-
-        Wetcat\Fortie\FortieServiceProvider::class,
-
-    ],
-
-    ...
-
-];
-
-```
 
 When you've included the Service Provider you can then use dependency injection in your BaseController to make fortie available in all controllers.
 

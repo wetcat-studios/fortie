@@ -20,22 +20,76 @@
 
 use Illuminate\Console\Command;
 
-class ActivateCommand extends Command {
+use Config;
 
-  protected $signature = 'joindin:sync {eventId?}';
+class ActivateCommand extends Command
+{
 
-  protected $description = 'Sync down Joind.in events.';
+  /**
+   * The name and signature of the console command.
+   *
+   * @var string
+   */
+  protected $signature = 'fortie:activate {code : The Authorization-Code}';
 
+
+  /**
+   * The console command description.
+   *
+   * @var string
+   */
+  protected $description = 'Get the access token from a new Authorization-Code (Should only be done once for each code).';
+
+
+  /**
+   * Create a new command instance.
+   *
+   * @return void
+   */
+  public function __construct()
+  {
+      parent::__construct();
+  }
+
+
+  /**
+   * Execute the console command.
+   *
+   * @return mixed
+   */
   public function handle()
   {
-    if ($eventId = $this->argument('eventId')) {
-      $this->info("Syncing event $eventId");
+    // Get the Authorization-Code
+    $auth_code = $this->argument('code');
 
-      return $this->client->syncEvent($eventId);
+    // Get the config options
+    $client_secret  = Config::get('fortie.default.client_secret', Config::get('fortie::default.client_secret'));
+    $content_type   = Config::get('fortie.default.content_type', Config::get('fortie::default.content_type'));
+    $accepts        = Config::get('fortie.default.accepts', Config::get('fortie::default.accepts'));
+    $endpoint       = Config::get('fortie.default.endpoint', Config::get('fortie::default.endpoint'));
+
+    try {
+      // Construct the Guzzle client
+      $client = new \GuzzleHttp\Client([
+        'base_uri'  => $endpoint,
+        'headers'   => [
+          'Authorization-Code'  => $auth_code,
+          'Client-Secret'       => $client_secret,
+          'Content-Type'        => $content_type,
+          'Accept'              => $accepts
+        ],
+        'timeout'   => 3.0,
+      ]);
+      $res = $client->request('GET', '/customers');
+      $this->info($res); 
     }
-
-    $this->info("Syncing all events");
-
-    return $this->client->syncAllEvents();
+    catch (\GuzzleHttp\Exception\ClientException $e) {
+      $response = $e->getResponse();
+      $responseBodyAsString = $response->getBody()->getContents();
+      
+      $this->error('Failed to generate access token!');
+      $this->error($responseBodyAsString);
+    }
   }
+
 }
