@@ -131,14 +131,20 @@ class Provider extends ProviderBase {
    */
   public function upload ($file, $directory = null, $folder = null)
   {
+    $req = new FortieRequest();
+    $req->method('POST');
+    $req->path($this->basePath);
+    $req->filePath($file);
+
     if (!is_null($directory)) {
-      return $this->sendRequest('POST', null, null, null, ['path' => $directory], $file);
+      $req->param('path', $directory);
     }
 
     else if (!is_null($folder)) {
-      return $this->sendRequest('POST', null, null, null, ['folderid' => $folder], $file);
+      $req->param('folderid', $folder);
     }
-    
+
+    return $this->send($req->build());
   }
 
 
