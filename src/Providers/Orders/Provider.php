@@ -178,15 +178,11 @@ class Provider extends ProviderBase {
 
   protected $required_create = [
     'CustomerNumber',
-    'Description',
-    'OrderedQuantity',
   ];
 
 
   protected $required_update = [
     'CustomerNumber',
-    'Description',
-    'OrderedQuantity',
   ];
 
 
