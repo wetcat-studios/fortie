@@ -19,17 +19,17 @@
 */
 
 class FortnoxException extends \Exception {
-    
+
     public $error;
 
     public $message;
 
     public $code;
 
-    public function __construct($error = null, $message = null, $code = null)
+    public function __construct($error = null, $message = null, $code = null, $previous)
     {
-        parent::__construct($message . ' (' . $code . ')');
-        
+        parent::__construct($message . ' (' . $code . ')', $code, $previous);
+
         $this->error = $error;
 
         $this->message = $message;

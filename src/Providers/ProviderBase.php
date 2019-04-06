@@ -216,13 +216,15 @@ abstract class ProviderBase
         throw new FortnoxException(
           $jsonError->ErrorInformation->error,
           $jsonError->ErrorInformation->message,
-          $jsonError->ErrorInformation->code
+          $jsonError->ErrorInformation->code,
+          $e
         );
       } else {
         throw new FortnoxException(
           $jsonError->ErrorInformation->Error,
           $jsonError->ErrorInformation->Message,
-          $jsonError->ErrorInformation->Code
+          $jsonError->ErrorInformation->Code,
+          $e
         );
       }
     }

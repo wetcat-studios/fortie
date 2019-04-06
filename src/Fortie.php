@@ -369,19 +369,19 @@ class Fortie
    */
   protected $wayOfDeliveriesProvider;
 
-
   /**
-   * Create a new Neo object.
+   * Create a new Fortie object.
    */
   public function __construct(
     $endpoint,
     $access_token,
     $client_secret,
     $content_type,
-    $accepts
+    $accepts,
+    $config = []
   ) {
     // Set up Guzzle client
-    $client = new \GuzzleHttp\Client([
+    $client = new \GuzzleHttp\Client(array_merge([
       'base_uri'  => $endpoint,
       'headers'   => [
         'Access-Token'  => $access_token,
@@ -390,7 +390,7 @@ class Fortie
         'Accept'        => $accepts
       ],
       'timeout'   => 3.0,
-    ]);
+    ], $config));
 
     // Set up providers
     $this->absenceTransactionsProvider = new AbsenceTransactionsProvider($client);
