@@ -269,7 +269,11 @@ class FortieRequest
 
     // Add the optional filter to params
     if (!is_null($this->optionalFilter)) {
-      $this->params['filter'] = $this->optionalFilter;
+      if (is_array($this->optionalFilter)) {
+        $this->params = $this->optionalFilter;
+      } else {
+        $this->params['filter'] = $this->optionalFilter;
+      }
     }
 
     // Apply the URL parameters, this must be an associative array
