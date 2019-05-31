@@ -178,15 +178,11 @@ class Provider extends ProviderBase {
 
   protected $required_create = [
     'CustomerNumber',
-    'Description',
-    'OrderedQuantity',
   ];
 
 
   protected $required_update = [
     'CustomerNumber',
-    'Description',
-    'OrderedQuantity',
   ];
 
 
@@ -264,7 +260,7 @@ class Provider extends ProviderBase {
   {
     $req = new FortieRequest();
     $req->method('PUT');
-    $req->path($this->basePath);
+    $req->path($this->basePath)->path($id);
     $req->wrapper('Order');
     $req->setRequired($this->required_update);
     $req->data($data);
