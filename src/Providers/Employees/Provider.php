@@ -51,6 +51,8 @@ class Provider extends ProviderBase {
     'TaxTable',
     'TaxColumn',
     'NonRecurringTax',
+    'ClearingNo',
+    'BankAccountNo',
   ];
 
 
@@ -82,6 +84,8 @@ class Provider extends ProviderBase {
     'TaxTable',
     'TaxColumn',
     'NonRecurringTax',
+    'ClearingNo',
+    'BankAccountNo',
   ];
 
 
