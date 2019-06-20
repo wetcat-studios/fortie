@@ -162,6 +162,27 @@ $fortie = new Fortie(
 );
 ```
 
+To prevent sending too many requests to Fortnox you can force a short sleep after each call.
+
+```php
+$stack = HandlerStack::create();
+$stack->push(
+    Middleware::tap(null, function (RequestInterface $request, $options, PromiseInterface $p) {
+        // Max 4 requests per sec
+        // https://developer.fortnox.se/documentation/general/regarding-fortnox-api-rate-limits/
+        usleep(intval(1 / 4 * 1000000));
+    })
+);
+$fortie = new Fortie(
+    $endpoint,
+    $access_token,
+    $client_secret,
+    $content_type,
+    $accepts,
+    ['handler' => $stack]
+);
+```
+
 #### Access token
 
 To get an access token (for use with your integration) you need to request it using a `authroization-code`.
