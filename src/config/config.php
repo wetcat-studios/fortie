@@ -37,6 +37,8 @@ return [
     // The URL to the Fortnox API
     'endpoint'      => 'url-to-fortnox-api',
 
+    // Rate limit (number of requests per second)
+    'rate_limit'  => 4,
   ],
 
 ];
