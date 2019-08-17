@@ -70,7 +70,9 @@ return [
 
     // The URL to the Fortnox API
     'endpoint'       => 'https://api.fortnox.se/3/',
-
+    
+    // Rate limit (number of requests per second)
+    'rate_limit'  => 4,
   ],
 
 ];
