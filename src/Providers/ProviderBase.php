@@ -67,6 +67,12 @@ abstract class ProviderBase
 
 
   /**
+   * The maximum requests per second per access-token.
+   */
+  protected $rate_limit;
+
+
+  /**
    * The minimum required attributes for a create request.
    */
   protected $required_create = [
@@ -211,6 +217,15 @@ abstract class ProviderBase
       $responseBodyAsString = $response->getBody()->getContents();
       $jsonError = json_decode($responseBodyAsString);
 
+      // Fortnox has a rate limit 4 requests per second
+      // Exceeding limit will response HTTP 429 (Too Many Requests)
+      // In that case just try again
+      if ($response->getStatusCode() == 429) {
+        $waitInMicroseconds = round( 1000000 / $this->getRateLimit() );
+        usleep($waitInMicroseconds);
+        return $this->send($request);
+      }
+
       // Because Fortnox API can use both non-capitalized and capitalized parameters.
       if (property_exists($jsonError->ErrorInformation, 'error')) {
         throw new FortnoxException(
@@ -228,6 +243,25 @@ abstract class ProviderBase
         );
       }
     }
+  }
+
+
+  /**
+   * Returns the rate limit.
+   *
+   * @return int
+   */
+  public function getRateLimit()
+  {
+    if (empty($this->rate_limit)) {
+      $this->rate_limit = config('fortie.default.rate_limit',
+          config('fortie::default.rate_limit',
+          4
+        )
+      );
+    }
+
+    return $this->rate_limit;
   }
 
 }
