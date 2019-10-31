@@ -131,6 +131,18 @@ abstract class ProviderBase
 
 
   /**
+   * The possible values for filtering.
+   */
+  protected $available_filters = [];
+
+
+  /**
+   * The filtering parameter for retrieving query.
+   */
+  public $filter = null;
+
+
+  /**
    * Create a new provider instance, pass the Guzzle client
    * reference.
    *
@@ -361,6 +373,19 @@ abstract class ProviderBase
   public function timespan($timespan)
   {
     $this->timespan = $timespan;
+
+    return $this;
+  }
+
+
+  /**
+   * Sets the filtering parameter for the query request.
+   */
+  public function filter($filter)
+  {
+    if (in_array($filter, $this->available_filters)) {
+      $this->filter = $filter;
+    }
 
     return $this;
   }
