@@ -48,6 +48,13 @@ class Provider extends ProviderBase {
 
 
   /**
+   * The possible values for filtering the units.
+   */
+  protected $available_filters = [
+  ];
+
+
+  /**
    * Override the REST path
    */
   protected $basePath = 'units';
@@ -83,6 +90,24 @@ class Provider extends ProviderBase {
     $req = new FortieRequest();
     $req->method('GET');
     $req->path($this->basePath);
+
+    $req->param('page', $this->page);
+    $req->param('offset', $this->offset);
+    $req->param('limit', $this->limit);
+
+    if (!is_null($this->timespan)) {
+      $lastModified = date('Y-m-d H:i', strtotime($this->timespan));
+      $req->param('lastmodified', $lastModified);
+    }
+
+    if (!is_null($this->filter)) {
+      $req->param('filter', $this->filter);
+    }
+
+    if (!is_null($this->sort_order)) {
+      $req->param('sortorder', $this->sort_order);
+      $req->param('sortby', $this->sort_by);
+    }
 
     $response = $this->send($req->build());
 
