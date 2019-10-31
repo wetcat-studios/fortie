@@ -205,13 +205,13 @@ class Provider extends ProviderBase {
    */
   public function all ($page = null)
   {
+    if (!is_null($page)) {
+      $this->page($page);
+    }
+
     $req = new FortieRequest();
     $req->method('GET');
     $req->path($this->basePath);
-
-    if (!is_null($page)) {  
-      $req->param('page', $page);
-    }
 
     return $this->send($req->build());
   }
