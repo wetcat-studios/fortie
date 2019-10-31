@@ -53,6 +53,22 @@ class Provider extends ProviderBase {
 
 
   /**
+   * Retrieves the number of all units.
+   *
+   * @return integer
+   */
+  public function count()
+  {
+    $req = new FortieRequest();
+    $req->method('GET');
+    $req->path($this->basePath);
+    $response = $this->send($req->build());
+
+    return $response->MetaInformation->{'@TotalResources'};
+  }
+
+
+  /**
    * Retrieves a list of units.
    *
    * @return array
