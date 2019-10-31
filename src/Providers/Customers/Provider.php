@@ -210,12 +210,25 @@ class Provider extends ProviderBase {
 
 
   /**
-   * Retrieves a list of customers. The customers are returned sorted 
-   * by customer number with the lowest number appearing first.
+   * Retrieves a list of customers.
    *
    * @return Wetcat\Fortie\Contracts\Customers
    */
   public function all ($page = null)
+  {
+    if ($this->limit > 0) {
+      return $this->fetch($page);
+    }
+  }
+
+
+  /**
+   * Retrieves a list of customers
+   * obeying settings for pagination, filtering and sorting.
+   *
+   * @return Wetcat\Fortie\Contracts\Customers
+   */
+  public function fetch($page = null)
   {
     if (!is_null($page)) {
       $this->page($page);
