@@ -18,8 +18,9 @@
 
 */
 
-use Wetcat\Fortie\Providers\ProviderBase;
+use Wetcat\Fortie\Contracts\Units as UnitsList;
 use Wetcat\Fortie\FortieRequest;
+use Wetcat\Fortie\Providers\ProviderBase;
 
 class Provider extends ProviderBase {
 
@@ -71,7 +72,7 @@ class Provider extends ProviderBase {
   /**
    * Retrieves a list of units.
    *
-   * @return array
+   * @return Wetcat\Fortie\Contracts\Units
    */
   public function all ($page = null)
   {
@@ -83,7 +84,14 @@ class Provider extends ProviderBase {
     $req->method('GET');
     $req->path($this->basePath);
 
-    return $this->send($req->build());
+    $response = $this->send($req->build());
+
+    return new UnitsList(
+      $response->MetaInformation->{'@TotalResources'},
+      $response->MetaInformation->{'@TotalPages'},
+      $response->MetaInformation->{'@CurrentPage'},
+      $response->Units
+    );
   }
 
 
