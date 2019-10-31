@@ -93,6 +93,19 @@ abstract class ProviderBase
 
 
   /**
+   * The default setting for the
+   * offset of listed queries.
+   */
+  protected $default_offset = 0;
+
+
+  /**
+   * The current offset of listed queries.
+   */
+  public $offset = 0;
+
+
+  /**
    * Create a new provider instance, pass the Guzzle client
    * reference.
    *
@@ -277,6 +290,17 @@ abstract class ProviderBase
   public function page($page)
   {
     $this->page = $page;
+
+    return $this;
+  }
+
+
+  /**
+   * Sets the item offset for the query request.
+   */
+  public function offset($offset)
+  {
+    $this->offset = $offset;
 
     return $this;
   }
