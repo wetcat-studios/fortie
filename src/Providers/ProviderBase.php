@@ -143,6 +143,18 @@ abstract class ProviderBase
 
 
   /**
+   * The ordering type parameter for retrieving query.
+   */
+  public $sort_order = null;
+
+
+  /**
+   * The ordering method parameter for retrieving query.
+   */
+  public $sort_by = 'ascending';
+
+
+  /**
    * Create a new provider instance, pass the Guzzle client
    * reference.
    *
@@ -388,5 +400,42 @@ abstract class ProviderBase
     }
 
     return $this;
+  }
+
+
+  /**
+   * Sets the ordering type parameter for the query request.
+   */
+  public function sortBy($sort_by)
+  {
+    if (in_array($sort_by, $this->attributes)) {
+      $this->sort_by = strtolower($sort_by);
+    }
+
+    return $this;
+  }
+
+
+  /**
+   * Sets the ordering method parameter for the query request.
+   */
+  public function sortOrder($sort_order)
+  {
+    switch ($sort_order) {
+      case '0':
+      case 'DESC':
+      case 'descending':
+        $this->sort_order = 'descending';
+        break;
+
+      default:
+      case '1':
+      case 'ASC':
+      case 'ascending':
+        $this->sort_order = 'ascending';
+        break;
+      }
+
+      return $this;
   }
 }
