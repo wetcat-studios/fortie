@@ -18,8 +18,9 @@
 
 */
 
-use Wetcat\Fortie\Providers\ProviderBase;
+use Wetcat\Fortie\Contracts\Customers as CustomersList;
 use Wetcat\Fortie\FortieRequest;
+use Wetcat\Fortie\Providers\ProviderBase;
 
 class Provider extends ProviderBase {
 
@@ -201,7 +202,7 @@ class Provider extends ProviderBase {
    * Retrieves a list of customers. The customers are returned sorted 
    * by customer number with the lowest number appearing first.
    *
-   * @return array
+   * @return Wetcat\Fortie\Contracts\Customers
    */
   public function all ($page = null)
   {
@@ -213,7 +214,14 @@ class Provider extends ProviderBase {
     $req->method('GET');
     $req->path($this->basePath);
 
-    return $this->send($req->build());
+    $response = $this->send($req->build());
+
+    return new CustomersList(
+      $response->MetaInformation->{'@TotalResources'},
+      $response->MetaInformation->{'@TotalPages'},
+      $response->MetaInformation->{'@CurrentPage'},
+      $response->Customers
+    );
   }
 
 
