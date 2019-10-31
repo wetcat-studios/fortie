@@ -182,6 +182,22 @@ class Provider extends ProviderBase {
 
 
   /**
+   * Retrieves the number of all customers.
+   *
+   * @return integer
+   */
+  public function count()
+  {
+    $req = new FortieRequest();
+    $req->method('GET');
+    $req->path($this->basePath);
+    $response = $this->send($req->build());
+
+    return $response->MetaInformation->{'@TotalResources'};
+  }
+
+
+  /**
    * Retrieves a list of customers. The customers are returned sorted 
    * by customer number with the lowest number appearing first.
    *
