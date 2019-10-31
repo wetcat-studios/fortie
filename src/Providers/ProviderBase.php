@@ -106,6 +106,19 @@ abstract class ProviderBase
 
 
   /**
+   * The default setting for the
+   * limit of items per page of listed queries.
+   */
+  protected $default_limit = 100;
+
+
+  /**
+   * The limit of items per page of listed queries.
+   */
+  public $limit = 100;
+
+
+  /**
    * Create a new provider instance, pass the Guzzle client
    * reference.
    *
@@ -301,6 +314,29 @@ abstract class ProviderBase
   public function offset($offset)
   {
     $this->offset = $offset;
+
+    return $this;
+  }
+
+
+  /**
+   * Sets the item listing limit for the query request.
+   */
+  public function limit($limit)
+  {
+    $this->limit = $limit;
+
+    return $this;
+  }
+
+
+  /**
+   * Sets the listing limit to unlimited
+   * for the query request.
+   */
+  public function unlimited()
+  {
+    $this->limit = -1;
 
     return $this;
   }
