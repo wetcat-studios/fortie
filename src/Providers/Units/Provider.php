@@ -83,6 +83,20 @@ class Provider extends ProviderBase {
    */
   public function all ($page = null)
   {
+    if ($this->limit > 0) {
+      return $this->fetch($page);
+    }
+  }
+
+
+  /**
+   * Retrieves a list of units
+   * obeying settings for pagination, filtering and sorting.
+   *
+   * @return Wetcat\Fortie\Contracts\Units
+   */
+  public function fetch($page = null)
+  {
     if (!is_null($page)) {
       $this->page($page);
     }
