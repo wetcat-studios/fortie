@@ -119,6 +119,18 @@ abstract class ProviderBase
 
 
   /**
+   * The time or time difference for retrieving the records since.
+   * (not available for FinancialYears or Settings)
+   *
+   * Values can be like:
+   *    2019-03-10 12:39
+   *    -2 days
+   *    last monday
+   */
+  public $timespan = null;
+
+
+  /**
    * Create a new provider instance, pass the Guzzle client
    * reference.
    *
@@ -337,6 +349,18 @@ abstract class ProviderBase
   public function unlimited()
   {
     $this->limit = -1;
+
+    return $this;
+  }
+
+
+  /**
+   * Sets the time limit for the last modification time
+   * of the items to be listed.
+   */
+  public function timespan($timespan)
+  {
+    $this->timespan = $timespan;
 
     return $this;
   }
