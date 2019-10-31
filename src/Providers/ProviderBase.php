@@ -87,6 +87,12 @@ abstract class ProviderBase
 
 
   /**
+   * The current page of the listed query.
+   */
+  public $page = 1;
+
+
+  /**
    * Create a new provider instance, pass the Guzzle client
    * reference.
    *
@@ -264,4 +270,14 @@ abstract class ProviderBase
     return $this->rate_limit;
   }
 
+
+  /**
+   * Sets the current page number for the query request.
+   */
+  public function page($page)
+  {
+    $this->page = $page;
+
+    return $this;
+  }
 }
