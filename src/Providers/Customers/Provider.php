@@ -219,6 +219,8 @@ class Provider extends ProviderBase {
     if ($this->limit > 0) {
       return $this->fetch($page);
     }
+
+    return $this->fetchAll();
   }
 
 
@@ -264,6 +266,37 @@ class Provider extends ProviderBase {
       $response->MetaInformation->{'@CurrentPage'},
       $response->Customers
     );
+  }
+
+
+  /**
+   * Retrieves an unpaginated full list of all customers
+   * obeying settings for filtering and sorting.
+   *
+   * @return Wetcat\Fortie\Contracts\Customers
+   */
+  public function fetchAll()
+  {
+    $items = [];
+    $currentPage = 0;
+    $totalPages = 1;
+
+    while ($currentPage < $totalPages) {
+      $currentPage++;
+      $response = $this->limit($this->default_limit)
+        ->page($currentPage)
+        ->fetch();
+
+      $totalPages = $response->MetaInformation->{'@TotalPages'};
+      $currentPage = $response->MetaInformation->{'@CurrentPage'};
+
+      $items = array_merge(
+        $items,
+        $this->page($currentPage)->all()->Customers
+      );
+    }
+
+    return new CustomersList(count($items), 1, 1, $items);
   }
 
 
