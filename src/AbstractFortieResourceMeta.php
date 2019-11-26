@@ -1,8 +1,8 @@
 <?php
 
-namespace Wetcat\Fortie\Contracts;
+namespace Wetcat\Fortie;
 
-class MetaInformation
+class AbstractFortieResourceMeta
 {
     public function __construct(
         $TotalResources,
