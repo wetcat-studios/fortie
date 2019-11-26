@@ -18,11 +18,26 @@
 
 */
 
-use Wetcat\Fortie\Contracts\Units as UnitsList;
 use Wetcat\Fortie\FortieRequest;
 use Wetcat\Fortie\Providers\ProviderBase;
+use Wetcat\Fortie\Traits\CountTrait;
+use Wetcat\Fortie\Traits\CreateTrait;
+use Wetcat\Fortie\Traits\DeleteTrait;
+use Wetcat\Fortie\Traits\FetchTrait;
+use Wetcat\Fortie\Traits\FindTrait;
+use Wetcat\Fortie\Traits\UpdateTrait;
 
 class Provider extends ProviderBase {
+
+  use CountTrait,
+      CreateTrait,
+      DeleteTrait,
+      FetchTrait,
+      FindTrait,
+      UpdateTrait;
+
+  protected static $wrapper = 'Unit';
+  protected static $wrapperGroup = 'Units';
 
   protected $attributes = [
     'Url',
@@ -58,179 +73,5 @@ class Provider extends ProviderBase {
    * Override the REST path
    */
   protected $basePath = 'units';
-
-
-  /**
-   * Retrieves the number of all units.
-   *
-   * @return integer
-   */
-  public function count()
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath);
-    $response = $this->send($req->build());
-
-    return $response->MetaInformation->{'@TotalResources'};
-  }
-
-
-  /**
-   * Retrieves a list of units.
-   *
-   * @return Wetcat\Fortie\Contracts\Units
-   */
-  public function all ($page = null)
-  {
-    if ($this->limit > 0) {
-      return $this->fetch($page);
-    }
-
-    return $this->fetchAll();
-  }
-
-
-  /**
-   * Retrieves a list of units
-   * obeying settings for pagination, filtering and sorting.
-   *
-   * @return Wetcat\Fortie\Contracts\Units
-   */
-  public function fetch($page = null)
-  {
-    if (!is_null($page)) {
-      $this->page($page);
-    }
-
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath);
-
-    $req->param('page', $this->page);
-    $req->param('offset', $this->offset);
-    $req->param('limit', $this->limit);
-
-    if (!is_null($this->timespan)) {
-      $lastModified = date('Y-m-d H:i', strtotime($this->timespan));
-      $req->param('lastmodified', $lastModified);
-    }
-
-    if (!is_null($this->filter)) {
-      $req->param('filter', $this->filter);
-    }
-
-    if (!is_null($this->sort_order)) {
-      $req->param('sortorder', $this->sort_order);
-      $req->param('sortby', $this->sort_by);
-    }
-
-    $response = $this->send($req->build());
-
-    return new UnitsList(
-      $response->MetaInformation->{'@TotalResources'},
-      $response->MetaInformation->{'@TotalPages'},
-      $response->MetaInformation->{'@CurrentPage'},
-      $response->Units
-    );
-  }
-
-
-  /**
-   * Retrieves an unpaginated full list of all units,
-   * obeying settings for filtering and sorting.
-   *
-   * @return Wetcat\Fortie\Contracts\Units
-   */
-  public function fetchAll()
-  {
-    $items = [];
-    $currentPage = 0;
-    $totalPages = 1;
-
-    while ($currentPage < $totalPages) {
-      $currentPage++;
-      $response = $this->limit($this->default_limit)
-        ->page($currentPage)
-        ->fetch();
-
-      $totalPages = $response->MetaInformation->{'@TotalPages'};
-      $currentPage = $response->MetaInformation->{'@CurrentPage'};
-
-      $items = array_merge(
-        $items,
-        $this->page($currentPage)->all()->Units
-      );
-    }
-
-    return new UnitsList(count($items), 1, 1, $items);
-  }
-
-
-  /**
-   * Retrieves a single unit.
-   *
-   * @param $code
-   * @return array
-   */
-  public function find ($code)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath)->path($code);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Creates a unit.
-   *
-   * @param array   $data
-   * @return array
-   */
-  public function create (array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('POST');
-    $req->path($this->basePath);
-    $req->wrapper('Unit');
-    $req->setRequired($this->required_create);
-    $req->data($data);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Updates a unit.
-   *
-   * @param array   $data
-   * @return array
-   */
-  public function update ($code, array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('PUT');
-    $req->path($this->basePath)->path($code);
-    $req->wrapper('Unit');
-    $req->setRequired($this->required_update);
-    $req->data($data);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Removes a unit.
-   */
-  public function delete ($code)
-  {
-    $req = new FortieRequest();
-    $req->method('DELETE');
-    $req->path($this->basePath)->path($code);
-
-    return $this->send($req->build());
-  }
 
 }
