@@ -18,10 +18,24 @@
 
 */
 
-use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\FortieRequest;
+use Wetcat\Fortie\Providers\ProviderBase;
+use Wetcat\Fortie\Traits\CountTrait;
+use Wetcat\Fortie\Traits\CreateTrait;
+use Wetcat\Fortie\Traits\DeleteTrait;
+use Wetcat\Fortie\Traits\FetchTrait;
+use Wetcat\Fortie\Traits\UpdateTrait;
 
 class Provider extends ProviderBase {
+
+  use CountTrait,
+      CreateTrait,
+      DeleteTrait,
+      FetchTrait,
+      UpdateTrait;
+
+  protected $wrapper = 'Label';
+  protected $wrapperGroup = 'Labels';
 
   protected $attributes = [
     'Id',
@@ -44,92 +58,16 @@ class Provider extends ProviderBase {
 
 
   /**
+   * The possible values for filtering.
+   *
+   * @var array
+   */
+  protected $available_filters = [
+  ];
+
+
+  /**
    * Override the REST path
    */
   protected $basePath = 'labels';
-
-
-  /**
-   * Retrieves a list of all the available labels.
-   *
-   * @return array
-   */
-  public function all ($page = null)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath);
-
-    if (!is_null($page)) {  
-      $req->param('page', $page);
-    }
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Create a label.
-   *
-   * The created label will be returned if everything succeeded, if there
-   * was any problems an error will be returned.
-   *
-   * @param array   $data
-   * @return array
-   */
-  public function create (array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('POST');
-    $req->path($this->basePath);
-    $req->wrapper('Label');
-    $req->data($data);
-    $req->setRequired($this->required_create);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Update a label.
-   *
-   * Updates the specified label with the values provided in the properties.
-   * Any property not provided will be left unchanged.
-   *
-   * @param $id
-   * @param array   $data
-   * @return array
-   */
-  public function update ($id, array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('PUT');
-    $req->path($this->basePath)->path($id);
-    $req->wrapper('Label');
-    $req->setRequired($this->required_update);
-    $req->data($data);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Delete a label.
-   *
-   * Deletes the label and it’s connection to documents permanently.
-   * You need to supply the unique label id that was returned when the label
-   * was created or retrieved from the list of labels.
-   *
-   * @param $id
-   * @return null
-   */
-  public function delete ($id)
-  {
-    $req = new FortieRequest();
-    $req->method('DELETE');
-    $req->path($this->basePath)->path($id);
-
-    return $this->send($req->build());
-  }
-
 }
