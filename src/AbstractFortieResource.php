@@ -6,7 +6,7 @@ use Wetcat\Fortie\AbstractFortieResourceMeta;
 
 abstract class AbstractFortieResource
 {
-    protected static $wrapper;
+    protected $wrapper;
 
     public function __construct(object $fortnoxResponse = null)
     {
@@ -14,8 +14,8 @@ abstract class AbstractFortieResource
             $this->setMetaInformation($fortnoxResponse->MetaInformation);
         }
 
-        if (!empty($fortnoxResponse->{static::$wrapper})) {
-            $this->setItems($fortnoxResponse->{static::$wrapper});
+        if (!empty($fortnoxResponse->{$this->wrapper})) {
+            $this->setItems($fortnoxResponse->{$this->wrapper});
         }
     }
 
@@ -30,6 +30,6 @@ abstract class AbstractFortieResource
 
     public function setItems(array $items)
     {
-        $this->{static::$wrapper} = $items;
+        $this->{$this->wrapper} = $items;
     }
 }

@@ -19,7 +19,7 @@ trait CreateTrait
     $req = new FortieRequest();
     $req->method('POST');
     $req->path($this->basePath);
-    $req->wrapper(static::$wrapper);
+    $req->wrapper($this->wrapper);
     $req->setRequired($this->required_create);
     $req->data($data);
 

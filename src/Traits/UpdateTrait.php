@@ -22,7 +22,7 @@ trait UpdateTrait
     $req = new FortieRequest();
     $req->method('PUT');
     $req->path($this->basePath)->path($id);
-    $req->wrapper(static::$wrapper);
+    $req->wrapper($this->wrapper);
     $req->setRequired($this->required_update);
     $req->data($data);
 

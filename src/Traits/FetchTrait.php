@@ -88,7 +88,7 @@ trait FetchTrait
 
             $items = array_merge(
                 $items,
-                $this->page($currentPage)->all()->{static::$wrapperGroup}
+                $this->page($currentPage)->all()->{$this->wrapperGroup}
             );
         }
 
@@ -96,7 +96,7 @@ trait FetchTrait
         $fullResponse->MetaInformation->{'@TotalResources'} = count($items);
         $fullResponse->MetaInformation->{'@TotalPages'} = 1;
         $fullResponse->MetaInformation->{'@CurrentPage'} = 1;
-        $fullResponse->{static::$wrapperGroup} = $items;
+        $fullResponse->{$this->wrapperGroup} = $items;
 
         return $this->makeResource(
             $fullResponse
@@ -112,7 +112,7 @@ trait FetchTrait
      */
     protected function makeResource($response)
     {
-        $resourceClass = '\\Wetcat\\Fortie\\Providers\\' . static::$wrapperGroup . '\\Resource';
+        $resourceClass = '\\Wetcat\\Fortie\\Providers\\' . $this->wrapperGroup . '\\Resource';
 
         return new $resourceClass($response);
     }

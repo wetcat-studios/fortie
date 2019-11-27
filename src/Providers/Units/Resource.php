@@ -6,5 +6,5 @@ use Wetcat\Fortie\AbstractFortieResource;
 
 class Resource extends AbstractFortieResource
 {
-    protected static $wrapper = 'Units';
+    protected $wrapper = 'Units';
 }

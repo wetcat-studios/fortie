@@ -36,8 +36,8 @@ class Provider extends ProviderBase {
       FindTrait,
       UpdateTrait;
 
-  protected static $wrapper = 'Account';
-  protected static $wrapperGroup = 'Accounts';
+  protected $wrapper = 'Account';
+  protected $wrapperGroup = 'Accounts';
 
   protected $attributes = [
     'Url',
