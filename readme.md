@@ -9,10 +9,10 @@ A simple [Fortnox](https://www.fortnox.se/) PHP package, including Laravel Servi
 The easiest way to install this package is through Composer.
 
 ```
-composer require wetcat/fortie dev-master
+composer require wetcat/fortie
 ```
 
-Or add `"wetcat/fortie": "dev-master"` to your `composer.json`.
+Or add `"wetcat/fortie": "^1.0"` to your `composer.json`.
 
 If you don't have Composer you should [install it](https://getcomposer.org/download/).
 
