@@ -18,7 +18,7 @@
 
 */
 
-abstract class Status {
+class Status {
 
   /**
    * Project was not started yet

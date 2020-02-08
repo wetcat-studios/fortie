@@ -18,10 +18,26 @@
 
 */
 
-use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\FortieRequest;
+use Wetcat\Fortie\Providers\ProviderBase;
+use Wetcat\Fortie\Traits\CountTrait;
+use Wetcat\Fortie\Traits\CreateTrait;
+use Wetcat\Fortie\Traits\DeleteTrait;
+use Wetcat\Fortie\Traits\FetchTrait;
+use Wetcat\Fortie\Traits\FindTrait;
+use Wetcat\Fortie\Traits\UpdateTrait;
 
 class Provider extends ProviderBase {
+
+  use CountTrait,
+      CreateTrait,
+      DeleteTrait,
+      FetchTrait,
+      FindTrait,
+      UpdateTrait;
+
+  protected $wrapper = 'Project';
+  protected $wrapperGroup = 'Projects';
 
   protected $attributes = [
     'Url',
@@ -57,93 +73,16 @@ class Provider extends ProviderBase {
 
 
   /**
+   * The possible values for filtering.
+   *
+   * @var array
+   */
+  protected $available_filters = [
+  ];
+
+
+  /**
    * Override the REST path
    */
   protected $basePath = 'projects';
-
-
-  /**
-   * Retrieves a list of orders.
-   *
-   * @return array
-   */
-  public function all ($page = null)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath);
-
-    if (!is_null($page)) {  
-      $req->param('page', $page);
-    }
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Retrieves a list of orders.
-   *
-   * @return array
-   */
-  public function find ($projectNumber = null)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath)->path($projectNumber);
-
-    return $this->send($req->build());
-  }
-
-  
-  /**
-   * Creates a project.
-   *
-   * @param array   $params
-   * @return array
-   */
-  public function create (array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('POST');
-    $req->path($this->basePath);
-    $req->wrapper('Project');
-    $req->setRequired($this->required_create);
-    $req->data($data);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Updates a project.
-   *
-   * @param array   $data
-   * @return array
-   */
-  public function update ($id, array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('PUT');
-    $req->path($this->basePath)->path($id);
-    $req->wrapper('Project');
-    $req->setRequired($this->required_update);
-    $req->data($data);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Removes a project
-   */
-  public function delete ($projectNumber)
-  {
-    $req = new FortieRequest();
-    $req->method('DELETE');
-    $req->path($this->basePath)->path($projectNumber);
-
-    return $this->send($req->build());
-  }
-
 }

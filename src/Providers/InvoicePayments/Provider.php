@@ -18,10 +18,26 @@
 
 */
 
-use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\FortieRequest;
+use Wetcat\Fortie\Providers\ProviderBase;
+use Wetcat\Fortie\Traits\CountTrait;
+use Wetcat\Fortie\Traits\CreateTrait;
+use Wetcat\Fortie\Traits\DeleteTrait;
+use Wetcat\Fortie\Traits\FetchTrait;
+use Wetcat\Fortie\Traits\FindTrait;
+use Wetcat\Fortie\Traits\UpdateTrait;
 
 class Provider extends ProviderBase {
+
+  use CountTrait,
+      CreateTrait,
+      DeleteTrait,
+      FetchTrait,
+      FindTrait,
+      UpdateTrait;
+
+  protected $wrapper = 'InvoicePayment';
+  protected $wrapperGroup = 'InvoicePayments';
 
   protected $attributes = [
     'Url',
@@ -86,98 +102,29 @@ class Provider extends ProviderBase {
 
 
   /**
+   * The possible values for filtering.
+   *
+   * @var array
+   */
+  protected $available_filters = [
+  ];
+
+
+  /**
    * Override the REST path
    */
   protected $basePath = 'invoicepayments';
 
 
   /**
-   * Retrieves a list of invoice payments.
-   *
-   * @return array
+   * Bookkeeps the invoice payment.
    */
-  public function all ($page = null)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath);
-
-    if (!is_null($page)) {  
-      $req->param('page', $page);
-    }
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Retrieves a single invoice payment.
-   *
-   * @param $number
-   * @return array
-   */
-  public function find ($number)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath)->path($number);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Creates an invoice payment.
-   *
-   * @param array   $data
-   * @return array
-   */
-  public function create (array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('POST');
-    $req->path($this->basePath);
-    $req->wrapper('InvoicePayment');
-    $req->data($data);
-    $req->setRequired($this->required_create);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Updates an invoice payment.
-   *
-   * @param $number
-   * @param array   $data
-   * @return array
-   */
-  public function update ($number, array $data)
+  public function bookkeep ($id)
   {
     $req = new FortieRequest();
     $req->method('PUT');
-    $req->path($this->basePath)->path($number);
-    $req->wrapper('InvoicePayment');
-    $req->setRequired($this->required_update);
-    $req->data($data);
+    $req->path($this->basePath)->path($id)->path('bookkeep');
 
     return $this->send($req->build());
   }
-
-
-  /**
-   * Removes an invoice payment.
-   *
-   * @param $number
-   * @return null
-   */
-  public function delete ($number)
-  {
-    $req = new FortieRequest();
-    $req->method('DELETE');
-    $req->path($this->basePath)->path($number);
-
-    return $this->send($req->build());
-  }
-
 }

@@ -18,10 +18,26 @@
 
 */
 
-use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\FortieRequest;
+use Wetcat\Fortie\Providers\ProviderBase;
+use Wetcat\Fortie\Traits\CountTrait;
+use Wetcat\Fortie\Traits\CreateTrait;
+use Wetcat\Fortie\Traits\DeleteTrait;
+use Wetcat\Fortie\Traits\FetchTrait;
+use Wetcat\Fortie\Traits\FindTrait;
+use Wetcat\Fortie\Traits\UpdateTrait;
 
 class Provider extends ProviderBase {
+
+  use CountTrait,
+      CreateTrait,
+      DeleteTrait,
+      FetchTrait,
+      FindTrait,
+      UpdateTrait;
+
+  protected $wrapper = 'SalaryTransaction';
+  protected $wrapperGroup = 'SalaryTransactions';
 
   protected $attributes = [
     'EmployeeId',
@@ -60,113 +76,16 @@ class Provider extends ProviderBase {
 
 
   /**
+   * The possible values for filtering.
+   *
+   * @var array
+   */
+  protected $available_filters = [
+  ];
+
+
+  /**
    * Override the REST path
    */
   protected $basePath = 'salarytransactions';
-
-
-  /**
-   * List all salary transactions
-   *
-   * Lists all salary transactions for all employees. Supports query-string
-   * parameters employeeid and date for filtering the result.
-   *
-   * @return array
-   */
-  public function all ($page = null)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath);
-
-    if (!is_null($page)) {  
-      $req->param('page', $page);
-    }
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Retrieve a salary transaction.
-   *
-   * Retrieves a single salary transaction
-   *
-   * @param $salaryRow
-   * @return array
-   */
-  public function find ($salaryRow)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath)->path($salaryRow);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Create a salary transaction.
-   *
-   * Creates a new salary transaction for an employee.
-   *
-   * Usable “SalaryCode”s:
-   *
-   * You can get a list of usable salary codes from Register, Lönearter och koder,
-   * Lönearter by choosing one of two tables and printing (Utskrift in the toolbar).
-   * Depending on which salary code table (löneartstabell) that is set in the
-   * settings (Inställningar, Lön, Avtal för arbetare/tjänsteman – Allmänt) you can
-   * choose the salary code to use from either salary code table. Make sure to use
-   * the correct table that is used for the employee (Register, Personal, Anställning,
-   * Personaltyp) you want to sent the salary transaction for. Some salary codes do
-   * not exist in every table.
-   *
-   * @param array   $data
-   * @return array
-   */
-  public function create (array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('POST');
-    $req->path($this->basePath);
-    $req->wrapper('SalaryTransaction');
-    $req->data($data);
-    $req->setRequired($this->required_create);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Update a salary transaction.
-   *
-   * Updates a salary transaction.
-   *
-   * Usable “SalaryCode”s:
-   *
-   * You can get a list of usable salary codes from Register, Lönearter och koder,
-   * Lönearter by choosing one of two tables and printing (Utskrift in the toolbar).
-   * Depending on which salary code table (löneartstabell) that is set in the settings
-   * (Inställningar, Lön, Avtal för arbetare/tjänsteman – Allmänt) you can choose
-   * the salary code to use from either salary code table. Make sure to use the
-   * correct table that is used for the employee (Register, Personal, Anställning,
-   * Personaltyp) you want to sent the salary transaction for. Some salary codes
-   * do not exist in every table.
-   *
-   * @param $salaryRow
-   * @param array   $data
-   * @return array
-   */
-  public function update ($salaryRow, array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('PUT');
-    $req->path($this->basePath)->path($salaryRow);
-    $req->wrapper('CostCenter');
-    $req->setRequired($this->required_update);
-    $req->data($data);
-
-    return $this->send($req->build());
-  }
-
 }

@@ -18,10 +18,22 @@
 
 */
 
-use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\FortieRequest;
+use Wetcat\Fortie\Providers\ProviderBase;
+use Wetcat\Fortie\Traits\CountTrait;
+use Wetcat\Fortie\Traits\FetchTrait;
+use Wetcat\Fortie\Traits\FindTrait;
+use Wetcat\Fortie\Traits\UpdateTrait;
 
 class Provider extends ProviderBase {
+
+  use CountTrait,
+      FetchTrait,
+      FindTrait,
+      UpdateTrait;
+
+  protected $wrapper = 'PreDefinedAccount';
+  protected $wrapperGroup = 'PreDefinedAccounts';
 
   protected $attributes = [
     'Url',
@@ -46,63 +58,17 @@ class Provider extends ProviderBase {
 
 
   /**
+   * The possible values for filtering.
+   *
+   * @var array
+   */
+  protected $available_filters = [
+  ];
+
+
+  /**
    * Override the REST path
    */
   protected $basePath = 'predefinedaccounts';
-
-
-  /**
-   * Retrieve a list of all predefined accounts.
-   *
-   * @return array
-   */
-  public function all ($page = null)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath);
-
-    if (!is_null($page)) {  
-      $req->param('page', $page);
-    }
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Retrieve information for a specific account type.
-   *
-   * @param $name
-   * @return array
-   */
-  public function find ($name)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath)->path(strtoupper($name));
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Update existing account type with a predefined account.
-   *
-   * @param $name
-   * @param array   $data
-   * @return array
-   */
-  public function update ($name, array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('PUT');
-    $req->path($this->basePath)->path(strtoupper($name));
-    $req->wrapper('PreDefinedAccount');
-    $req->setRequired($this->required_update);
-    $req->data($data);
-
-    return $this->send($req->build());
-  }
 
 }

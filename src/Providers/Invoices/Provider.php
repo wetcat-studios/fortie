@@ -18,10 +18,24 @@
 
 */
 
-use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\FortieRequest;
+use Wetcat\Fortie\Providers\ProviderBase;
+use Wetcat\Fortie\Traits\CountTrait;
+use Wetcat\Fortie\Traits\CreateTrait;
+use Wetcat\Fortie\Traits\FetchTrait;
+use Wetcat\Fortie\Traits\FindTrait;
+use Wetcat\Fortie\Traits\UpdateTrait;
 
 class Provider extends ProviderBase {
+
+  use CountTrait,
+      CreateTrait,
+      FetchTrait,
+      FindTrait,
+      UpdateTrait;
+
+  protected $wrapper = 'Invoice';
+  protected $wrapperGroup = 'Invoices';
 
   protected $attributes = [
     'Url',
@@ -229,107 +243,23 @@ class Provider extends ProviderBase {
 
 
   /**
+   * The possible values for filtering.
+   *
+   * @var array
+   */
+  protected $available_filters = [
+    'cancelled',
+    'fullypaid',
+    'unpaid',
+    'unpaidoverdue',
+    'unbooked',
+  ];
+
+
+  /**
    * Override the REST path
    */
   protected $basePath = 'invoices';
-
-
-  /**
-   * Retrieves a list of invoices. The invoices are returned sorted by 
-   * document number with the lowest number appearing first.
-   *
-   * @return array
-   */
-  public function all ($filter = null, $page = null)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath);
-
-    if (!is_null($filter)) {
-      $req->filter($filter);
-    }
-
-    if (!is_null($page)) {  
-      $req->param('page', $page);
-    }
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Retrieves the details of an invoice. You need to supply the unique 
-   * document number that was returned when the invoice was created or 
-   * retrieved from the list of invoices.
-   *
-   * @param $id
-   * @return array
-   */
-  public function find ($id)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath)->path($id);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * The created invoice will be returned if everything succeeded, if 
-   * there was any problems an error will be returned.
-   *
-   * You must specify a customer to create an invoice. It’s possible 
-   * to create an invoice without rows, although we encourage you to 
-   * add them if you can.
-   *
-   * Predefined values will be used for properties where it applies, 
-   * the values can be changed in the settings for the Fortnox account. 
-   * Predefined values will always be overwritten by values provided 
-   * through the API.
-   *
-   * @param array   $data
-   * @return array
-   */
-  public function create (array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('POST');
-    $req->path($this->basePath);
-    $req->wrapper('Invoice');
-    $req->setRequired($this->required_create);
-    $req->data($data);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * The updated invoice will be returned if everything succeeded, if
-   * there was any problems an error will be returned.
-   *
-   * You need to supply the document number of the invoice that you 
-   * want to update.
-   *
-   * Note that when updating rows you’ll need to provide all the rows
-   * of the invoice, only providing the updates will overwrite the 
-   * current rows resulting in the old ones being removed.
-   *
-   * @param array   $params
-   * @return array
-   */
-  public function update ($id, array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('PUT');
-    $req->path($this->basePath)->path($id);
-    $req->wrapper('Invoice');
-    $req->setRequired($this->required_update);
-    $req->data($data);
-
-    return $this->send($req->build());
-  }
 
 
   /**

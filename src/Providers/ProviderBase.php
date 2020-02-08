@@ -87,6 +87,74 @@ abstract class ProviderBase
 
 
   /**
+   * The current page of the listed query.
+   */
+  public $page = 1;
+
+
+  /**
+   * The default setting for the
+   * offset of listed queries.
+   */
+  protected $default_offset = 0;
+
+
+  /**
+   * The current offset of listed queries.
+   */
+  public $offset = 0;
+
+
+  /**
+   * The default setting for the
+   * limit of items per page of listed queries.
+   */
+  protected $default_limit = 100;
+
+
+  /**
+   * The limit of items per page of listed queries.
+   */
+  public $limit = 100;
+
+
+  /**
+   * The time or time difference for retrieving the records since.
+   * (not available for FinancialYears or Settings)
+   *
+   * Values can be like:
+   *    2019-03-10 12:39
+   *    -2 days
+   *    last monday
+   */
+  public $timespan = null;
+
+
+  /**
+   * The possible values for filtering.
+   */
+  protected $available_filters = [];
+
+
+  /**
+   * The filtering parameter for retrieving query.
+   */
+  public $filter = null;
+
+
+  /**
+   * The ordering type parameter for retrieving query.
+   */
+  public $sort_order = null;
+
+
+  /**
+   * The ordering method parameter for retrieving query.
+   */
+  public $sort_by = 'ascending';
+
+
+  /**
    * Create a new provider instance, pass the Guzzle client
    * reference.
    *
@@ -264,4 +332,110 @@ abstract class ProviderBase
     return $this->rate_limit;
   }
 
+
+  /**
+   * Sets the current page number for the query request.
+   */
+  public function page($page)
+  {
+    $this->page = $page;
+
+    return $this;
+  }
+
+
+  /**
+   * Sets the item offset for the query request.
+   */
+  public function offset($offset)
+  {
+    $this->offset = $offset;
+
+    return $this;
+  }
+
+
+  /**
+   * Sets the item listing limit for the query request.
+   */
+  public function limit($limit)
+  {
+    $this->limit = $limit;
+
+    return $this;
+  }
+
+
+  /**
+   * Sets the listing limit to unlimited
+   * for the query request.
+   */
+  public function unlimited()
+  {
+    $this->limit = -1;
+
+    return $this;
+  }
+
+
+  /**
+   * Sets the time limit for the last modification time
+   * of the items to be listed.
+   */
+  public function timespan($timespan)
+  {
+    $this->timespan = $timespan;
+
+    return $this;
+  }
+
+
+  /**
+   * Sets the filtering parameter for the query request.
+   */
+  public function filter($filter)
+  {
+    if (in_array($filter, $this->available_filters)) {
+      $this->filter = $filter;
+    }
+
+    return $this;
+  }
+
+
+  /**
+   * Sets the ordering type parameter for the query request.
+   */
+  public function sortBy($sort_by)
+  {
+    if (in_array($sort_by, $this->attributes)) {
+      $this->sort_by = strtolower($sort_by);
+    }
+
+    return $this;
+  }
+
+
+  /**
+   * Sets the ordering method parameter for the query request.
+   */
+  public function sortOrder($sort_order)
+  {
+    switch ($sort_order) {
+      case '0':
+      case 'DESC':
+      case 'descending':
+        $this->sort_order = 'descending';
+        break;
+
+      default:
+      case '1':
+      case 'ASC':
+      case 'ascending':
+        $this->sort_order = 'ascending';
+        break;
+      }
+
+      return $this;
+  }
 }

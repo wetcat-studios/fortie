@@ -18,10 +18,26 @@
 
 */
 
-use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\FortieRequest;
+use Wetcat\Fortie\Providers\ProviderBase;
+use Wetcat\Fortie\Traits\CountTrait;
+use Wetcat\Fortie\Traits\CreateTrait;
+use Wetcat\Fortie\Traits\DeleteTrait;
+use Wetcat\Fortie\Traits\FetchTrait;
+use Wetcat\Fortie\Traits\FindTrait;
+use Wetcat\Fortie\Traits\UpdateTrait;
 
 class Provider extends ProviderBase {
+
+  use CountTrait,
+      CreateTrait,
+      DeleteTrait,
+      FetchTrait,
+      FindTrait,
+      UpdateTrait;
+
+  protected $wrapper = 'Currency';
+  protected $wrapperGroup = 'Currencies';
 
   protected $attributes = [
     'Url',
@@ -55,95 +71,16 @@ class Provider extends ProviderBase {
 
 
   /**
+   * The possible values for filtering the currencies.
+   *
+   * @var array
+   */
+  protected $available_filters = [
+  ];
+
+
+  /**
    * Override the REST path
    */
   protected $basePath = 'currencies';
-
-
-  /**
-   * Retrieves a list of currencies.
-   *
-   * @return array
-   */
-  public function all ($page = null)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath);
-
-    if (!is_null($page)) {  
-      $req->param('page', $page);
-    }
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Retrieves a single currency.
-   *
-   * @param $id
-   * @return array
-   */
-  public function find ($id)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath)->path($id);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Creates a currency.
-   *
-   * @param array   $data
-   * @return array
-   */
-  public function create (array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('POST');
-    $req->path($this->basePath);
-    $req->wrapper('Currency');
-    $req->data($data);
-    $req->setRequired($this->required_create);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Updates a currency.
-   *
-   * @param array   $data
-   * @return array
-   */
-  public function update ($id, array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('PUT');
-    $req->path($this->basePath)->path($id);
-    $req->wrapper('Currency');
-    $req->setRequired($this->required_update);
-    $req->data($data);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Removes a currency.
-   */
-  public function delete ($id)
-  {
-    $req = new FortieRequest();
-    $req->method('DELETE');
-    $req->path($this->basePath);
-    $req->path($id);
-
-    return $this->send($req->build());
-  }
-
 }
