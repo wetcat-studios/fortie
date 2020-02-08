@@ -18,10 +18,26 @@
 
 */
 
-use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\FortieRequest;
+use Wetcat\Fortie\Providers\ProviderBase;
+use Wetcat\Fortie\Traits\CountTrait;
+use Wetcat\Fortie\Traits\CreateTrait;
+use Wetcat\Fortie\Traits\DeleteTrait;
+use Wetcat\Fortie\Traits\FetchTrait;
+use Wetcat\Fortie\Traits\FindTrait;
+use Wetcat\Fortie\Traits\UpdateTrait;
 
 class Provider extends ProviderBase {
+
+  use CountTrait,
+      CreateTrait,
+      DeleteTrait,
+      FetchTrait,
+      FindTrait,
+      UpdateTrait;
+
+  protected $wrapper = 'ContractAccrual';
+  protected $wrapperGroup = 'ContractAccruals';
 
   protected $attributes = [
     'Url',
@@ -60,101 +76,16 @@ class Provider extends ProviderBase {
 
 
   /**
+   * The possible values for filtering.
+   *
+   * @var array
+   */
+  protected $available_filters = [
+  ];
+
+
+  /**
    * Override the REST path
    */
   protected $basePath = 'contractaccruals';
-
-
-  /**
-   * Retrieves a list of contract accruals.
-   *
-   * @return array
-   */
-  public function all ($page = null)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath);
-
-    if (!is_null($page)) {  
-      $req->param('page', $page);
-    }
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Retrieves a single contract accrual.
-   *
-   * @param $documentNumber
-   * @return array
-   */
-  public function find ($documentNumber)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath)->path($documentNumber);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Creates a contract accrual.
-   *
-   * @param array   $data
-   * @return array
-   */
-  public function create (array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('POST');
-    $req->path($this->basePath);
-    $req->wrapper('ContractAccrual');
-    $req->data($data);
-    $req->setRequired($this->required_create);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Updates an attendance transaction.
-   *
-   * @param $documentNumber
-   * @param array   $data
-   * @return array
-   */
-  public function update ($documentNumber, array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('PUT');
-    $req->path($this->basePath)->path($documentNumber);
-    $req->wrapper('ContractAccrual');
-    $req->setRequired($this->required_update);
-    $req->data($data);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Deletes the article permanently.
-   *
-   * You need to supply the unique article number that was returned when the 
-   * article was created or retrieved from the list of articles.
-   *
-   * @param $documentNumber
-   * @return null
-   */
-  public function delete ($documentNumber)
-  {
-    $req = new FortieRequest();
-    $req->method('DELETE');
-    $req->path($this->basePath)->path($documentNumber);
-
-    return $this->send($req->build());
-  }
-
 }

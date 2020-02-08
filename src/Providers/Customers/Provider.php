@@ -18,10 +18,26 @@
 
 */
 
-use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\FortieRequest;
+use Wetcat\Fortie\Providers\ProviderBase;
+use Wetcat\Fortie\Traits\CountTrait;
+use Wetcat\Fortie\Traits\CreateTrait;
+use Wetcat\Fortie\Traits\DeleteTrait;
+use Wetcat\Fortie\Traits\FetchTrait;
+use Wetcat\Fortie\Traits\FindTrait;
+use Wetcat\Fortie\Traits\UpdateTrait;
 
 class Provider extends ProviderBase {
+
+  use CountTrait,
+      CreateTrait,
+      DeleteTrait,
+      FetchTrait,
+      FindTrait,
+      UpdateTrait;
+
+  protected $wrapper = 'Customer';
+  protected $wrapperGroup = 'Customers';
 
   protected $attributes = [
     'Url',
@@ -176,112 +192,18 @@ class Provider extends ProviderBase {
 
 
   /**
+   * The possible values for filtering the customers.
+   *
+   * @var array
+   */
+  protected $available_filters = [
+    'active',
+    'inactive'
+  ];
+
+
+  /**
    * Override the REST path
    */
   protected $basePath = 'customers';
-
-
-  /**
-   * Retrieves a list of customers. The customers are returned sorted 
-   * by customer number with the lowest number appearing first.
-   *
-   * @return array
-   */
-  public function all ($page = null)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath);
-
-    if (!is_null($page)) {  
-      $req->param('page', $page);
-    }
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Retrieves the details of a customer. You need to supply the 
-   * unique customer number that was returned when the customer was
-   * created or retrieved from the list of customers.
-   *
-   * @param $id
-   * @return array
-   */
-  public function find ($id)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath)->path($id);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * The created customer will be returned if everything succeeded,
-   * if there was any problems an error will be returned.
-   *
-   * @param array   $data
-   * @return array
-   */
-  public function create (array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('POST');
-    $req->path($this->basePath);
-    $req->wrapper('Customer');
-    $req->setRequired($this->required_create);
-    $req->data($data);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * The updated customer will be returned if everything succeeded, 
-   * if there was any problems an error will be returned.
-   *
-   * You need to supply the unique customer number of the customer 
-   * that you want to update.
-   *
-   * Only the properties provided in the request body will be updated,
-   * properties not provided will left unchanged.
-   *
-   * @param array   $data
-   * @return array
-   */
-  public function update ($id, array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('PUT');
-    $req->path($this->basePath)->path($id);
-    $req->wrapper('Customer');
-    $req->setRequired($this->required_update);
-    $req->data($data);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Deletes the customer permanently. If everything succeeded the
-   * response will be of the type “204 – No content” and the response
-   * body will be empty. If there was any problems an error will be
-   * returned.
-   *
-   * You need to supply the unique customer number of the customer
-   * that you want to delete.
-   */
-  public function delete ($id)
-  {
-    $req = new FortieRequest();
-    $req->method('DELETE');
-    $req->path($this->basePath);
-    $req->path($id);
-
-    return $this->send($req->build());
-  }
-
 }
