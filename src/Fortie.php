@@ -307,7 +307,7 @@ class Fortie
   /**
    * Supplier Invoices
    */
-  protected $supplierInvoicesPRovider;
+  protected $supplierInvoicesProvider;
 
 
   /**
