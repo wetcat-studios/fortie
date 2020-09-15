@@ -86,10 +86,12 @@ trait FetchTrait
             $totalPages = $response->MetaInformation->{'@TotalPages'};
             $currentPage = $response->MetaInformation->{'@CurrentPage'};
 
-            $items = array_merge(
-                $items,
-                $this->page($currentPage)->all()->{$this->wrapperGroup}
-            );
+            if ($this->page($currentPage)->count() > 0) {
+                $items = array_merge(
+                    $items,
+                    $this->page($currentPage)->all()->{$this->wrapperGroup}
+                );
+            }
         }
 
         // force overwriting meta information header
