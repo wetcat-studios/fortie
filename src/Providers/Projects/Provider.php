@@ -1,4 +1,6 @@
-<?php namespace Wetcat\Fortie\Providers\Projects;
+<?php
+
+namespace Wetcat\Fortie\Providers\Projects;
 
 /*
 
@@ -18,7 +20,6 @@
 
 */
 
-use Wetcat\Fortie\FortieRequest;
 use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\Traits\CountTrait;
 use Wetcat\Fortie\Traits\CreateTrait;
@@ -27,62 +28,58 @@ use Wetcat\Fortie\Traits\FetchTrait;
 use Wetcat\Fortie\Traits\FindTrait;
 use Wetcat\Fortie\Traits\UpdateTrait;
 
-class Provider extends ProviderBase {
-
-  use CountTrait,
+class Provider extends ProviderBase
+{
+    use CountTrait,
       CreateTrait,
       DeleteTrait,
       FetchTrait,
       FindTrait,
       UpdateTrait;
 
-  protected $wrapper = 'Project';
-  protected $wrapperGroup = 'Projects';
+    protected $wrapper = 'Project';
 
-  protected $attributes = [
-    'Url',
-    'Comments',
-    'ContactPerson',
-    'Description',
-    'EndDate',
-    'ProjectLeader',
-    'ProjectNumber',
-    'Status',
-    'StartDate',
-  ];
+    protected $wrapperGroup = 'Projects';
 
+    protected $attributes = [
+        'Url',
+        'Comments',
+        'ContactPerson',
+        'Description',
+        'EndDate',
+        'ProjectLeader',
+        'ProjectNumber',
+        'Status',
+        'StartDate',
+    ];
 
-  protected $writeable = [
-    'ContactPerson',
-    'Description',
-    'EndDate',
-    'ProjectLeader',
-    'ProjectNumber',
-    'Status',
-    'StartDate',
-  ];
+    protected $writeable = [
+        'ContactPerson',
+        'Description',
+        'EndDate',
+        'ProjectLeader',
+        'ProjectNumber',
+        'Status',
+        'StartDate',
+    ];
 
+    protected $required_create = [
+        'Description',
+    ];
 
-  protected $required_create = [
-    'Description'
-  ];
+    protected $required_update = [
+    ];
 
+    /**
+     * The possible values for filtering.
+     *
+     * @var array
+     */
+    protected $available_filters = [
+    ];
 
-  protected $required_update = [
-  ];
-
-
-  /**
-   * The possible values for filtering.
-   *
-   * @var array
-   */
-  protected $available_filters = [
-  ];
-
-
-  /**
-   * Override the REST path
-   */
-  protected $basePath = 'projects';
+    /**
+     * Override the REST path.
+     */
+    protected $basePath = 'projects';
 }

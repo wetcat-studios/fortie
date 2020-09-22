@@ -1,4 +1,6 @@
-<?php namespace Wetcat\Fortie\Providers\TrustedEmailSenders;
+<?php
+
+namespace Wetcat\Fortie\Providers\TrustedEmailSenders;
 
 /*
 
@@ -18,89 +20,85 @@
 
 */
 
-use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\FortieRequest;
+use Wetcat\Fortie\Providers\ProviderBase;
 
-class Provider extends ProviderBase {
+class Provider extends ProviderBase
+{
+    protected $attributes = [
+        'Id',
+        'Email',
+    ];
 
-  protected $attributes = [
-    'Id',
-    'Email',
-  ];
+    protected $writeable = [
+        // 'Id',
+        'Email',
+    ];
 
+    protected $required_create = [
+    ];
 
-  protected $writeable = [
-    // 'Id',
-    'Email',
-  ];
+    protected $required_update = [
+    ];
 
+    /**
+     * Override the REST path.
+     */
+    protected $basePath = 'emailsenders';
 
-  protected $required_create = [
-  ];
+    /**
+     * Retrieve a list of all trusted and rejected senders.
+     *
+     * @param null|mixed $page
+     *
+     * @return array
+     */
+    public function all($page = null)
+    {
+        $req = new FortieRequest();
+        $req->method('GET');
+        $req->path($this->basePath);
 
+        if (! is_null($page)) {
+            $req->param('page', $page);
+        }
 
-  protected $required_update = [
-  ];
-
-
-  /**
-   * Override the REST path
-   */
-  protected $basePath = 'emailsenders';
-
-
-  /**
-   * Retrieve a list of all trusted and rejected senders.
-   *
-   * @return array
-   */
-  public function all ($page = null)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath);
-
-    if (!is_null($page)) {  
-      $req->param('page', $page);
+        return $this->send($req->build());
     }
 
-    return $this->send($req->build());
-  }
+    /**
+     * Add a new email address as trusted.
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    public function create(array $data)
+    {
+        $req = new FortieRequest();
+        $req->method('POST');
+        $req->path($this->basePath)->path('trusted');
+        $req->wrapper('TrustedSender');
+        $req->data($data);
+        $req->setRequired($this->required_create);
 
+        return $this->send($req->build());
+    }
 
-  /**
-   * Add a new email address as trusted.
-   *
-   * @param array   $data
-   * @return array
-   */
-  public function create (array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('POST');
-    $req->path($this->basePath)->path('trusted');
-    $req->wrapper('TrustedSender');
-    $req->data($data);
-    $req->setRequired($this->required_create);
+    /**
+     * Delete an email address from the trusted senders list. Provide an id
+     * matching an email to delete.
+     *
+     * @param $id
+     *
+     * @return null
+     */
+    public function delete($id)
+    {
+        $req = new FortieRequest();
+        $req->method('DELETE');
+        $req->path($this->basePath)->path('trusted')->path($id);
 
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Delete an email address from the trusted senders list. Provide an id
-   * matching an email to delete.
-   *
-   * @param $id
-   * @return null
-   */
-  public function delete ($id)
-  {
-    $req = new FortieRequest();
-    $req->method('DELETE');
-    $req->path($this->basePath)->path('trusted')->path($id);
-
-    return $this->send($req->build());
-  }
-
+        return $this->send($req->build());
+    }
 }

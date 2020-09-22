@@ -1,4 +1,6 @@
-<?php namespace Wetcat\Fortie\Providers\CompanySettings;
+<?php
+
+namespace Wetcat\Fortie\Providers\CompanySettings;
 
 /*
 
@@ -18,85 +20,79 @@
 
 */
 
-use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\FortieRequest;
+use Wetcat\Fortie\Providers\ProviderBase;
 
-class Provider extends ProviderBase {
+class Provider extends ProviderBase
+{
+    protected $attributes = [
+        'Url',
+        'Address',
+        'BG',
+        'BIC',
+        'BranchCode',
+        'City',
+        'ContactFirstName',
+        'ContactLastName',
+        'Country',
+        'CountryCode',
+        'DatabaseNumber',
+        'Domicile',
+        'Email',
+        'Fax',
+        'IBAN',
+        'Name',
+        'OrganisationNumber',
+        'PG',
+        'Phone1',
+        'Phone2',
+        'TaxEnabled',
+        'VATNumber',
+        'VisitAddress',
+        'VisitCity',
+        'VisitCountry',
+        'VisitCountryCode',
+        'VisitName',
+        'VisitZipCode',
+        'WWW',
+        'ZipCode',
+    ];
 
-  protected $attributes = [
-    'Url',
-    'Address',
-    'BG',
-    'BIC',
-    'BranchCode',
-    'City',
-    'ContactFirstName',
-    'ContactLastName',
-    'Country',
-    'CountryCode',
-    'DatabaseNumber',
-    'Domicile',
-    'Email',
-    'Fax',
-    'IBAN',
-    'Name',
-    'OrganisationNumber',
-    'PG',
-    'Phone1',
-    'Phone2',
-    'TaxEnabled',
-    'VATNumber',
-    'VisitAddress',
-    'VisitCity',
-    'VisitCountry',
-    'VisitCountryCode',
-    'VisitName',
-    'VisitZipCode',
-    'WWW',
-    'ZipCode',
-  ];
+    protected $writeable = [
+    ];
 
+    protected $required_create = [
+    ];
 
-  protected $writeable = [
-  ];
+    protected $required_update = [
+    ];
 
+    /**
+     * Override the REST path.
+     */
+    protected $basePath = 'settings/company';
 
-  protected $required_create = [
-  ];
+    /**
+     * Retrieves the company settings.
+     *
+     * @return array
+     */
+    public function all()
+    {
+        $req = new FortieRequest();
+        $req->method('GET');
+        $req->path($this->basePath);
 
+        return $this->send($req->build());
+    }
 
-  protected $required_update = [
-  ];
+    public function create(array $data)
+    {
+        throw new Exception('This is not implemented in Company Settings');
+    }
 
-
-  /**
-   * Override the REST path
-   */
-  protected $basePath = 'settings/company';
-
-
-  /**
-   * Retrieves the company settings
-   *
-   * @return array
-   */
-  public function all ()
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath);
-
-    return $this->send($req->build());
-  }
-
-  public function create (array $data)
-  {
-    throw new Exception('This is not implemented in Company Settings');
-  }
-
-  public function update ($id, array $data)
-  {
-    throw new Exception('This is not implemented in Company Settings');
-  }
-
+    public function update($id, array $data)
+    {
+        throw new Exception('This is not implemented in Company Settings');
+    }
 }

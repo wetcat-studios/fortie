@@ -1,4 +1,6 @@
-<?php namespace Wetcat\Fortie\Providers\WayOfDeliveries;
+<?php
+
+namespace Wetcat\Fortie\Providers\WayOfDeliveries;
 
 /*
 
@@ -18,126 +20,122 @@
 
 */
 
-use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\FortieRequest;
+use Wetcat\Fortie\Providers\ProviderBase;
 
-class Provider extends ProviderBase {
+class Provider extends ProviderBase
+{
+    protected $attributes = [
+        'Url',
+        'Code',
+        'Description',
+    ];
 
-  protected $attributes = [
-    'Url',
-    'Code',
-    'Description',
-  ];
+    protected $writeable = [
+        // 'Url',
+        'Code',
+        'Description',
+    ];
 
+    protected $required_create = [
+    ];
 
-  protected $writeable = [
-    // 'Url',
-    'Code',
-    'Description',
-  ];
+    protected $required_update = [
+    ];
 
+    /**
+     * Override the REST path.
+     */
+    protected $basePath = 'wayofdeliveries';
 
-  protected $required_create = [
-  ];
+    /**
+     * Retrieves a list of way of deliveries.
+     *
+     * @param null|mixed $page
+     *
+     * @return array
+     */
+    public function all($page = null)
+    {
+        $req = new FortieRequest();
+        $req->method('GET');
+        $req->path($this->basePath);
 
+        if (! is_null($page)) {
+            $req->param('page', $page);
+        }
 
-  protected $required_update = [
-  ];
-
-
-  /**
-   * Override the REST path
-   */
-  protected $basePath = 'wayofdeliveries';
-
-
-  /**
-   * Retrieves a list of way of deliveries.
-   *
-   * @return array
-   */
-  public function all ($page = null)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath);
-
-    if (!is_null($page)) {  
-      $req->param('page', $page);
+        return $this->send($req->build());
     }
 
-    return $this->send($req->build());
-  }
+    /**
+     * Retrieves a single way of delivery.
+     *
+     * @param $code
+     *
+     * @return array
+     */
+    public function find($code)
+    {
+        $req = new FortieRequest();
+        $req->method('GET');
+        $req->path($this->basePath)->path($code);
 
+        return $this->send($req->build());
+    }
 
-  /**
-   * Retrieves a single way of delivery.
-   *
-   * @param $code
-   * @return array
-   */
-  public function find ($code)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath)->path($code);
+    /**
+     * Creates a way of delivery.
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    public function create(array $data)
+    {
+        $req = new FortieRequest();
+        $req->method('POST');
+        $req->path($this->basePath);
+        $req->wrapper('WayOfDelivery');
+        $req->data($data);
+        $req->setRequired($this->required_create);
 
-    return $this->send($req->build());
-  }
+        return $this->send($req->build());
+    }
 
+    /**
+     * Updates a way of delivery.
+     *
+     * @param $code
+     * @param array $data
+     *
+     * @return array
+     */
+    public function update($code, array $data)
+    {
+        $req = new FortieRequest();
+        $req->method('PUT');
+        $req->path($this->basePath)->path($code);
+        $req->wrapper('WayOfDelivery');
+        $req->setRequired($this->required_update);
+        $req->data($data);
 
-  /**
-   * Creates a way of delivery.
-   *
-   * @param array   $data
-   * @return array
-   */
-  public function create (array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('POST');
-    $req->path($this->basePath);
-    $req->wrapper('WayOfDelivery');
-    $req->data($data);
-    $req->setRequired($this->required_create);
+        return $this->send($req->build());
+    }
 
-    return $this->send($req->build());
-  }
+    /**
+     * Removes a way of delivery.
+     *
+     * @param $code
+     *
+     * @return null
+     */
+    public function delete($code)
+    {
+        $req = new FortieRequest();
+        $req->method('DELETE');
+        $req->path($this->basePath)->path($code);
 
-
-  /**
-   * Updates a way of delivery.
-   *
-   * @param $code
-   * @param array   $data
-   * @return array
-   */
-  public function update ($code, array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('PUT');
-    $req->path($this->basePath)->path($code);
-    $req->wrapper('WayOfDelivery');
-    $req->setRequired($this->required_update);
-    $req->data($data);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Removes a way of delivery.
-   *
-   * @param $code
-   * @return null
-   */
-  public function delete ($code)
-  {
-    $req = new FortieRequest();
-    $req->method('DELETE');
-    $req->path($this->basePath)->path($code);
-
-    return $this->send($req->build());
-  }
-
+        return $this->send($req->build());
+    }
 }

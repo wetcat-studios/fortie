@@ -1,4 +1,6 @@
-<?php namespace Wetcat\Fortie\Providers\ArticleFileConnections;
+<?php
+
+namespace Wetcat\Fortie\Providers\ArticleFileConnections;
 
 /*
 
@@ -18,7 +20,6 @@
 
 */
 
-use Wetcat\Fortie\FortieRequest;
 use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\Traits\CountTrait;
 use Wetcat\Fortie\Traits\CreateTrait;
@@ -26,50 +27,46 @@ use Wetcat\Fortie\Traits\DeleteTrait;
 use Wetcat\Fortie\Traits\FetchTrait;
 use Wetcat\Fortie\Traits\FindTrait;
 
-class Provider extends ProviderBase {
-
-  use CountTrait,
+class Provider extends ProviderBase
+{
+    use CountTrait,
       CreateTrait,
       DeleteTrait,
       FetchTrait,
       FindTrait;
 
-  protected $wrapper = 'ArticleFileConnection';
-  protected $wrapperGroup = 'ArticleFileConnections';
+    protected $wrapper = 'ArticleFileConnection';
 
-  protected $attributes = [
-    'Url',
-    'FileId',
-    'ArticleNumber',
-  ];
+    protected $wrapperGroup = 'ArticleFileConnections';
 
+    protected $attributes = [
+        'Url',
+        'FileId',
+        'ArticleNumber',
+    ];
 
-  protected $writeable = [
-    // 'Url',
-    'FileId',
-    'ArticleNumber',
-  ];
+    protected $writeable = [
+        // 'Url',
+        'FileId',
+        'ArticleNumber',
+    ];
 
+    protected $required_create = [
+    ];
 
-  protected $required_create = [
-  ];
+    protected $required_update = [
+    ];
 
+    /**
+     * The possible values for filtering.
+     *
+     * @var array
+     */
+    protected $available_filters = [
+    ];
 
-  protected $required_update = [
-  ];
-
-
-  /**
-   * The possible values for filtering.
-   *
-   * @var array
-   */
-  protected $available_filters = [
-  ];
-
-
-  /**
-   * Override the REST path
-   */
-  protected $basePath = 'articlefileconnections';
+    /**
+     * Override the REST path.
+     */
+    protected $basePath = 'articlefileconnections';
 }

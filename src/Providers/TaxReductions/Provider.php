@@ -1,4 +1,6 @@
-<?php namespace Wetcat\Fortie\Providers\TaxReductions;
+<?php
+
+namespace Wetcat\Fortie\Providers\TaxReductions;
 
 /*
 
@@ -18,156 +20,153 @@
 
 */
 
-use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\FortieRequest;
+use Wetcat\Fortie\Providers\ProviderBase;
 
-class Provider extends ProviderBase {
+class Provider extends ProviderBase
+{
+    protected $attributes = [
+        'Url',
+        'ApprovedAmount',
+        'AskedAmount',
+        'BilledAmount',
+        'CustomerName',
+        'Id',
+        'PropertyDesignation',
+        'ReferenceDocumentType',
+        'ReferenceNumber',
+        'RequestSent',
+        'ResidenceAssociationOrganisationNumber',
+        'SocialSecurityNumber',
+        'TypeOfReduction',
+        'VoucherNumber',
+        'VoucherSeries',
+        'VoucherYear',
+    ];
 
-  protected $attributes = [
-    'Url',
-    'ApprovedAmount',
-    'AskedAmount',
-    'BilledAmount',
-    'CustomerName',
-    'Id',
-    'PropertyDesignation',
-    'ReferenceDocumentType',
-    'ReferenceNumber',
-    'RequestSent',
-    'ResidenceAssociationOrganisationNumber',
-    'SocialSecurityNumber',
-    'TypeOfReduction',
-    'VoucherNumber',
-    'VoucherSeries',
-    'VoucherYear',
-  ];
+    protected $writeable = [
+        // 'Url',
+        // 'ApprovedAmount',
+        'AskedAmount',
+        // 'BilledAmount',
+        'CustomerName',
+        // 'Id',
+        'PropertyDesignation',
+        'ReferenceDocumentType',
+        'ReferenceNumber',
+        // 'RequestSent',
+        'ResidenceAssociationOrganisationNumber',
+        'SocialSecurityNumber',
+        'TypeOfReduction',
+        // 'VoucherNumber',
+        // 'VoucherSeries',
+        // 'VoucherYear',
+    ];
 
+    protected $required_create = [
+    ];
 
-  protected $writeable = [
-    // 'Url',
-    // 'ApprovedAmount',
-    'AskedAmount',
-    // 'BilledAmount',
-    'CustomerName',
-    // 'Id',
-    'PropertyDesignation',
-    'ReferenceDocumentType',
-    'ReferenceNumber',
-    // 'RequestSent',
-    'ResidenceAssociationOrganisationNumber',
-    'SocialSecurityNumber',
-    'TypeOfReduction',
-    // 'VoucherNumber',
-    // 'VoucherSeries',
-    // 'VoucherYear',
-  ];
+    protected $required_update = [
+    ];
 
+    /**
+     * Override the REST path.
+     */
+    protected $basePath = 'taxreductions';
 
-  protected $required_create = [
-  ];
+    /**
+     * Retrieves a list of tax reductions.
+     *
+     * @param null|mixed $filter
+     * @param null|mixed $page
+     *
+     * @return array
+     */
+    public function all($filter = null, $page = null)
+    {
+        $req = new FortieRequest();
+        $req->method('GET');
+        $req->path($this->basePath);
 
+        if (! is_null($filter)) {
+            $req->filter($filter);
+        }
 
-  protected $required_update = [
-  ];
+        if (! is_null($page)) {
+            $req->param('page', $page);
+        }
 
-
-  /**
-   * Override the REST path
-   */
-  protected $basePath = 'taxreductions';
-
-
-  /**
-   * Retrieves a list of tax reductions.
-   *
-   * @return array
-   */
-  public function all ($filter = null, $page = null)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath);
-
-    if (!is_null($filter)) {
-      $req->filter($filter);
+        return $this->send($req->build());
     }
 
-    if (!is_null($page)) {  
-      $req->param('page', $page);
+    /**
+     * Retrieves a single tax reduction.
+     *
+     * @param $id
+     *
+     * @return array
+     */
+    public function find($id)
+    {
+        $req = new FortieRequest();
+        $req->method('GET');
+        $req->path($this->basePath)->path($id);
+
+        return $this->send($req->build());
     }
 
-    return $this->send($req->build());
-  }
+    /**
+     * Creates a tax reduction.
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    public function create(array $data)
+    {
+        $req = new FortieRequest();
+        $req->method('POST');
+        $req->path($this->basePath);
+        $req->wrapper('TaxReduction');
+        $req->data($data);
+        $req->setRequired($this->required_create);
 
+        return $this->send($req->build());
+    }
 
-  /**
-   * Retrieves a single tax reduction.
-   *
-   * @param $id
-   * @return array
-   */
-  public function find ($id)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath)->path($id);
+    /**
+     * Updates a tax reduction.
+     *
+     * @param $code
+     * @param array $id
+     *
+     * @return array
+     */
+    public function update($id, array $data)
+    {
+        $req = new FortieRequest();
+        $req->method('PUT');
+        $req->path($this->basePath)->path($id);
+        $req->wrapper('TaxReduction');
+        $req->setRequired($this->required_update);
+        $req->data($data);
 
-    return $this->send($req->build());
-  }
+        return $this->send($req->build());
+    }
 
+    /**
+     * Removes a tax reduction.
+     *
+     * @param $id
+     *
+     * @return null
+     */
+    public function delete($id)
+    {
+        $req = new FortieRequest();
+        $req->method('DELETE');
+        $req->path($this->basePath)->path($id);
 
-  /**
-   * Creates a tax reduction.
-   *
-   * @param array   $data
-   * @return array
-   */
-  public function create (array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('POST');
-    $req->path($this->basePath);
-    $req->wrapper('TaxReduction');
-    $req->data($data);
-    $req->setRequired($this->required_create);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Updates a tax reduction.
-   *
-   * @param $code
-   * @param array   $id
-   * @return array
-   */
-  public function update ($id, array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('PUT');
-    $req->path($this->basePath)->path($id);
-    $req->wrapper('TaxReduction');
-    $req->setRequired($this->required_update);
-    $req->data($data);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Removes a tax reduction.
-   *
-   * @param $id
-   * @return null
-   */
-  public function delete ($id)
-  {
-    $req = new FortieRequest();
-    $req->method('DELETE');
-    $req->path($this->basePath)->path($id);
-
-    return $this->send($req->build());
-  }
-
+        return $this->send($req->build());
+    }
 }

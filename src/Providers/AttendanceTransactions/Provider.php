@@ -1,4 +1,6 @@
-<?php namespace Wetcat\Fortie\Providers\AttendanceTransactions;
+<?php
+
+namespace Wetcat\Fortie\Providers\AttendanceTransactions;
 
 /*
 
@@ -18,137 +20,136 @@
 
 */
 
+use DateTimeInterface;
 use Wetcat\Fortie\Exceptions\MissingRequiredAttributeException;
-use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\FortieRequest;
+use Wetcat\Fortie\Providers\ProviderBase;
 
-class Provider extends ProviderBase {
+class Provider extends ProviderBase
+{
+    protected $attributes = [
+        'EmployeeId',
+        'CauseCode',
+        'Date',
+        'Hours',
+    ];
 
-  protected $attributes = [
-    'EmployeeId',
-    'CauseCode',
-    'Date',
-    'Hours',
-  ];
+    protected $writeable = [
+        'EmployeeId',
+        'CauseCode',
+        'Date',
+        'Hours',
+    ];
 
+    protected $required_create = [
+    ];
 
-  protected $writeable = [
-    'EmployeeId',
-    'CauseCode',
-    'Date',
-    'Hours',
-  ];
+    protected $required_update = [
+    ];
 
+    /**
+     * Override the REST path.
+     */
+    protected $basePath = 'attendancetransactions';
 
-  protected $required_create = [
-  ];
+    /**
+     * List all attendance tarnsactions for all employees. Supports query-string
+     * parameters employeeid and date for fitlering the result.
+     *
+     * @param null|mixed $page
+     *
+     * @return array
+     */
+    public function all($page = null)
+    {
+        $req = new FortieRequest();
+        $req->method('GET');
+        $req->path($this->basePath);
 
+        if (! is_null($page)) {
+            $req->param('page', $page);
+        }
 
-  protected $required_update = [
-  ];
-
-
-  /**
-   * Override the REST path
-   */
-  protected $basePath = 'attendancetransactions';
-
-  /**
-   * List all attendance tarnsactions for all employees. Supports query-string
-   * parameters employeeid and date for fitlering the result
-   *
-   * @return array
-   */
-  public function all ($page = null)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath);
-
-    if (!is_null($page)) {  
-      $req->param('page', $page);
+        return $this->send($req->build());
     }
 
-    return $this->send($req->build());
-  }
+    /**
+     * Retrieves a single attendance transaction for an employee on a specific
+     * date and cause code.
+     *
+     * @param $employeeId
+     * @param $date
+     * @param $causeCode
+     *
+     * @return array
+     */
+    public function find($employeeId, $date, $causeCode)
+    {
+        if (is_null($employeeId) || is_null($date) || is_null($causeCode)) {
+            throw new MissingRequiredAttributeException(['employeeId', 'date', 'causeCode']);
+        }
 
+        $req = new FortieRequest();
+        $req->method('GET');
+        $req->path($this->basePath)->path($employeeId)->path($date)->path($causeCode);
 
-  /**
-   * Retrieves a single attendance transaction for an employee on a specific
-   * date and cause code
-   *
-   * @param $employeeId
-   * @param $date
-   * @param $causeCode
-   * @return array
-   */
-  public function find ($employeeId, $date, $causeCode)
-  {
-    if (is_null($employeeId) || is_null($date) || is_null($causeCode)) {
-      throw new MissingRequiredAttributeException(['employeeId', 'date', 'causeCode']);
+        return $this->send($req->build());
     }
 
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath)->path($employeeId)->path($date)->path($causeCode);
+    /**
+     * Creates a new attendance transaction for an employee.
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    public function create(array $data)
+    {
+        $req = new FortieRequest();
+        $req->method('POST');
+        $req->path($this->basePath);
+        $req->wrapper('AttendanceTransaction');
+        $req->data($data);
+        $req->setRequired($this->required_create);
 
-    return $this->send($req->build());
-  }
+        return $this->send($req->build());
+    }
 
+    /**
+     * Updates an attendance transaction.
+     *
+     * @param array $data
+     * @param mixed $fileId
+     *
+     * @return array
+     */
+    public function update($fileId, array $data)
+    {
+        $req = new FortieRequest();
+        $req->method('PUT');
+        $req->path($this->basePath)->path($fileId);
+        $req->wrapper('AttendanceTransaction');
+        $req->setRequired($this->required_update);
+        $req->data($data);
 
-  /**
-   * Creates a new attendance transaction for an employee.
-   *
-   * @param array   $data
-   * @return array
-   */
-  public function create (array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('POST');
-    $req->path($this->basePath);
-    $req->wrapper('AttendanceTransaction');
-    $req->data($data);
-    $req->setRequired($this->required_create);
+        return $this->send($req->build());
+    }
 
-    return $this->send($req->build());
-  }
+    /**
+     * Removes an attendance transaction.
+     *
+     * @param string $employeeId
+     * @param DateTimeInterface $date
+     * @param string $causeCode
+     *
+     * @return array
+     */
+    public function delete($employeeId, DateTimeInterface $date, $causeCode)
+    {
+        $req = new FortieRequest();
+        $req->method('DELETE');
+        $req->path($this->basePath)->path($employeeId)->path($date->format('Y-m-d'))->path($causeCode);
 
-
-  /**
-   * Updates an attendance transaction.
-   *
-   * @param array   $data
-   * @return array
-   */
-  public function update ($fileId, array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('PUT');
-    $req->path($this->basePath)->path($fileId);
-    $req->wrapper('AttendanceTransaction');
-    $req->setRequired($this->required_update);
-    $req->data($data);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Removes an attendance transaction.
-   *
-   * @param string $employeeId
-   * @param \DateTimeInterface $date
-   * @param string $causeCode
-   *
-   * @return array
-   */
-  public function delete ($employeeId, \DateTimeInterface $date, $causeCode)
-  {
-    $req = new FortieRequest();
-    $req->method('DELETE');
-    $req->path($this->basePath)->path($employeeId)->path($date->format('Y-m-d'))->path($causeCode);
-
-    return $this->send($req->build());
-  }
+        return $this->send($req->build());
+    }
 }

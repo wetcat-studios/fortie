@@ -1,4 +1,6 @@
-<?php namespace Wetcat\Fortie\Providers\Employees;
+<?php
+
+namespace Wetcat\Fortie\Providers\Employees;
 
 /*
 
@@ -18,7 +20,6 @@
 
 */
 
-use Wetcat\Fortie\FortieRequest;
 use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\Traits\CountTrait;
 use Wetcat\Fortie\Traits\CreateTrait;
@@ -26,102 +27,98 @@ use Wetcat\Fortie\Traits\FetchTrait;
 use Wetcat\Fortie\Traits\FindTrait;
 use Wetcat\Fortie\Traits\UpdateTrait;
 
-class Provider extends ProviderBase {
-
-  use CountTrait,
+class Provider extends ProviderBase
+{
+    use CountTrait,
       CreateTrait,
       FetchTrait,
       FindTrait,
       UpdateTrait;
 
-  protected $wrapper = 'Employee';
-  protected $wrapperGroup = 'Employees';
+    protected $wrapper = 'Employee';
 
-  protected $attributes = [
-    'EmployeeId',
-    'PersonalIdentityNumber',
-    'FirstName',
-    'LastName',
-    'FullName',
-    'Address1',
-    'Address2',
-    'PostCode',
-    'City',
-    'Country',
-    'Phone1',
-    'Phone2',
-    'Email',
-    'EmploymentDate',
-    'EmploymentForm',
-    'SalaryForm',
-    'JobTitle',
-    'PersonelType',
-    'Inactive',
-    'ScheduleId',
-    'ForaType',
-    'MonthlySalary',
-    'HourlyPay',
-    'TaxAllowance',
-    'TaxTable',
-    'TaxColumn',
-    'NonRecurringTax',
-    'ClearingNo',
-    'BankAccountNo',
-  ];
+    protected $wrapperGroup = 'Employees';
 
+    protected $attributes = [
+        'EmployeeId',
+        'PersonalIdentityNumber',
+        'FirstName',
+        'LastName',
+        'FullName',
+        'Address1',
+        'Address2',
+        'PostCode',
+        'City',
+        'Country',
+        'Phone1',
+        'Phone2',
+        'Email',
+        'EmploymentDate',
+        'EmploymentForm',
+        'SalaryForm',
+        'JobTitle',
+        'PersonelType',
+        'Inactive',
+        'ScheduleId',
+        'ForaType',
+        'MonthlySalary',
+        'HourlyPay',
+        'TaxAllowance',
+        'TaxTable',
+        'TaxColumn',
+        'NonRecurringTax',
+        'ClearingNo',
+        'BankAccountNo',
+    ];
 
-  protected $writeable = [
-    'EmployeeId',
-    'PersonalIdentityNumber',
-    'FirstName',
-    'LastName',
-    // 'FullName',
-    'Address1',
-    'Address2',
-    'PostCode',
-    'City',
-    'Country',
-    'Phone1',
-    'Phone2',
-    'Email',
-    'EmploymentDate',
-    'EmploymentForm',
-    'SalaryForm',
-    'JobTitle',
-    'PersonelType',
-    'Inactive',
-    'ScheduleId',
-    'ForaType',
-    'MonthlySalary',
-    'HourlyPay',
-    'TaxAllowance',
-    'TaxTable',
-    'TaxColumn',
-    'NonRecurringTax',
-    'ClearingNo',
-    'BankAccountNo',
-  ];
+    protected $writeable = [
+        'EmployeeId',
+        'PersonalIdentityNumber',
+        'FirstName',
+        'LastName',
+        // 'FullName',
+        'Address1',
+        'Address2',
+        'PostCode',
+        'City',
+        'Country',
+        'Phone1',
+        'Phone2',
+        'Email',
+        'EmploymentDate',
+        'EmploymentForm',
+        'SalaryForm',
+        'JobTitle',
+        'PersonelType',
+        'Inactive',
+        'ScheduleId',
+        'ForaType',
+        'MonthlySalary',
+        'HourlyPay',
+        'TaxAllowance',
+        'TaxTable',
+        'TaxColumn',
+        'NonRecurringTax',
+        'ClearingNo',
+        'BankAccountNo',
+    ];
 
+    protected $required_create = [
+    ];
 
-  protected $required_create = [
-  ];
+    protected $required_update = [
+    ];
 
+    /**
+     * The possible values for filtering.
+     *
+     * @var array
+     */
+    protected $available_filters = [
+    ];
 
-  protected $required_update = [
-  ];
-
-
-  /**
-   * The possible values for filtering.
-   *
-   * @var array
-   */
-  protected $available_filters = [
-  ];
-
-
-  /**
-   * Override the REST path
-   */
-  protected $basePath = 'employees';
+    /**
+     * Override the REST path.
+     */
+    protected $basePath = 'employees';
 }

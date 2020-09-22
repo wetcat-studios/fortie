@@ -1,4 +1,6 @@
-<?php namespace Wetcat\Fortie\Providers\PriceLists;
+<?php
+
+namespace Wetcat\Fortie\Providers\PriceLists;
 
 /*
 
@@ -18,7 +20,6 @@
 
 */
 
-use Wetcat\Fortie\FortieRequest;
 use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\Traits\CountTrait;
 use Wetcat\Fortie\Traits\CreateTrait;
@@ -26,54 +27,50 @@ use Wetcat\Fortie\Traits\FetchTrait;
 use Wetcat\Fortie\Traits\FindTrait;
 use Wetcat\Fortie\Traits\UpdateTrait;
 
-class Provider extends ProviderBase {
-
-  use CountTrait,
+class Provider extends ProviderBase
+{
+    use CountTrait,
       CreateTrait,
       FetchTrait,
       FindTrait,
       UpdateTrait;
 
-  protected $wrapper = 'PriceList';
-  protected $wrapperGroup = 'PriceLists';
+    protected $wrapper = 'PriceList';
 
-  protected $attributes = [
-    'Url',
-    'Code',
-    'Description',
-    'Comments',
-    'PreSelected',
-  ];
+    protected $wrapperGroup = 'PriceLists';
 
+    protected $attributes = [
+        'Url',
+        'Code',
+        'Description',
+        'Comments',
+        'PreSelected',
+    ];
 
-  protected $writeable = [
-    'Code',
-    'Description',
-    'Comments',
-  ];
+    protected $writeable = [
+        'Code',
+        'Description',
+        'Comments',
+    ];
 
+    protected $required_create = [
+        'Code',
+        'Description',
+    ];
 
-  protected $required_create = [
-    'Code',
-    'Description',
-  ];
+    protected $required_update = [
+    ];
 
+    /**
+     * The possible values for filtering.
+     *
+     * @var array
+     */
+    protected $available_filters = [
+    ];
 
-  protected $required_update = [
-  ];
-
-
-  /**
-   * The possible values for filtering.
-   *
-   * @var array
-   */
-  protected $available_filters = [
-  ];
-
-
-  /**
-   * Override the REST path
-   */
-  protected $basePath = 'pricelists';
+    /**
+     * Override the REST path.
+     */
+    protected $basePath = 'pricelists';
 }

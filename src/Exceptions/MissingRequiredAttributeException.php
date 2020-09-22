@@ -1,4 +1,8 @@
-<?php namespace Wetcat\Fortie\Exceptions;
+<?php
+
+namespace Wetcat\Fortie\Exceptions;
+
+use Exception;
 
 /*
 
@@ -18,11 +22,11 @@
 
 */
 
-class MissingRequiredAttributeException extends \Exception {
-    
-    public function __construct($requiredAttributes = null) {
+class MissingRequiredAttributeException extends Exception
+{
+    public function __construct($requiredAttributes = null)
+    {
         $message = 'Required attributes are ' . join(', ', $requiredAttributes);
         parent::__construct($message);
     }
-
 }

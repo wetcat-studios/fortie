@@ -1,4 +1,6 @@
-<?php namespace Wetcat\Fortie\Providers\Prices;
+<?php
+
+namespace Wetcat\Fortie\Providers\Prices;
 
 /*
 
@@ -19,146 +21,152 @@
 */
 
 use Wetcat\Fortie\Exceptions\MissingRequiredAttributeException;
-use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\FortieRequest;
+use Wetcat\Fortie\Providers\ProviderBase;
 
-class Provider extends ProviderBase {
+class Provider extends ProviderBase
+{
+    protected $attributes = [
+        'Url',
+        'ArticleNumber',
+        'Date',
+        'FromQuantity',
+        'Percent',
+        'Price',
+        'PriceList',
+    ];
 
-  protected $attributes = [
-    'Url',
-    'ArticleNumber',
-    'Date',
-    'FromQuantity',
-    'Percent',
-    'Price',
-    'PriceList',
-  ];
+    protected $writeable = [
+        'ArticleNumber',
+        'FromQuantity',
+        'Percent',
+        'Price',
+        'PriceList',
+    ];
 
+    protected $required_create = [
+        'ArticleNumber',
+        'FromQuantity',
+        'PriceList',
+    ];
 
-  protected $writeable = [
-    'ArticleNumber',
-    'FromQuantity',
-    'Percent',
-    'Price',
-    'PriceList',
-  ];
+    protected $required_update = [
+    ];
 
+    /**
+     * Override the REST path.
+     */
+    protected $basePath = 'prices';
 
-  protected $required_create = [
-    'ArticleNumber',
-    'FromQuantity',
-    'PriceList',
-  ];
+    /**
+     * Retrieves a list of prices in a price list.
+     *
+     * @param null|mixed $priceList
+     * @param null|mixed $articleNumber
+     *
+     * @return array
+     */
+    public function priceList($priceList = null, $articleNumber = null)
+    {
+        if (is_null($priceList) || is_null($articleNumber)) {
+            throw new MissingRequiredAttributeException(['priceList', 'articleNumber']);
+        }
 
+        $req = new FortieRequest();
+        $req->method('GET');
+        $req->path($this->basePath)->path($priceList)->path($articleNumber);
 
-  protected $required_update = [
-  ];
-
-
-  /**
-   * Override the REST path
-   */
-  protected $basePath = 'prices';
-
-
-  /**
-   * Retrieves a list of prices in a price list
-   *
-   * @return array
-   */
-  public function priceList ($priceList = null, $articleNumber = null)
-  {
-    if (is_null($priceList) || is_null($articleNumber)) {
-      throw new MissingRequiredAttributeException(['priceList', 'articleNumber']);
+        return $this->send($req->build());
     }
 
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath)->path($priceList)->path($articleNumber);
+    /**
+     * Retrives a price for a specified article.
+     *
+     * @param $id
+     * @param null|mixed $priceList
+     * @param null|mixed $articleNumber
+     * @param null|mixed $fromQuantity
+     *
+     * @return array
+     */
+    public function article($priceList = null, $articleNumber = null, $fromQuantity = null)
+    {
+        if (is_null($priceList) || is_null($articleNumber) || is_null($fromQuantity)) {
+            throw new MissingRequiredAttributeException(['priceList', 'articleNumber', 'fromQuantity']);
+        }
 
-    return $this->send($req->build());
-  }
+        $req = new FortieRequest();
+        $req->method('GET');
+        $req->path($this->basePath)->path($priceList)->path($articleNumber)->path($fromQuantity);
 
-
-  /**
-   * Retrives a price for a specified article.
-   *
-   * @param $id
-   * @return array
-   */
-  public function article ($priceList = null, $articleNumber = null, $fromQuantity = null)
-  {
-    if (is_null($priceList) || is_null($articleNumber) || is_null($fromQuantity)) {
-      throw new MissingRequiredAttributeException(['priceList', 'articleNumber', 'fromQuantity']);
+        return $this->send($req->build());
     }
 
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath)->path($priceList)->path($articleNumber)->path($fromQuantity);
+    /**
+     * Creates a price.
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    public function create(array $data)
+    {
+        $req = new FortieRequest();
+        $req->method('POST');
+        $req->path($this->basePath);
+        $req->wrapper('Price');
+        $req->setRequired($this->required_create);
+        $req->data($data);
 
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Creates a price.
-   *
-   * @param array   $data
-   * @return array
-   */
-  public function create (array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('POST');
-    $req->path($this->basePath);
-    $req->wrapper('Price');
-    $req->setRequired($this->required_create);
-    $req->data($data);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Updates a price.
-   *
-   * @param array   $data
-   * @return array
-   */
-  public function update ($priceList = null, $articleNumber = null, $fromQuantity = null, array $data)
-  {
-    if (is_null($priceList) || is_null($articleNumber) || is_null($fromQuantity)) {
-      throw new MissingRequiredAttributeException(['priceList', 'articleNumber', 'fromQuantity']);
+        return $this->send($req->build());
     }
 
-    $req = new FortieRequest();
-    $req->method('PUT');
-    $req->path($this->basePath)->path($priceList)->path($articleNumber)->path($fromQuantity);
-    $req->wrapper('Price');
-    $req->setRequired($this->required_update);
-    $req->data($data);
+    /**
+     * Updates a price.
+     *
+     * @param array $data
+     * @param null|mixed $priceList
+     * @param null|mixed $articleNumber
+     * @param null|mixed $fromQuantity
+     *
+     * @return array
+     */
+    public function update($priceList = null, $articleNumber = null, $fromQuantity = null, array $data)
+    {
+        if (is_null($priceList) || is_null($articleNumber) || is_null($fromQuantity)) {
+            throw new MissingRequiredAttributeException(['priceList', 'articleNumber', 'fromQuantity']);
+        }
 
-    return $this->send($req->build());
-  }
+        $req = new FortieRequest();
+        $req->method('PUT');
+        $req->path($this->basePath)->path($priceList)->path($articleNumber)->path($fromQuantity);
+        $req->wrapper('Price');
+        $req->setRequired($this->required_update);
+        $req->data($data);
 
-
-  /**
-   * Removes a price.
-   */
-  public function delete ($priceList = null, $articleNumber = null, $fromQuantity = null)
-  {
-    if (is_null($priceList) || is_null($articleNumber) || is_null($fromQuantity)) {
-      throw new MissingRequiredAttributeException(['priceList', 'articleNumber', 'fromQuantity']);
+        return $this->send($req->build());
     }
 
-    $req = new FortieRequest();
-    $req->method('DELETE');
-    $req->path($this->basePath)->path($priceList)->path($articleNumber)->path($fromQuantity);
-    $req->wrapper('Price');
-    $req->setRequired($this->required_update);
-    $req->data($data);
+    /**
+     * Removes a price.
+     *
+     * @param null|mixed $priceList
+     * @param null|mixed $articleNumber
+     * @param null|mixed $fromQuantity
+     */
+    public function delete($priceList = null, $articleNumber = null, $fromQuantity = null)
+    {
+        if (is_null($priceList) || is_null($articleNumber) || is_null($fromQuantity)) {
+            throw new MissingRequiredAttributeException(['priceList', 'articleNumber', 'fromQuantity']);
+        }
 
-    return $this->send($req->build());
-  }
+        $req = new FortieRequest();
+        $req->method('DELETE');
+        $req->path($this->basePath)->path($priceList)->path($articleNumber)->path($fromQuantity);
+        $req->wrapper('Price');
+        $req->setRequired($this->required_update);
+        $req->data($data);
 
+        return $this->send($req->build());
+    }
 }

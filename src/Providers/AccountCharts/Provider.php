@@ -1,4 +1,6 @@
-<?php namespace Wetcat\Fortie\Providers\AccountCharts;
+<?php
+
+namespace Wetcat\Fortie\Providers\AccountCharts;
 
 /*
 
@@ -18,45 +20,40 @@
 
 */
 
-use Wetcat\Fortie\FortieRequest;
 use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\Traits\FetchTrait;
 
-class Provider extends ProviderBase {
+class Provider extends ProviderBase
+{
+    use FetchTrait;
 
-  use FetchTrait;
+    protected $wrapper = 'AccountChart';
 
-  protected $wrapper = 'AccountChart';
-  protected $wrapperGroup = 'AccountCharts';
+    protected $wrapperGroup = 'AccountCharts';
 
-  protected $attributes = [
-    'Name',
-  ];
+    protected $attributes = [
+        'Name',
+    ];
 
+    protected $writeable = [
+    ];
 
-  protected $writeable = [
-  ];
+    protected $required_create = [
+    ];
 
+    protected $required_update = [
+    ];
 
-  protected $required_create = [
-  ];
+    /**
+     * The possible values for filtering.
+     *
+     * @var array
+     */
+    protected $available_filters = [
+    ];
 
-
-  protected $required_update = [
-  ];
-
-
-  /**
-   * The possible values for filtering.
-   *
-   * @var array
-   */
-  protected $available_filters = [
-  ];
-
-
-  /**
-   * Override the REST path
-   */
-  protected $basePath = 'accountcharts';
+    /**
+     * Override the REST path.
+     */
+    protected $basePath = 'accountcharts';
 }

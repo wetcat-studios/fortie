@@ -1,4 +1,6 @@
-<?php namespace Wetcat\Fortie\Providers\ScheduleTimes;
+<?php
+
+namespace Wetcat\Fortie\Providers\ScheduleTimes;
 
 /*
 
@@ -18,103 +20,100 @@
 
 */
 
-use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\FortieRequest;
+use Wetcat\Fortie\Providers\ProviderBase;
 
-class Provider extends ProviderBase {
+class Provider extends ProviderBase
+{
+    protected $attributes = [
+        'EmployeeId',
+        'Date',
+        'ScheduleId',
+        'Hours',
+        'IWH1',
+        'IWH2',
+        'IWH3',
+    ];
 
-  protected $attributes = [
-    'EmployeeId',
-    'Date',
-    'ScheduleId',
-    'Hours',
-    'IWH1',
-    'IWH2',
-    'IWH3',
-  ];
+    protected $writeable = [
+        'EmployeeId',
+        'Date',
+        'ScheduleId',
+        'Hours',
+        'IWH1',
+        'IWH2',
+        'IWH3',
+    ];
 
+    protected $required_create = [
+    ];
 
-  protected $writeable = [
-    'EmployeeId',
-    'Date',
-    'ScheduleId',
-    'Hours',
-    'IWH1',
-    'IWH2',
-    'IWH3',
-  ];
+    protected $required_update = [
+    ];
 
+    /**
+     * Override the REST path.
+     */
+    protected $basePath = 'scheduletimes';
 
-  protected $required_create = [
-  ];
+    /**
+     * Retrieve schedule time.
+     *
+     * Retrieves schedule time on a specific day for an employee.
+     *
+     * @param $employeeId
+     * @param $date
+     *
+     * @return array
+     */
+    public function find($employeeId, $date)
+    {
+        $req = new FortieRequest();
+        $req->method('GET');
+        $req->path($this->basePath)->path($employeeId)->path($date);
 
+        return $this->send($req->build());
+    }
 
-  protected $required_update = [
-  ];
+    /**
+     * Updates a cost center.
+     *
+     * @param $employeeId
+     * @param $date
+     * @param array $data
+     *
+     * @return array
+     */
+    public function update($employeeId, $date, array $data)
+    {
+        $req = new FortieRequest();
+        $req->method('PUT');
+        $req->path($this->basePath)->path($employeeId)->path($date);
+        $req->wrapper('ScheduleTime');
+        $req->setRequired($this->required_update);
+        $req->data($data);
 
+        return $this->send($req->build());
+    }
 
-  /**
-   * Override the REST path
-   */
-  protected $basePath = 'scheduletimes';
+    /**
+     * Reset schedule time.
+     *
+     * Resets schedule time of a day according to the schedule that is
+     * assigned to the employee through the employment information.
+     *
+     * @param $code
+     * @param mixed $employeeId
+     * @param mixed $date
+     *
+     * @return null
+     */
+    public function reset($employeeId, $date)
+    {
+        $req = new FortieRequest();
+        $req->method('PUt');
+        $req->path($this->basePath)->path($employeeId)->path($date)->path('resetday');
 
-
-  /**
-   * Retrieve schedule time.
-   *
-   * Retrieves schedule time on a specific day for an employee.
-   *
-   * @param $employeeId
-   * @param $date
-   * @return array
-   */
-  public function find ($employeeId, $date)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath)->path($employeeId)->path($date);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Updates a cost center.
-   *
-   * @param $employeeId
-   * @param $date
-   * @param array   $data
-   * @return array
-   */
-  public function update ($employeeId, $date, array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('PUT');
-    $req->path($this->basePath)->path($employeeId)->path($date);
-    $req->wrapper('ScheduleTime');
-    $req->setRequired($this->required_update);
-    $req->data($data);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Reset schedule time.
-   *
-   * Resets schedule time of a day according to the schedule that is
-   * assigned to the employee through the employment information.
-   *
-   * @param $code
-   * @return null
-   */
-  public function reset ($employeeId, $date)
-  {
-    $req = new FortieRequest();
-    $req->method('PUt');
-    $req->path($this->basePath)->path($employeeId)->path($date)->path('resetday');
-
-    return $this->send($req->build());
-  }
-
+        return $this->send($req->build());
+    }
 }

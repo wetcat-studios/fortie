@@ -1,4 +1,6 @@
-<?php namespace Wetcat\Fortie\Providers\VoucherSeries;
+<?php
+
+namespace Wetcat\Fortie\Providers\VoucherSeries;
 
 /*
 
@@ -18,116 +20,112 @@
 
 */
 
-use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\FortieRequest;
+use Wetcat\Fortie\Providers\ProviderBase;
 
-class Provider extends ProviderBase {
+class Provider extends ProviderBase
+{
+    protected $attributes = [
+        'Url',
+        'Code',
+        'Description',
+        'Manual',
+        'NextVoucherNumber',
+        'Year',
+    ];
 
-  protected $attributes = [
-    'Url',
-    'Code',
-    'Description',
-    'Manual',
-    'NextVoucherNumber',
-    'Year',
-  ];
+    protected $writeable = [
+        // 'Url',
+        'Code',
+        'Description',
+        'Manual',
+        // 'NextVoucherNumber',
+        // 'Year',
+    ];
 
+    protected $required_create = [
+    ];
 
-  protected $writeable = [
-    // 'Url',
-    'Code',
-    'Description',
-    'Manual',
-    // 'NextVoucherNumber',
-    // 'Year',
-  ];
+    protected $required_update = [
+    ];
 
+    /**
+     * Override the REST path.
+     */
+    protected $basePath = 'voucherseries';
 
-  protected $required_create = [
-  ];
+    /**
+     * Retrieves a list of voucher series.
+     *
+     * @param null|mixed $page
+     *
+     * @return array
+     */
+    public function all($page = null)
+    {
+        $req = new FortieRequest();
+        $req->method('GET');
+        $req->path($this->basePath);
 
+        if (! is_null($page)) {
+            $req->param('page', $page);
+        }
 
-  protected $required_update = [
-  ];
-
-
-  /**
-   * Override the REST path
-   */
-  protected $basePath = 'voucherseries';
-
-
-  /**
-   * Retrieves a list of voucher series.
-   *
-   * @return array
-   */
-  public function all ($page = null)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath);
-
-    if (!is_null($page)) {  
-      $req->param('page', $page);
+        return $this->send($req->build());
     }
 
-    return $this->send($req->build());
-  }
+    /**
+     * Retrieves a single voucher series.
+     *
+     * @param $code
+     *
+     * @return array
+     */
+    public function find($code)
+    {
+        $req = new FortieRequest();
+        $req->method('GET');
+        $req->path($this->basePath)->path($code);
 
+        return $this->send($req->build());
+    }
 
-  /**
-   * Retrieves a single voucher series.
-   *
-   * @param $code
-   * @return array
-   */
-  public function find ($code)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath)->path($code);
+    /**
+     * Creates a voucher series.
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    public function create(array $data)
+    {
+        $req = new FortieRequest();
+        $req->method('POST');
+        $req->path($this->basePath);
+        $req->wrapper('CostCenter');
+        $req->data($data);
+        $req->setRequired($this->required_create);
 
-    return $this->send($req->build());
-  }
+        return $this->send($req->build());
+    }
 
+    /**
+     * Updates a voucher series.
+     *
+     * @param $code
+     * @param array $data
+     *
+     * @return array
+     */
+    public function update($code, array $data)
+    {
+        $req = new FortieRequest();
+        $req->method('PUT');
+        $req->path($this->basePath)->path($code);
+        $req->wrapper('CostCenter');
+        $req->setRequired($this->required_update);
+        $req->data($data);
 
-  /**
-   * Creates a voucher series.
-   *
-   * @param array   $data
-   * @return array
-   */
-  public function create (array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('POST');
-    $req->path($this->basePath);
-    $req->wrapper('CostCenter');
-    $req->data($data);
-    $req->setRequired($this->required_create);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Updates a voucher series.
-   *
-   * @param $code
-   * @param array   $data
-   * @return array
-   */
-  public function update ($code, array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('PUT');
-    $req->path($this->basePath)->path($code);
-    $req->wrapper('CostCenter');
-    $req->setRequired($this->required_update);
-    $req->data($data);
-
-    return $this->send($req->build());
-  }
-
+        return $this->send($req->build());
+    }
 }

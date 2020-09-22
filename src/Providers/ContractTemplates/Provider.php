@@ -1,4 +1,6 @@
-<?php namespace Wetcat\Fortie\Providers\ContractTemplates;
+<?php
+
+namespace Wetcat\Fortie\Providers\ContractTemplates;
 
 /*
 
@@ -18,7 +20,6 @@
 
 */
 
-use Wetcat\Fortie\FortieRequest;
 use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\Traits\CountTrait;
 use Wetcat\Fortie\Traits\CreateTrait;
@@ -26,74 +27,70 @@ use Wetcat\Fortie\Traits\FetchTrait;
 use Wetcat\Fortie\Traits\FindTrait;
 use Wetcat\Fortie\Traits\UpdateTrait;
 
-class Provider extends ProviderBase {
-
-  use CountTrait,
+class Provider extends ProviderBase
+{
+    use CountTrait,
       CreateTrait,
       FetchTrait,
       FindTrait,
       UpdateTrait;
 
-  protected $wrapper = 'ContractTemplate';
-  protected $wrapperGroup = 'ContractTemplates';
+    protected $wrapper = 'ContractTemplate';
 
-  protected $attributes = [
-    'Url',
-    'AdministrationFee',
-    'ContractLength',
-    'Freight',
-    'InvoiceInterval',
-    'InvoiceRows',
-    'Continuous',
-    'OurReference',
-    'PrintTemplate',
-    'Remarks',
-    'TemplateName',
-    'TemplateNumber',
-    'TermsOfDelivery',
-    'TermsOfPayment',
-    'WayOfDelivery',
-  ];
+    protected $wrapperGroup = 'ContractTemplates';
 
+    protected $attributes = [
+        'Url',
+        'AdministrationFee',
+        'ContractLength',
+        'Freight',
+        'InvoiceInterval',
+        'InvoiceRows',
+        'Continuous',
+        'OurReference',
+        'PrintTemplate',
+        'Remarks',
+        'TemplateName',
+        'TemplateNumber',
+        'TermsOfDelivery',
+        'TermsOfPayment',
+        'WayOfDelivery',
+    ];
 
-  protected $writeable = [
-    // 'Url',
-    'AdministrationFee',
-    'ContractLength',
-    'Freight',
-    'InvoiceInterval',
-    'InvoiceRows',
-    'Continuous',
-    'OurReference',
-    'PrintTemplate',
-    'Remarks',
-    'TemplateName',
-    'TemplateNumber',
-    'TermsOfDelivery',
-    'TermsOfPayment',
-    'WayOfDelivery',
-  ];
+    protected $writeable = [
+        // 'Url',
+        'AdministrationFee',
+        'ContractLength',
+        'Freight',
+        'InvoiceInterval',
+        'InvoiceRows',
+        'Continuous',
+        'OurReference',
+        'PrintTemplate',
+        'Remarks',
+        'TemplateName',
+        'TemplateNumber',
+        'TermsOfDelivery',
+        'TermsOfPayment',
+        'WayOfDelivery',
+    ];
 
+    protected $required_create = [
+    ];
 
-  protected $required_create = [
-  ];
+    protected $required_update = [
+    ];
 
+    /**
+     * The possible values for filtering.
+     *
+     * @var array
+     */
+    protected $available_filters = [
+    ];
 
-  protected $required_update = [
-  ];
-
-
-  /**
-   * The possible values for filtering.
-   *
-   * @var array
-   */
-  protected $available_filters = [
-  ];
-
-
-  /**
-   * Override the REST path
-   */
-  protected $basePath = 'contracttemplates';
+    /**
+     * Override the REST path.
+     */
+    protected $basePath = 'contracttemplates';
 }

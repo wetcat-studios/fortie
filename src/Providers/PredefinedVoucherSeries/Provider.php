@@ -1,4 +1,6 @@
-<?php namespace Wetcat\Fortie\Providers\PredefinedVoucherSeries;
+<?php
+
+namespace Wetcat\Fortie\Providers\PredefinedVoucherSeries;
 
 /*
 
@@ -18,57 +20,51 @@
 
 */
 
-use Wetcat\Fortie\FortieRequest;
 use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\Traits\CountTrait;
 use Wetcat\Fortie\Traits\FetchTrait;
 use Wetcat\Fortie\Traits\FindTrait;
 use Wetcat\Fortie\Traits\UpdateTrait;
 
-class Provider extends ProviderBase {
-
-  use CountTrait,
+class Provider extends ProviderBase
+{
+    use CountTrait,
       FetchTrait,
       FindTrait,
       UpdateTrait;
 
-  protected $wrapper = 'PreDefinedVoucherSeries';
-  protected $wrapperGroup = 'PreDefinedVoucherSeries';
+    protected $wrapper = 'PreDefinedVoucherSeries';
 
-  protected $attributes = [
-    'Url',
-    'Name',
-    'VoucherSeries',
-  ];
+    protected $wrapperGroup = 'PreDefinedVoucherSeries';
 
+    protected $attributes = [
+        'Url',
+        'Name',
+        'VoucherSeries',
+    ];
 
-  protected $writeable = [
-    // 'Url',
-    // 'Name',
-    'VoucherSeries',
-  ];
+    protected $writeable = [
+        // 'Url',
+        // 'Name',
+        'VoucherSeries',
+    ];
 
+    protected $required_create = [
+    ];
 
-  protected $required_create = [
-  ];
+    protected $required_update = [
+    ];
 
+    /**
+     * The possible values for filtering.
+     *
+     * @var array
+     */
+    protected $available_filters = [
+    ];
 
-  protected $required_update = [
-  ];
-
-
-  /**
-   * The possible values for filtering.
-   *
-   * @var array
-   */
-  protected $available_filters = [
-  ];
-
-
-  /**
-   * Override the REST path
-   */
-  protected $basePath = 'predefinedvoucherseries';
-
+    /**
+     * Override the REST path.
+     */
+    protected $basePath = 'predefinedvoucherseries';
 }
