@@ -29,9 +29,9 @@ use Wetcat\Fortie\Traits\UpdateTrait;
 class Provider extends ProviderBase
 {
     use CountTrait,
-      FetchTrait,
-      FindTrait,
-      UpdateTrait;
+        FetchTrait,
+        FindTrait,
+        UpdateTrait;
 
     protected $wrapper = 'PreDefinedAccount';
 

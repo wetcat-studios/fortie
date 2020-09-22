@@ -30,10 +30,10 @@ use Wetcat\Fortie\Traits\UpdateTrait;
 class Provider extends ProviderBase
 {
     use CountTrait,
-      CreateTrait,
-      FetchTrait,
-      FindTrait,
-      UpdateTrait;
+        CreateTrait,
+        FetchTrait,
+        FindTrait,
+        UpdateTrait;
 
     protected $wrapper = 'Employee';
 

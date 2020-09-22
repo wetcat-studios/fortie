@@ -30,10 +30,10 @@ use Wetcat\Fortie\Traits\FindTrait;
 class Provider extends ProviderBase
 {
     use CountTrait,
-      CreateTrait,
-      DeleteTrait,
-      FetchTrait,
-      FindTrait;
+        CreateTrait,
+        DeleteTrait,
+        FetchTrait,
+        FindTrait;
 
     protected $wrapper = 'ArticleFileConnection';
 

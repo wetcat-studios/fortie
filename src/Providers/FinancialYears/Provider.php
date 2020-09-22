@@ -30,9 +30,9 @@ use Wetcat\Fortie\Traits\FindTrait;
 class Provider extends ProviderBase
 {
     use CountTrait,
-      CreateTrait,
-      FetchTrait,
-      FindTrait;
+        CreateTrait,
+        FetchTrait,
+        FindTrait;
 
     protected $wrapper = 'FinancialYear';
 

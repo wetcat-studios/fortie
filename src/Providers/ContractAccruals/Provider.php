@@ -31,11 +31,11 @@ use Wetcat\Fortie\Traits\UpdateTrait;
 class Provider extends ProviderBase
 {
     use CountTrait,
-      CreateTrait,
-      DeleteTrait,
-      FetchTrait,
-      FindTrait,
-      UpdateTrait;
+        CreateTrait,
+        DeleteTrait,
+        FetchTrait,
+        FindTrait,
+        UpdateTrait;
 
     protected $wrapper = 'ContractAccrual';
 
