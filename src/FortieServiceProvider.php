@@ -60,9 +60,9 @@ class FortieServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(
-        __DIR__ . '/config/config.php',
-        'fortie'
-    );
+            __DIR__ . '/config/config.php',
+            'fortie'
+        );
 
         $this->registerFortie();
     }
@@ -92,12 +92,12 @@ class FortieServiceProvider extends ServiceProvider
             $endpoint = Config::get('fortie.default.endpoint', Config::get('fortie::default.endpoint'));
 
             return new Fortie(
-          $endpoint,
-          $access_token,
-          $client_secret,
-          $content_type,
-          $accepts
-      );
+                $endpoint,
+                $access_token,
+                $client_secret,
+                $content_type,
+                $accepts
+            );
         });
     }
 }
