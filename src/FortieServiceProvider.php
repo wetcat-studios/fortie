@@ -21,7 +21,6 @@ namespace Wetcat\Fortie;
 */
 
 use Config;
-
 use Illuminate\Support\ServiceProvider;
 
 class FortieServiceProvider extends ServiceProvider

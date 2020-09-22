@@ -21,7 +21,6 @@ namespace Wetcat\Fortie\Commands;
 */
 
 use Config;
-
 use Illuminate\Console\Command;
 
 class ActivateCommand extends Command
