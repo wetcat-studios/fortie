@@ -18,9 +18,10 @@
 
 */
 
-use Illuminate\Console\Command;
-
 use Config;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
+use Illuminate\Console\Command;
 
 class ActivateCommand extends Command
 {
@@ -70,7 +71,7 @@ class ActivateCommand extends Command
 
     try {
       // Construct the Guzzle client
-      $client = new \GuzzleHttp\Client([
+      $client = new Client([
         'base_uri'  => $endpoint,
         'headers'   => [
           'Authorization-Code'  => $auth_code,
@@ -83,10 +84,10 @@ class ActivateCommand extends Command
       $res = $client->request('GET');
       $this->info($res->getBody()->getContents());
     }
-    catch (\GuzzleHttp\Exception\ClientException $e) {
+    catch (ClientException $e) {
       $response = $e->getResponse();
       $responseBodyAsString = $response->getBody()->getContents();
-      
+
       $this->error('Failed to generate access token!');
       $this->error($responseBodyAsString);
     }
