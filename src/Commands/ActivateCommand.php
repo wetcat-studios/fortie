@@ -80,8 +80,8 @@ class ActivateCommand extends Command
         ],
         'timeout'   => 3.0,
       ]);
-      $res = $client->request('GET', '/customers');
-      $this->info($res); 
+      $res = $client->request('GET');
+      $this->info($res->getBody()->getContents());
     }
     catch (\GuzzleHttp\Exception\ClientException $e) {
       $response = $e->getResponse();
