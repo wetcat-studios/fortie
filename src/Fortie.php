@@ -75,299 +75,10 @@ use Wetcat\Fortie\Providers\WayOfDeliveries\Provider as WayOfDeliveriesProvider;
  */
 class Fortie
 {
-
   /**
-   * Absence transactions
+   * Storage for Guzzle client
    */
-  protected $absenceTransactionsProvider;
-
-
-  /**
-   * Account Charts
-   */
-  protected $accountChartsProvider;
-
-
-  /**
-   * The Account provider provides access to all the account endpoints.
-   */
-  protected $accountsProvider;
-
-
-  /**
-   * Provides access to archives endpoints.
-   */
-  protected $archiveProvider;
-
-
-  /**
-   * Article File Connections
-   */
-  protected $articleFileConnectionsProvider;
-
-
-  /**
-   * Article URL Connections
-   */
-  protected $articleURLConnectionsProvider;
-
-
-  /**
-   * Provides access to article endpoints.
-   */
-  protected $articlesProvider;
-
-
-  /**
-   * Attendance transactions
-   */
-  protected $attendanceTransactionsProvider;
-
-
-  /**
-   * Provides access to the company settings endpoint. This is read-only.
-   */
-  protected $companySettingsProvider;
-
-
-  /**
-   * Contract Accruals
-   */
-  protected $contractAccrualsProvider;
-
-
-  /**
-   * Contract Templates
-   */
-  protected $contractTemplatesProvider;
-
-
-  /**
-   * Provides access to the contracts endpoint.
-   */
-  protected $contractsProvider;
-
-
-  /**
-   * Cost Centers
-   */
-  protected $costCentersProvider;
-
-
-  /**
-   * Provides access to currencies.
-   */
-  protected $currenciesProvider;
-
-
-  /**
-   * Provides access to customer endpoints.
-   */
-  protected $customersProvider;
-
-
-  /**
-   * Employees
-   */
-  protected $employeesProvider;
-
-
-  /**
-   * Financial Years
-   */
-  protected $financialYearsProvider;
-
-
-  /**
-   * Inbox
-   */
-  protected $inboxProvider;
-
-
-  /**
-   * Invoice Accruals
-   */
-  protected $invoiceAccrualsProvider;
-
-
-  /**
-   * Invoice Payments
-   */
-  protected $invoicePaymentsProvider;
-
-
-  /**
-   * Provides access to invoices actions and endpoints.
-   */
-  protected $invoicesProvider;
-
-
-  /**
-   * Labels
-   */
-  protected $labelsProvider;
-
-
-  /**
-   * Locked Period
-   */
-  protected $lockedPeriodProvider;
-  
-
-  /**
-   * Modes of Payments
-   */
-  protected $modesOfPaymentsProvider;
-
-
-  /**
-   * Provides access to offers actions and endpoints.
-   */
-  protected $offersProvider;
-
-
-  /**
-   * Provides access to orders.
-   */
-  protected $ordersProvider;
-
-
-  /**
-   * Predefined Accounts
-   */
-  protected $predefinedAccountsProvider;
-
-
-  /**
-   * Predefined Voucher Series
-   */
-  protected $predefinedVoucherSeriesProvider;
-
-
-  /**
-   * Provides access to price lists.
-   */
-  protected $priceListsProvider;
-
-
-  /**
-   * Provides access to prices.
-   */
-  protected $pricesProvider;
-
-
-  /**
-   * Print Templates
-   */
-  protected $printTemplatesProvider;
-
-
-  /**
-   * Provides access to projects.
-   */
-  protected $projectsProvider;
-
-
-  /**
-   * Salary transactions
-   */
-  protected $salaryTransactionsProvider;
-
-
-  /**
-   * Schedule times
-   */
-  protected $scheduleTimesProvider;
-
-
-  /**
-   * Supplier Invoice Accruals
-   */
-  protected $supplierInvoiceAccrualsProvider;
-
-
-  /**
-   * Supplier Invoice External URL Connections
-   */
-  protected $supplierInvoiceExternalURLConnectionsProvider;
-
-
-  /**
-   * Supplier Invoice File Connections
-   */
-  protected $supplierInvoiceFileConnectionsProvider;
-
-
-  /**
-   * Supplier Invoice Payments
-   */
-  protected $supplierInvoicePaymentsProvider;
-
-
-  /**
-   * Supplier Invoices
-   */
-  protected $supplierInvoicesProvider;
-
-
-  /**
-   * Provides access to suppliers.
-   */
-  protected $suppliersProvider;
-
-
-  /**
-   * Tax Reductions
-   */
-  protected $taxReductionsProvider;
-
-
-  /**
-   * Terms of Deliveries
-   */
-  protected $termsOfDeliveriesProvider;
-
-
-  /**
-   * Terms of Payments
-   */
-  protected $termsOfPaymentsProvider;
-
-
-  /**
-   * Trusted Email Senders
-   */
-  protected $trustedEmailSendersProvider;
-  
-
-  /**
-   * Provides access to units.
-   */
-  protected $unitsProvider;
-
-
-  /**
-   * Voucher File Connections
-   */
-  protected $voucherFileConnectionsProvider;
-
-
-  /**
-   * Voucher Series
-   */
-  protected $voucherSeriesProvider;
-  
-
-  /**
-   * Provides access to vouchers.
-   */
-  protected $vouchersProvider;
-
-
-  /**
-   * Way of Deliveries
-   */
-  protected $wayOfDeliveriesProvider;
+  protected $client;
 
   /**
    * Create a new Fortie object.
@@ -381,7 +92,7 @@ class Fortie
     $config = []
   ) {
     // Set up Guzzle client
-    $client = new \GuzzleHttp\Client(array_merge([
+    $this->client = new \GuzzleHttp\Client(array_merge([
       'base_uri'  => $endpoint,
       'headers'   => [
         'Access-Token'  => $access_token,
@@ -391,57 +102,6 @@ class Fortie
       ],
       'timeout'   => 3.0,
     ], $config));
-
-    // Set up providers
-    $this->absenceTransactionsProvider = new AbsenceTransactionsProvider($client);
-    $this->accountChartsProvider = new AccountChartsProvider($client);
-    $this->accountsProvider = new AccountsProvider($client);
-    $this->archiveProvider = new ArchiveProvider($client);
-    $this->articleFileConnectionsProvider = new ArticleFileConnectionsProvider($client);
-    $this->articleURLConnectionsProvider = new ArticleURLConnectionsProvider($client);
-    $this->articlesProvider = new ArticlesProvider($client);
-    $this->attendanceTransactionsProvider = new AttendanceTransactionsProvider($client);
-    $this->companySettingsProvider = new CompanySettingsProvider($client);
-    $this->contractAccrualsProvider = new ContractAccrualsProvider($client);
-    $this->contractTemplatesProvider = new ContractTemplatesProvider($client);
-    $this->contractsProvider = new ContractsProvider($client);
-    $this->costCentersProvider = new CostCentersProvider($client);
-    $this->currenciesProvider = new CurrenciesProvider($client);
-    $this->customersProvider = new CustomersProvider($client);
-    $this->employeesProvider = new EmployeesProvider($client);
-    $this->financialYearsProvider = new FinancialYearsProvider($client);
-    $this->inboxProvider = new InboxProvider($client);
-    $this->invoiceAccrualsProvider = new InvoiceAccrualsProvider($client);
-    $this->invoicePaymentsProvider = new InvoicePaymentsProvider($client);
-    $this->invoicesProvider = new InvoicesProvider($client);
-    $this->labelsProvider = new LabelsProvider($client);
-    $this->lockedPeriodProvider = new LockedPeriodProvider($client);
-    $this->modesOfPaymentsProvider = new ModesOfPaymentsProvider($client);
-    $this->offersProvider = new OffersProvider($client);
-    $this->ordersProvider = new OrdersProvider($client);
-    $this->predefinedAccountsProvider = new PredefinedAccountsProvider($client);
-    $this->predefinedVoucherSeriesProvider = new PredefinedVoucherSeriesProvider($client);
-    $this->priceListsProvider = new PriceListsProvider($client);
-    $this->pricesProvider = new PricesProvider($client);
-    $this->printTemplatesProvider = new PrintTemplatesProvider($client);
-    $this->projectsProvider = new ProjectsProvider($client);
-    $this->salaryTransactionsProvider = new SalaryTransactionsProvider($client);
-    $this->scheduleTimesProvider = new ScheduleTimesProvider($client);
-    $this->supplierInvoiceAccrualsProvider = new SupplierInvoiceAccrualsProvider($client);
-    $this->supplierInvoiceExternalURLConnectionsProvider = new SupplierInvoiceExternalURLConnectionsProvider($client);
-    $this->supplierInvoiceFileConnectionsProvider = new SupplierInvoiceFileConnectionsProvider($client);
-    $this->supplierInvoicePaymentsProvider = new SupplierInvoicePaymentsProvider($client);
-    $this->supplierInvoicesProvider = new SupplierInvoicesProvider($client);
-    $this->suppliersProvider = new SuppliersProvider($client);
-    $this->taxReductionsProvider = new TaxReductionsProvider($client);
-    $this->termsOfDeliveriesProvider = new TermsOfDeliveriesProvider($client);
-    $this->termsOfPaymentsProvider = new TermsOfPaymentsProvider($client);
-    $this->trustedEmailSendersProvider = new TrustedEmailSendersProvider($client);
-    $this->unitsProvider = new UnitsProvider($client);
-    $this->voucherFileConnectionsProvider = new VoucherFileConnectionsProvider($client);
-    $this->voucherSeriesProvider = new VoucherSeriesProvider($client);
-    $this->vouchersProvider = new VouchersProvider($client);
-    $this->wayOfDeliveriesProvider = new WayOfDeliveriesProvider($client);
   }
 
 
@@ -450,7 +110,7 @@ class Fortie
    */
   public function absenceTransactions ()
   {
-    return $this->absenceTransactionsProvider;
+    return new AbsenceTransactionsProvider($this->client);
   }
 
 
@@ -459,7 +119,7 @@ class Fortie
    */
   public function accountCharts ()
   {
-    return $this->accountChartsProvider;
+    return new AccountChartsProvider($this->client);
   }
 
 
@@ -470,7 +130,7 @@ class Fortie
    */
   public function accounts ()
   {
-    return $this->accountsProvider;
+    return new AccountsProvider($this->client);
   }
 
 
@@ -481,7 +141,7 @@ class Fortie
    */
   public function archive ()
   {
-    return $this->archiveProvider;
+    return new ArchiveProvider($this->client);
   }
 
 
@@ -490,7 +150,7 @@ class Fortie
    */
   public function articleFileConnections ()
   {
-    return $this->articleFileConnectionsProvider;
+    return new ArticleFileConnectionsProvider($this->client);
   }
 
 
@@ -499,7 +159,7 @@ class Fortie
    */
   public function articleURLConnections ()
   {
-    return $this->articleURLConnectionsProvider;
+    return new ArticleURLConnectionsProvider($this->client);
   }
 
 
@@ -510,7 +170,7 @@ class Fortie
    */
   public function articles ()
   {
-    return $this->articlesProvider;
+    return new ArticlesProvider($this->client);
   }
 
 
@@ -519,7 +179,7 @@ class Fortie
    */
   public function attendanceTransactions ()
   {
-    return $this->attendanceTransactionsProvider;
+    return new AttendanceTransactionsProvider($this->client);
   }
 
 
@@ -528,7 +188,7 @@ class Fortie
    */
   public function companySettings ()
   {
-    return $this->companySettingsProvider;
+    return new CompanySettingsProvider($this->client);
   }
 
 
@@ -537,7 +197,7 @@ class Fortie
    */
   public function contractAccruals ()
   {
-    return $this->contractAccrualsProvider;
+    return new ContractAccrualsProvider($this->client);
   }
 
 
@@ -546,7 +206,7 @@ class Fortie
    */
   public function contractTemplates ()
   {
-    return $this->contractTemplatesProvider;
+    return new ContractTemplatesProvider($this->client);
   }
 
 
@@ -555,7 +215,7 @@ class Fortie
    */
   public function contracts ()
   {
-    return $this->contractsProvider;
+    return new ContractsProvider($this->client);
   }
 
 
@@ -564,7 +224,7 @@ class Fortie
    */
   public function costCenters ()
   {
-    return $this->costCentersProvider;
+    return new CostCentersProvider($this->client);
   }
 
 
@@ -573,7 +233,7 @@ class Fortie
    */
   public function currencies ()
   {
-    return $this->currenciesProvider;
+    return new CurrenciesProvider($this->client);
   }
 
 
@@ -582,7 +242,7 @@ class Fortie
    */
   public function customers ()
   {
-    return $this->customersProvider;
+    return new CustomersProvider($this->client);
   }
 
 
@@ -591,7 +251,7 @@ class Fortie
    */
   public function employees ()
   {
-    return $this->employeesProvider;
+    return new EmployeesProvider($this->client);
   }
 
 
@@ -600,7 +260,7 @@ class Fortie
    */
   public function financialYears ()
   {
-    return $this->financialYearsProvider;
+    return new FinancialYearsProvider($this->client);
   }
 
 
@@ -609,7 +269,7 @@ class Fortie
    */
   public function inbox ()
   {
-    return $this->inboxProvider;
+    return new InboxProvider($this->client);
   }
 
 
@@ -618,7 +278,7 @@ class Fortie
    */
   public function invoiceAccruals ()
   {
-    return $this->invoiceAccrualsProvider;
+    return new InvoiceAccrualsProvider($this->client);
   }
 
 
@@ -627,7 +287,7 @@ class Fortie
    */
   public function invoicePayments ()
   {
-    return $this->invoicePaymentsProvider;
+    return new InvoicePaymentsProvider($this->client);
   }
 
 
@@ -636,7 +296,7 @@ class Fortie
    */
   public function invoices ()
   {
-    return $this->invoicesProvider;
+    return new InvoicesProvider($this->client);
   }
 
 
@@ -645,7 +305,7 @@ class Fortie
    */
   public function labels ()
   {
-    return $this->labelsProvider;
+    return new LabelsProvider($this->client);
   }
 
 
@@ -654,7 +314,7 @@ class Fortie
    */
   public function lockedPeriod ()
   {
-    return $this->lockedPeriodProvider;
+    return new LockedPeriodProvider($this->client);
   }
 
 
@@ -663,7 +323,7 @@ class Fortie
    */
   public function modesOfPayments ()
   {
-    return $this->modesOfPaymentsProvider;
+    return new ModesOfPaymentsProvider($this->client);
   }
 
 
@@ -672,7 +332,7 @@ class Fortie
    */
   public function offers ()
   {
-    return $this->offersProvider;
+    return new OffersProvider($this->client);
   }
 
 
@@ -681,7 +341,7 @@ class Fortie
    */
   public function orders ()
   {
-    return $this->ordersProvider;
+    return new OrdersProvider($this->client);
   }
 
 
@@ -690,7 +350,7 @@ class Fortie
    */
   public function predefinedAccounts ()
   {
-    return $this->predefinedAccountsProvider;
+    return new PredefinedAccountsProvider($this->client);
   }
 
 
@@ -699,7 +359,7 @@ class Fortie
    */
   public function predefinedVoucherSeries ()
   {
-    return $this->predefinedVoucherSeriesProvider;
+    return new PredefinedVoucherSeriesProvider($this->client);
   }
 
 
@@ -708,7 +368,7 @@ class Fortie
    */
   public function priceLists ()
   {
-    return $this->priceListsProvider;
+    return new PriceListsProvider($this->client);
   }
 
 
@@ -717,7 +377,7 @@ class Fortie
    */
   public function prices ()
   {
-    return $this->pricesProvider;
+    return new PricesProvider($this->client);
   }
 
 
@@ -726,7 +386,7 @@ class Fortie
    */
   public function printTemplates ()
   {
-    return $this->printTemplatesProvider;
+    return new PrintTemplatesProvider($this->client);
   }
 
 
@@ -735,7 +395,7 @@ class Fortie
    */
   public function projects ()
   {
-    return $this->projectsProvider;
+    return new ProjectsProvider($this->client);
   }
 
 
@@ -744,7 +404,7 @@ class Fortie
    */
   public function salaryTransactions ()
   {
-    return $this->salaryTransactionsProvider;
+    return new SalaryTransactionsProvider($this->client);
   }
 
 
@@ -753,7 +413,7 @@ class Fortie
    */
   public function scheduleTimes ()
   {
-    return $this->scheduleTimesProvider;
+    return new ScheduleTimesProvider($this->client);
   }
 
 
@@ -762,7 +422,7 @@ class Fortie
    */
   public function supplierInvoiceAccruals ()
   {
-    return $this->supplierInvoiceAccrualsProvider;
+    return new SupplierInvoiceAccrualsProvider($this->client);
   }
 
 
@@ -771,7 +431,7 @@ class Fortie
    */
   public function supplierInvoiceExternalURLConnections ()
   {
-    return $this->supplierInvoiceExternalURLConnectionsProvider;
+    return new SupplierInvoiceExternalURLConnectionsProvider($this->client);
   }
 
 
@@ -780,7 +440,7 @@ class Fortie
    */
   public function supplierInvoiceFileConnections ()
   {
-    return $this->supplierInvoiceFileConnectionsProvider;
+    return new SupplierInvoiceFileConnectionsProvider($this->client);
   }
 
 
@@ -789,7 +449,7 @@ class Fortie
    */
   public function supplierInvoicePayments ()
   {
-    return $this->supplierInvoicePaymentsProvider;
+    return new SupplierInvoicePaymentsProvider($this->client);
   }
 
 
@@ -798,7 +458,7 @@ class Fortie
    */
   public function supplierInvoices ()
   {
-    return $this->supplierInvoicesProvider;
+    return new SupplierInvoicesProvider($this->client);
   }
 
 
@@ -807,7 +467,7 @@ class Fortie
    */
   public function suppliers ()
   {
-    return $this->suppliersProvider;
+    return new SuppliersProvider($this->client);
   }
 
 
@@ -816,7 +476,7 @@ class Fortie
    */
   public function taxReductions ()
   {
-    return $this->taxReductionsProvider;
+    return new TaxReductionsProvider($this->client);
   }
 
 
@@ -825,7 +485,7 @@ class Fortie
    */
   public function termsOfDeliveries ()
   {
-    return $this->termsOfDeliveriesProvider;
+    return new TermsOfDeliveriesProvider($this->client);
   }
 
 
@@ -834,7 +494,7 @@ class Fortie
    */
   public function termsOfPayments ()
   {
-    return $this->termsOfPaymentsProvider;
+    return new TermsOfPaymentsProvider($this->client);
   }
 
 
@@ -843,7 +503,7 @@ class Fortie
    */
   public function trustedEmailSenders ()
   {
-    return $this->trustedEmailSendersProvider;
+    return new TrustedEmailSendersProvider($this->client);
   }
 
 
@@ -852,7 +512,7 @@ class Fortie
    */
   public function units ()
   {
-    return $this->unitsProvider;
+    return new UnitsProvider($this->client);
   }
 
 
@@ -861,7 +521,7 @@ class Fortie
    */
   public function voucherFileConnections ()
   {
-    return $this->voucherFileConnectionsProvider;
+    return new VoucherFileConnectionsProvider($this->client);
   }
 
 
@@ -870,7 +530,7 @@ class Fortie
    */
   public function voucherSeries ()
   {
-    return $this->voucherSeriesProvider;
+    return new VoucherSeriesProvider($this->client);
   }
 
 
@@ -879,7 +539,7 @@ class Fortie
    */
   public function vouchers ()
   {
-    return $this->vouchersProvider;
+    return new VouchersProvider($this->client);
   }
 
 
@@ -888,7 +548,7 @@ class Fortie
    */
   public function wayOfDeliveries ()
   {
-    return $this->wayOfDeliveriesProvider;
+    return new WayOfDeliveriesProvider($this->client);
   }
 
 }
