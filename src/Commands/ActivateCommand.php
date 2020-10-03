@@ -21,6 +21,8 @@ namespace Wetcat\Fortie\Commands;
 */
 
 use Config;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use Illuminate\Console\Command;
 
 class ActivateCommand extends Command
@@ -67,7 +69,7 @@ class ActivateCommand extends Command
 
         try {
             // Construct the Guzzle client
-            $client = new \GuzzleHttp\Client([
+            $client = new Client([
                 'base_uri' => $endpoint,
                 'headers' => [
                     'Authorization-Code' => $auth_code,
@@ -77,9 +79,9 @@ class ActivateCommand extends Command
                 ],
                 'timeout' => 3.0,
             ]);
-            $res = $client->request('GET', '/customers');
-            $this->info($res);
-        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            $res = $client->request('GET');
+            $this->info($res->getBody()->getContents());
+        catch (ClientException $e) {
             $response = $e->getResponse();
             $responseBodyAsString = $response->getBody()->getContents();
 

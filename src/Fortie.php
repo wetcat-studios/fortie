@@ -4,7 +4,7 @@ namespace Wetcat\Fortie;
 
 /*
 
-   Copyright 2015 Andreas Göransson
+   Copyright The Fortie Authors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -77,728 +77,480 @@ use Wetcat\Fortie\Providers\WayOfDeliveries\Provider as WayOfDeliveriesProvider;
  */
 class Fortie
 {
-    /**
-     * Absence transactions.
-     */
-    protected $absenceTransactionsProvider;
 
     /**
-     * Account Charts.
+     * Storage for Guzzle client
      */
-    protected $accountChartsProvider;
-
-    /**
-     * The Account provider provides access to all the account endpoints.
-     */
-    protected $accountsProvider;
-
-    /**
-     * Provides access to archives endpoints.
-     */
-    protected $archiveProvider;
-
-    /**
-     * Article File Connections.
-     */
-    protected $articleFileConnectionsProvider;
-
-    /**
-     * Article URL Connections.
-     */
-    protected $articleURLConnectionsProvider;
-
-    /**
-     * Provides access to article endpoints.
-     */
-    protected $articlesProvider;
-
-    /**
-     * Attendance transactions.
-     */
-    protected $attendanceTransactionsProvider;
-
-    /**
-     * Provides access to the company settings endpoint. This is read-only.
-     */
-    protected $companySettingsProvider;
-
-    /**
-     * Contract Accruals.
-     */
-    protected $contractAccrualsProvider;
-
-    /**
-     * Contract Templates.
-     */
-    protected $contractTemplatesProvider;
-
-    /**
-     * Provides access to the contracts endpoint.
-     */
-    protected $contractsProvider;
-
-    /**
-     * Cost Centers.
-     */
-    protected $costCentersProvider;
-
-    /**
-     * Provides access to currencies.
-     */
-    protected $currenciesProvider;
-
-    /**
-     * Provides access to customer endpoints.
-     */
-    protected $customersProvider;
-
-    /**
-     * Employees.
-     */
-    protected $employeesProvider;
-
-    /**
-     * Financial Years.
-     */
-    protected $financialYearsProvider;
-
-    /**
-     * Inbox.
-     */
-    protected $inboxProvider;
-
-    /**
-     * Invoice Accruals.
-     */
-    protected $invoiceAccrualsProvider;
-
-    /**
-     * Invoice Payments.
-     */
-    protected $invoicePaymentsProvider;
-
-    /**
-     * Provides access to invoices actions and endpoints.
-     */
-    protected $invoicesProvider;
-
-    /**
-     * Labels.
-     */
-    protected $labelsProvider;
-
-    /**
-     * Locked Period.
-     */
-    protected $lockedPeriodProvider;
-
-    /**
-     * Modes of Payments.
-     */
-    protected $modesOfPaymentsProvider;
-
-    /**
-     * Provides access to offers actions and endpoints.
-     */
-    protected $offersProvider;
-
-    /**
-     * Provides access to orders.
-     */
-    protected $ordersProvider;
-
-    /**
-     * Predefined Accounts.
-     */
-    protected $predefinedAccountsProvider;
-
-    /**
-     * Predefined Voucher Series.
-     */
-    protected $predefinedVoucherSeriesProvider;
-
-    /**
-     * Provides access to price lists.
-     */
-    protected $priceListsProvider;
-
-    /**
-     * Provides access to prices.
-     */
-    protected $pricesProvider;
-
-    /**
-     * Print Templates.
-     */
-    protected $printTemplatesProvider;
-
-    /**
-     * Provides access to projects.
-     */
-    protected $projectsProvider;
-
-    /**
-     * Salary transactions.
-     */
-    protected $salaryTransactionsProvider;
-
-    /**
-     * Schedule times.
-     */
-    protected $scheduleTimesProvider;
-
-    /**
-     * Supplier Invoice Accruals.
-     */
-    protected $supplierInvoiceAccrualsProvider;
-
-    /**
-     * Supplier Invoice External URL Connections.
-     */
-    protected $supplierInvoiceExternalURLConnectionsProvider;
-
-    /**
-     * Supplier Invoice File Connections.
-     */
-    protected $supplierInvoiceFileConnectionsProvider;
-
-    /**
-     * Supplier Invoice Payments.
-     */
-    protected $supplierInvoicePaymentsProvider;
-
-    /**
-     * Supplier Invoices.
-     */
-    protected $supplierInvoicesProvider;
-
-    /**
-     * Provides access to suppliers.
-     */
-    protected $suppliersProvider;
-
-    /**
-     * Tax Reductions.
-     */
-    protected $taxReductionsProvider;
-
-    /**
-     * Terms of Deliveries.
-     */
-    protected $termsOfDeliveriesProvider;
-
-    /**
-     * Terms of Payments.
-     */
-    protected $termsOfPaymentsProvider;
-
-    /**
-     * Trusted Email Senders.
-     */
-    protected $trustedEmailSendersProvider;
-
-    /**
-     * Provides access to units.
-     */
-    protected $unitsProvider;
-
-    /**
-     * Voucher File Connections.
-     */
-    protected $voucherFileConnectionsProvider;
-
-    /**
-     * Voucher Series.
-     */
-    protected $voucherSeriesProvider;
-
-    /**
-     * Provides access to vouchers.
-     */
-    protected $vouchersProvider;
-
-    /**
-     * Way of Deliveries.
-     */
-    protected $wayOfDeliveriesProvider;
+    protected $client;
 
     /**
      * Create a new Fortie object.
-     *
-     * @param mixed $endpoint
-     * @param mixed $access_token
-     * @param mixed $client_secret
-     * @param mixed $content_type
-     * @param mixed $accepts
-     * @param mixed $config
      */
     public function __construct(
-      $endpoint,
-      $access_token,
-      $client_secret,
-      $content_type,
-      $accepts,
-      $config = []
-  ) {
+        $endpoint,
+        $access_token,
+        $client_secret,
+        $content_type,
+        $accepts,
+        $config = []
+    ) {
         // Set up Guzzle client
-        $client = new \GuzzleHttp\Client(array_merge([
-            'base_uri' => $endpoint,
-            'headers' => [
-                'Access-Token' => $access_token,
+        $this->client = new \GuzzleHttp\Client(array_merge([
+            'base_uri'  => $endpoint,
+            'headers'   => [
+                'Access-Token'  => $access_token,
                 'Client-Secret' => $client_secret,
-                'Content-Type' => $content_type,
-                'Accept' => $accepts,
+                'Content-Type'  => $content_type,
+                'Accept'        => $accepts
             ],
-            'timeout' => 3.0,
+            'timeout'   => 3.0,
         ], $config));
-
-        // Set up providers
-        $this->absenceTransactionsProvider = new AbsenceTransactionsProvider($client);
-        $this->accountChartsProvider = new AccountChartsProvider($client);
-        $this->accountsProvider = new AccountsProvider($client);
-        $this->archiveProvider = new ArchiveProvider($client);
-        $this->articleFileConnectionsProvider = new ArticleFileConnectionsProvider($client);
-        $this->articleURLConnectionsProvider = new ArticleURLConnectionsProvider($client);
-        $this->articlesProvider = new ArticlesProvider($client);
-        $this->attendanceTransactionsProvider = new AttendanceTransactionsProvider($client);
-        $this->companySettingsProvider = new CompanySettingsProvider($client);
-        $this->contractAccrualsProvider = new ContractAccrualsProvider($client);
-        $this->contractTemplatesProvider = new ContractTemplatesProvider($client);
-        $this->contractsProvider = new ContractsProvider($client);
-        $this->costCentersProvider = new CostCentersProvider($client);
-        $this->currenciesProvider = new CurrenciesProvider($client);
-        $this->customersProvider = new CustomersProvider($client);
-        $this->employeesProvider = new EmployeesProvider($client);
-        $this->financialYearsProvider = new FinancialYearsProvider($client);
-        $this->inboxProvider = new InboxProvider($client);
-        $this->invoiceAccrualsProvider = new InvoiceAccrualsProvider($client);
-        $this->invoicePaymentsProvider = new InvoicePaymentsProvider($client);
-        $this->invoicesProvider = new InvoicesProvider($client);
-        $this->labelsProvider = new LabelsProvider($client);
-        $this->lockedPeriodProvider = new LockedPeriodProvider($client);
-        $this->modesOfPaymentsProvider = new ModesOfPaymentsProvider($client);
-        $this->offersProvider = new OffersProvider($client);
-        $this->ordersProvider = new OrdersProvider($client);
-        $this->predefinedAccountsProvider = new PredefinedAccountsProvider($client);
-        $this->predefinedVoucherSeriesProvider = new PredefinedVoucherSeriesProvider($client);
-        $this->priceListsProvider = new PriceListsProvider($client);
-        $this->pricesProvider = new PricesProvider($client);
-        $this->printTemplatesProvider = new PrintTemplatesProvider($client);
-        $this->projectsProvider = new ProjectsProvider($client);
-        $this->salaryTransactionsProvider = new SalaryTransactionsProvider($client);
-        $this->scheduleTimesProvider = new ScheduleTimesProvider($client);
-        $this->supplierInvoiceAccrualsProvider = new SupplierInvoiceAccrualsProvider($client);
-        $this->supplierInvoiceExternalURLConnectionsProvider = new SupplierInvoiceExternalURLConnectionsProvider($client);
-        $this->supplierInvoiceFileConnectionsProvider = new SupplierInvoiceFileConnectionsProvider($client);
-        $this->supplierInvoicePaymentsProvider = new SupplierInvoicePaymentsProvider($client);
-        $this->supplierInvoicesProvider = new SupplierInvoicesProvider($client);
-        $this->suppliersProvider = new SuppliersProvider($client);
-        $this->taxReductionsProvider = new TaxReductionsProvider($client);
-        $this->termsOfDeliveriesProvider = new TermsOfDeliveriesProvider($client);
-        $this->termsOfPaymentsProvider = new TermsOfPaymentsProvider($client);
-        $this->trustedEmailSendersProvider = new TrustedEmailSendersProvider($client);
-        $this->unitsProvider = new UnitsProvider($client);
-        $this->voucherFileConnectionsProvider = new VoucherFileConnectionsProvider($client);
-        $this->voucherSeriesProvider = new VoucherSeriesProvider($client);
-        $this->vouchersProvider = new VouchersProvider($client);
-        $this->wayOfDeliveriesProvider = new WayOfDeliveriesProvider($client);
     }
+
 
     /**
-     * Absence transactions.
+     * Absence transactions
      */
-    public function absenceTransactions()
+    public function absenceTransactions ()
     {
-        return $this->absenceTransactionsProvider;
+        return new AbsenceTransactionsProvider($this->client);
     }
 
+
     /**
-     * Account Charts.
+     * Account Charts
      */
-    public function accountCharts()
+    public function accountCharts ()
     {
-        return $this->accountChartsProvider;
+        return new AccountChartsProvider($this->client);
     }
+
 
     /**
      * Get the accounts provider.
      *
      * @return AccountProvider
      */
-    public function accounts()
+    public function accounts ()
     {
-        return $this->accountsProvider;
+        return new AccountsProvider($this->client);
     }
+
 
     /**
      * Get the archive provider.
      *
      * @return ArchiveProvider
      */
-    public function archive()
+    public function archive ()
     {
-        return $this->archiveProvider;
+        return new ArchiveProvider($this->client);
     }
 
-    /**
-     * Article File Connections.
-     */
-    public function articleFileConnections()
-    {
-        return $this->articleFileConnectionsProvider;
-    }
 
     /**
-     * Article URL Connections.
+     * Article File Connections
      */
-    public function articleURLConnections()
+    public function articleFileConnections ()
     {
-        return $this->articleURLConnectionsProvider;
+        return new ArticleFileConnectionsProvider($this->client);
     }
+
+
+    /**
+     * Article URL Connections
+     */
+    public function articleURLConnections ()
+    {
+        return new ArticleURLConnectionsProvider($this->client);
+    }
+
 
     /**
      * Get the articles provider.
      *
      * @return ArticleProvider
      */
-    public function articles()
+    public function articles ()
     {
-        return $this->articlesProvider;
+        return new ArticlesProvider($this->client);
     }
 
-    /**
-     * Attendance transactions.
-     */
-    public function attendanceTransactions()
-    {
-        return $this->attendanceTransactionsProvider;
-    }
 
     /**
-     * Company Settings.
+     * Attendance transactions
      */
-    public function companySettings()
+    public function attendanceTransactions ()
     {
-        return $this->companySettingsProvider;
+        return new AttendanceTransactionsProvider($this->client);
     }
 
-    /**
-     * Contract Accruals.
-     */
-    public function contractAccruals()
-    {
-        return $this->contractAccrualsProvider;
-    }
 
     /**
-     * Contract Templates.
+     * Company Settings
      */
-    public function contractTemplates()
+    public function companySettings ()
     {
-        return $this->contractTemplatesProvider;
+        return new CompanySettingsProvider($this->client);
     }
 
-    /**
-     * Contracts.
-     */
-    public function contracts()
-    {
-        return $this->contractsProvider;
-    }
 
     /**
-     * Cost Centers.
+     * Contract Accruals
      */
-    public function costCenters()
+    public function contractAccruals ()
     {
-        return $this->costCentersProvider;
+        return new ContractAccrualsProvider($this->client);
     }
 
-    /**
-     * Currencies.
-     */
-    public function currencies()
-    {
-        return $this->currenciesProvider;
-    }
 
     /**
-     * Customers.
+     * Contract Templates
      */
-    public function customers()
+    public function contractTemplates ()
     {
-        return $this->customersProvider;
+        return new ContractTemplatesProvider($this->client);
     }
 
-    /**
-     * Employees.
-     */
-    public function employees()
-    {
-        return $this->employeesProvider;
-    }
 
     /**
-     * Financial Years.
+     * Contracts
      */
-    public function financialYears()
+    public function contracts ()
     {
-        return $this->financialYearsProvider;
+        return new ContractsProvider($this->client);
     }
 
-    /**
-     * Inbox.
-     */
-    public function inbox()
-    {
-        return $this->inboxProvider;
-    }
 
     /**
-     * Invoice Accruals.
+     * Cost Centers
      */
-    public function invoiceAccruals()
+    public function costCenters ()
     {
-        return $this->invoiceAccrualsProvider;
+        return new CostCentersProvider($this->client);
     }
 
-    /**
-     * Invoice Payments.
-     */
-    public function invoicePayments()
-    {
-        return $this->invoicePaymentsProvider;
-    }
 
     /**
-     * Invoices.
+     * Currencies
      */
-    public function invoices()
+    public function currencies ()
     {
-        return $this->invoicesProvider;
+        return new CurrenciesProvider($this->client);
     }
 
-    /**
-     * Labels.
-     */
-    public function labels()
-    {
-        return $this->labelsProvider;
-    }
 
     /**
-     * Locked Period.
+     * Customers
      */
-    public function lockedPeriod()
+    public function customers ()
     {
-        return $this->lockedPeriodProvider;
+        return new CustomersProvider($this->client);
     }
 
-    /**
-     * Modes of Payments.
-     */
-    public function modesOfPayments()
-    {
-        return $this->modesOfPaymentsProvider;
-    }
 
     /**
-     * Offers.
+     * Employees
      */
-    public function offers()
+    public function employees ()
     {
-        return $this->offersProvider;
+        return new EmployeesProvider($this->client);
     }
 
-    /**
-     * Orders.
-     */
-    public function orders()
-    {
-        return $this->ordersProvider;
-    }
 
     /**
-     * Predefined Accounts.
+     * Financial Years
      */
-    public function predefinedAccounts()
+    public function financialYears ()
     {
-        return $this->predefinedAccountsProvider;
+        return new FinancialYearsProvider($this->client);
     }
 
-    /**
-     * Predefined Voucher Series.
-     */
-    public function predefinedVoucherSeries()
-    {
-        return $this->predefinedVoucherSeriesProvider;
-    }
 
     /**
-     * Price Lists.
+     * Inbox
      */
-    public function priceLists()
+    public function inbox ()
     {
-        return $this->priceListsProvider;
+        return new InboxProvider($this->client);
     }
 
-    /**
-     * Prices.
-     */
-    public function prices()
-    {
-        return $this->pricesProvider;
-    }
 
     /**
-     * Print Templates.
+     * Invoice Accruals
      */
-    public function printTemplates()
+    public function invoiceAccruals ()
     {
-        return $this->printTemplatesProvider;
+        return new InvoiceAccrualsProvider($this->client);
     }
 
-    /**
-     * Projects.
-     */
-    public function projects()
-    {
-        return $this->projectsProvider;
-    }
 
     /**
-     * Salary transactions.
+     * Invoice Payments
      */
-    public function salaryTransactions()
+    public function invoicePayments ()
     {
-        return $this->salaryTransactionsProvider;
+        return new InvoicePaymentsProvider($this->client);
     }
 
-    /**
-     * Schedule times.
-     */
-    public function scheduleTimes()
-    {
-        return $this->scheduleTimesProvider;
-    }
 
     /**
-     * Supplier Invoice Accruals.
+     * Invoices
      */
-    public function supplierInvoiceAccruals()
+    public function invoices ()
     {
-        return $this->supplierInvoiceAccrualsProvider;
+        return new InvoicesProvider($this->client);
     }
 
-    /**
-     * Supplier Invoice External URL Connections.
-     */
-    public function supplierInvoiceExternalURLConnections()
-    {
-        return $this->supplierInvoiceExternalURLConnectionsProvider;
-    }
 
     /**
-     * Supplier Invoice File Connections.
+     * Labels
      */
-    public function supplierInvoiceFileConnections()
+    public function labels ()
     {
-        return $this->supplierInvoiceFileConnectionsProvider;
+        return new LabelsProvider($this->client);
     }
 
-    /**
-     * Supplier Invoice Payments.
-     */
-    public function supplierInvoicePayments()
-    {
-        return $this->supplierInvoicePaymentsProvider;
-    }
 
     /**
-     * Supplier Invoices.
+     * Locked Period
      */
-    public function supplierInvoices()
+    public function lockedPeriod ()
     {
-        return $this->supplierInvoicesProvider;
+        return new LockedPeriodProvider($this->client);
     }
 
-    /**
-     * Suppliers.
-     */
-    public function suppliers()
-    {
-        return $this->suppliersProvider;
-    }
 
     /**
-     * Tax Reductions.
+     * Modes of Payments
      */
-    public function taxReductions()
+    public function modesOfPayments ()
     {
-        return $this->taxReductionsProvider;
+        return new ModesOfPaymentsProvider($this->client);
     }
 
-    /**
-     * Terms of Deliveries.
-     */
-    public function termsOfDeliveries()
-    {
-        return $this->termsOfDeliveriesProvider;
-    }
 
     /**
-     * Terms of Payments.
+     * Offers
      */
-    public function termsOfPayments()
+    public function offers ()
     {
-        return $this->termsOfPaymentsProvider;
+        return new OffersProvider($this->client);
     }
 
-    /**
-     * Trusted Email Senders.
-     */
-    public function trustedEmailSenders()
-    {
-        return $this->trustedEmailSendersProvider;
-    }
 
     /**
-     * Units.
+     * Orders
      */
-    public function units()
+    public function orders ()
     {
-        return $this->unitsProvider;
+        return new OrdersProvider($this->client);
     }
 
-    /**
-     * Voucher File Connections.
-     */
-    public function voucherFileConnections()
-    {
-        return $this->voucherFileConnectionsProvider;
-    }
 
     /**
-     * Voucher Series.
+     * Predefined Accounts
      */
-    public function voucherSeries()
+    public function predefinedAccounts ()
     {
-        return $this->voucherSeriesProvider;
+        return new PredefinedAccountsProvider($this->client);
     }
 
-    /**
-     * Vouchers.
-     */
-    public function vouchers()
-    {
-        return $this->vouchersProvider;
-    }
 
     /**
-     * Way of Deliveries.
+     * Predefined Voucher Series
      */
-    public function wayOfDeliveries()
+    public function predefinedVoucherSeries ()
     {
-        return $this->wayOfDeliveriesProvider;
+        return new PredefinedVoucherSeriesProvider($this->client);
+    }
+
+
+    /**
+     * Price Lists
+     */
+    public function priceLists ()
+    {
+        return new PriceListsProvider($this->client);
+    }
+
+
+    /**
+     * Prices
+     */
+    public function prices ()
+    {
+        return new PricesProvider($this->client);
+    }
+
+
+    /**
+     * Print Templates
+     */
+    public function printTemplates ()
+    {
+        return new PrintTemplatesProvider($this->client);
+    }
+
+
+    /**
+     * Projects
+     */
+    public function projects ()
+    {
+        return new ProjectsProvider($this->client);
+    }
+
+
+    /**
+     * Salary transactions
+     */
+    public function salaryTransactions ()
+    {
+        return new SalaryTransactionsProvider($this->client);
+    }
+
+
+    /**
+     * Schedule times
+     */
+    public function scheduleTimes ()
+    {
+        return new ScheduleTimesProvider($this->client);
+    }
+
+
+    /**
+     * Supplier Invoice Accruals
+     */
+    public function supplierInvoiceAccruals ()
+    {
+        return new SupplierInvoiceAccrualsProvider($this->client);
+    }
+
+
+    /**
+     * Supplier Invoice External URL Connections
+     */
+    public function supplierInvoiceExternalURLConnections ()
+    {
+        return new SupplierInvoiceExternalURLConnectionsProvider($this->client);
+    }
+
+
+    /**
+     * Supplier Invoice File Connections
+     */
+    public function supplierInvoiceFileConnections ()
+    {
+        return new SupplierInvoiceFileConnectionsProvider($this->client);
+    }
+
+
+    /**
+     * Supplier Invoice Payments
+     */
+    public function supplierInvoicePayments ()
+    {
+        return new SupplierInvoicePaymentsProvider($this->client);
+    }
+
+
+    /**
+     * Supplier Invoices
+     */
+    public function supplierInvoices ()
+    {
+        return new SupplierInvoicesProvider($this->client);
+    }
+
+
+    /**
+     * Suppliers
+     */
+    public function suppliers ()
+    {
+        return new SuppliersProvider($this->client);
+    }
+
+
+    /**
+     * Tax Reductions
+     */
+    public function taxReductions ()
+    {
+        return new TaxReductionsProvider($this->client);
+    }
+
+
+    /**
+     * Terms of Deliveries
+     */
+    public function termsOfDeliveries ()
+    {
+        return new TermsOfDeliveriesProvider($this->client);
+    }
+
+
+    /**
+     * Terms of Payments
+     */
+    public function termsOfPayments ()
+    {
+        return new TermsOfPaymentsProvider($this->client);
+    }
+
+
+    /**
+     * Trusted Email Senders
+     */
+    public function trustedEmailSenders ()
+    {
+        return new TrustedEmailSendersProvider($this->client);
+    }
+
+
+    /**
+     * Units
+     */
+    public function units ()
+    {
+        return new UnitsProvider($this->client);
+    }
+
+
+    /**
+     * Voucher File Connections
+     */
+    public function voucherFileConnections ()
+    {
+        return new VoucherFileConnectionsProvider($this->client);
+    }
+
+
+    /**
+     * Voucher Series
+     */
+    public function voucherSeries ()
+    {
+        return new VoucherSeriesProvider($this->client);
+    }
+
+
+    /**
+     * Vouchers
+     */
+    public function vouchers ()
+    {
+        return new VouchersProvider($this->client);
+    }
+
+
+    /**
+     * Way of Deliveries
+     */
+    public function wayOfDeliveries ()
+    {
+        return new WayOfDeliveriesProvider($this->client);
     }
 }
