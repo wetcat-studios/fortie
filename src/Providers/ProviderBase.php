@@ -4,7 +4,7 @@ namespace Wetcat\Fortie\Providers;
 
 /*
 
-   Copyright 2015 Andreas Göransson
+   Copyright The Fortie authors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ namespace Wetcat\Fortie\Providers;
    limitations under the License.
 
 */
-
 
 use Wetcat\Fortie\Exceptions\FortnoxException;
 use Wetcat\Fortie\Exceptions\MissingRequiredAttributeException;
@@ -174,7 +173,7 @@ abstract class ProviderBase
         case 'post':
         case 'POST':
           // If there's a file path available then we'll proceed with uploading that file
-          if (! is_null($request->getFile())) {
+          if (!is_null($request->getFile())) {
               $body = fopen($request->getFile(), 'r');
               $response = $this->client->post($request->getUrl(), ['body' => $body]);
           }
@@ -182,7 +181,7 @@ abstract class ProviderBase
           // otherwise assume it's normal POST
           else {
               // Get the correct filter, if there is nothing required then set empty array
-              $required = (! is_null($request->getRequired()) ? $request->getRequired() : []);
+              $required = (!is_null($request->getRequired()) ? $request->getRequired() : []);
 
               $body = $this->handleData($required, $request->getWrapper(), $request->getData());
 
@@ -194,7 +193,7 @@ abstract class ProviderBase
         case 'put':
         case 'PUT':
           // If there's a file path available then we'll proceed with uploading that file
-          if (! is_null($request->getFile())) {
+          if (!is_null($request->getFile())) {
               $body = fopen($request->getFile(), 'r');
               $response = $this->client->put($request->getUrl(), ['body' => $body]);
           }
@@ -202,7 +201,7 @@ abstract class ProviderBase
           // otherwise assume it's normal PUT
           else {
               // Get the correct filter, if there is nothing required then set empty array
-              $required = (! is_null($request->getRequired()) ? $request->getRequired() : []);
+              $required = (!is_null($request->getRequired()) ? $request->getRequired() : []);
 
               $body = $this->handleData($required, $request->getWrapper(), $request->getData());
               $response = $this->client->put($request->getUrl(), ['json' => $body]);
@@ -405,10 +404,10 @@ abstract class ProviderBase
      * This will perform filtering on the supplied data, used when uploading data
      * to Fortnox.
      *
-     * @param null|mixed $requiredArr
-     * @param mixed $bodyWrapper
-     * @param mixed $data
-     * @param mixed $sanitize
+     * @param mixed|null $requiredArr
+     * @param mixed      $bodyWrapper
+     * @param mixed      $data
+     * @param mixed      $sanitize
      */
     protected function handleData($requiredArr = null, $bodyWrapper, $data, $sanitize = true)
     {
@@ -419,7 +418,7 @@ abstract class ProviderBase
         $writeable = array_intersect_key($filtered, array_flip($this->writeable));
 
         // Make sure all required data are set
-        if (! (count(array_intersect_key(array_flip($requiredArr), $writeable)) === count($requiredArr))) {
+        if (!(count(array_intersect_key(array_flip($requiredArr), $writeable)) === count($requiredArr))) {
             throw new MissingRequiredAttributeException($requiredArr);
         }
 
