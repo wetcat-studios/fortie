@@ -1,4 +1,6 @@
-<?php namespace Wetcat\Fortie\Providers\SupplierInvoices;
+<?php
+
+namespace Wetcat\Fortie\Providers\SupplierInvoices;
 
 /*
 
@@ -18,35 +20,30 @@
 
 */
 
-abstract class Filter {
+abstract class Filter
+{
+    /**
+     * Retrieves all invoices with the status “cancelled”.
+     */
+    const CANCELLED = 'cancelled';
 
-  /**
-   * Retrieves all invoices with the status “cancelled”
-   */
-  const CANCELLED = 'cancelled';
+    /**
+     * Retrieves all invoices that has been fully paid.
+     */
+    const FULLY_PAID = 'fullypaid';
 
+    /**
+     * Retrieves all invoices that is unpaid.
+     */
+    const UNPAID = 'unpaid';
 
-  /**
-   * Retrieves all invoices that has been fully paid
-   */
-  const FULLY_PAID = 'fullypaid';
+    /**
+     * Retrieves all invoices that is unpaid and overdue.
+     */
+    const UNPAID_OVERDUE = 'unpaidoverdue';
 
-
-  /**
-   * Retrieves all invoices that is unpaid
-   */
-  const UNPAID = 'unpaid';
-
-
-  /**
-   * Retrieves all invoices that is unpaid and overdue
-   */
-  const UNPAID_OVERDUE = 'unpaidoverdue';
-
-
-  /**
-   * Retrieves all invoices that is unbooked
-   */
-  const INBOOKED = 'unbooked';
-
-};
+    /**
+     * Retrieves all invoices that is unbooked.
+     */
+    const INBOOKED = 'unbooked';
+}

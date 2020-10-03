@@ -1,4 +1,6 @@
-<?php namespace Wetcat\Fortie\Providers\Currencies;
+<?php
+
+namespace Wetcat\Fortie\Providers\Currencies;
 
 /*
 
@@ -18,7 +20,6 @@
 
 */
 
-use Wetcat\Fortie\FortieRequest;
 use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\Traits\CountTrait;
 use Wetcat\Fortie\Traits\CreateTrait;
@@ -27,60 +28,56 @@ use Wetcat\Fortie\Traits\FetchTrait;
 use Wetcat\Fortie\Traits\FindTrait;
 use Wetcat\Fortie\Traits\UpdateTrait;
 
-class Provider extends ProviderBase {
+class Provider extends ProviderBase
+{
+    use CountTrait,
+        CreateTrait,
+        DeleteTrait,
+        FetchTrait,
+        FindTrait,
+        UpdateTrait;
 
-  use CountTrait,
-      CreateTrait,
-      DeleteTrait,
-      FetchTrait,
-      FindTrait,
-      UpdateTrait;
+    protected $wrapper = 'Currency';
 
-  protected $wrapper = 'Currency';
-  protected $wrapperGroup = 'Currencies';
+    protected $wrapperGroup = 'Currencies';
 
-  protected $attributes = [
-    'Url',
-    'BuyRate',
-    'Code',
-    'Date',
-    'Description',
-    'SellRate',
-    'Unit',
-  ];
+    protected $attributes = [
+        'Url',
+        'BuyRate',
+        'Code',
+        'Date',
+        'Description',
+        'SellRate',
+        'Unit',
+    ];
 
+    protected $writeable = [
+        'BuyRate',
+        'Code',
+        'Description',
+        'SellRate',
+        'Unit',
+    ];
 
-  protected $writeable = [
-    'BuyRate',
-    'Code',
-    'Description',
-    'SellRate',
-    'Unit',
-  ];
+    protected $required_create = [
+        'Code',
+        'Description',
+    ];
 
+    protected $required_update = [
+        'Code',
+    ];
 
-  protected $required_create = [
-    'Code',
-    'Description',
-  ];
+    /**
+     * The possible values for filtering the currencies.
+     *
+     * @var array
+     */
+    protected $available_filters = [
+    ];
 
-
-  protected $required_update = [
-    'Code',
-  ];
-
-
-  /**
-   * The possible values for filtering the currencies.
-   *
-   * @var array
-   */
-  protected $available_filters = [
-  ];
-
-
-  /**
-   * Override the REST path
-   */
-  protected $basePath = 'currencies';
+    /**
+     * Override the REST path.
+     */
+    protected $basePath = 'currencies';
 }

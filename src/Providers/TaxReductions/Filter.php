@@ -1,4 +1,6 @@
-<?php namespace Wetcat\Fortie\Providers\TaxReductions;
+<?php
+
+namespace Wetcat\Fortie\Providers\TaxReductions;
 
 /*
 
@@ -18,23 +20,20 @@
 
 */
 
-abstract class Filter {
+abstract class Filter
+{
+    /**
+     * Retrieves all tax reductions with ReferenceDocumentType “INVOICE”.
+     */
+    const INVOICES = 'invoices';
 
-  /**
-   * Retrieves all tax reductions with ReferenceDocumentType “INVOICE”
-   */
-  const INVOICES = 'invoices';
+    /**
+     * Retrieves all tax reductions with ReferenceDocumentType “ORDER”.
+     */
+    const ORDERS = 'orders';
 
-
-  /**
-   * Retrieves all tax reductions with ReferenceDocumentType “ORDER”
-   */
-  const ORDERS = 'orders';
-
-
-  /**
-   * Retrieves all tax reductions with ReferenceDocumentType “OFFER”
-   */
-  const OFFERS = 'offers';
-
-};
+    /**
+     * Retrieves all tax reductions with ReferenceDocumentType “OFFER”.
+     */
+    const OFFERS = 'offers';
+}

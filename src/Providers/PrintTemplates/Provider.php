@@ -1,4 +1,6 @@
-<?php namespace Wetcat\Fortie\Providers\PrintTemplates;
+<?php
+
+namespace Wetcat\Fortie\Providers\PrintTemplates;
 
 /*
 
@@ -18,48 +20,43 @@
 
 */
 
-use Wetcat\Fortie\FortieRequest;
 use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\Traits\FetchTrait;
 
-class Provider extends ProviderBase {
+class Provider extends ProviderBase
+{
+    use FetchTrait;
 
-  use FetchTrait;
+    protected $wrapper = 'PrintTemplate';
 
-  protected $wrapper = 'PrintTemplate';
-  protected $wrapperGroup = 'PrintTemplates';
+    protected $wrapperGroup = 'PrintTemplates';
 
-  protected $attributes = [
-    'Template',
-    'Name',
-  ];
+    protected $attributes = [
+        'Template',
+        'Name',
+    ];
 
+    protected $writeable = [
+        // 'Template',
+        // 'Name',
+    ];
 
-  protected $writeable = [
-    // 'Template',
-    // 'Name',
-  ];
+    protected $required_create = [
+    ];
 
+    protected $required_update = [
+    ];
 
-  protected $required_create = [
-  ];
+    /**
+     * The possible values for filtering.
+     *
+     * @var array
+     */
+    protected $available_filters = [
+    ];
 
-
-  protected $required_update = [
-  ];
-
-
-  /**
-   * The possible values for filtering.
-   *
-   * @var array
-   */
-  protected $available_filters = [
-  ];
-
-
-  /**
-   * Override the REST path
-   */
-  protected $basePath = 'printtemplates';
+    /**
+     * Override the REST path.
+     */
+    protected $basePath = 'printtemplates';
 }

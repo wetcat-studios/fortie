@@ -1,4 +1,6 @@
-<?php namespace Wetcat\Fortie\Providers\InvoiceAccruals;
+<?php
+
+namespace Wetcat\Fortie\Providers\InvoiceAccruals;
 
 /*
 
@@ -18,7 +20,6 @@
 
 */
 
-use Wetcat\Fortie\FortieRequest;
 use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\Traits\CountTrait;
 use Wetcat\Fortie\Traits\CreateTrait;
@@ -27,69 +28,65 @@ use Wetcat\Fortie\Traits\FetchTrait;
 use Wetcat\Fortie\Traits\FindTrait;
 use Wetcat\Fortie\Traits\UpdateTrait;
 
-class Provider extends ProviderBase {
+class Provider extends ProviderBase
+{
+    use CountTrait,
+        CreateTrait,
+        DeleteTrait,
+        FetchTrait,
+        FindTrait,
+        UpdateTrait;
 
-  use CountTrait,
-      CreateTrait,
-      DeleteTrait,
-      FetchTrait,
-      FindTrait,
-      UpdateTrait;
+    protected $wrapper = 'InvoiceAccrual';
 
-  protected $wrapper = 'InvoiceAccrual';
-  protected $wrapperGroup = 'InvoiceAccruals';
+    protected $wrapperGroup = 'InvoiceAccruals';
 
-  protected $attributes = [
-    'Url',
-    'AccrualAccount',
-    'Description',
-    'EndDate',
-    'InvoiceAccrualRows',
-    'InvoiceNumber',
-    'Period',
-    'RevenueAccount',
-    'StartDate',
-    'Times',
-    'Total',
-    'VATIncluded',
-  ];
+    protected $attributes = [
+        'Url',
+        'AccrualAccount',
+        'Description',
+        'EndDate',
+        'InvoiceAccrualRows',
+        'InvoiceNumber',
+        'Period',
+        'RevenueAccount',
+        'StartDate',
+        'Times',
+        'Total',
+        'VATIncluded',
+    ];
 
+    protected $writeable = [
+        // 'Url',
+        'AccrualAccount',
+        'Description',
+        'EndDate',
+        'InvoiceAccrualRows',
+        'InvoiceNumber',
+        'Period',
+        'RevenueAccount',
+        'StartDate',
+        // 'Times',
+        'Total',
+        'VATIncluded',
+    ];
 
-  protected $writeable = [
-    // 'Url',
-    'AccrualAccount',
-    'Description',
-    'EndDate',
-    'InvoiceAccrualRows',
-    'InvoiceNumber',
-    'Period',
-    'RevenueAccount',
-    'StartDate',
-    // 'Times',
-    'Total',
-    'VATIncluded',
-  ];
+    protected $required_create = [
+    ];
 
+    protected $required_update = [
+    ];
 
-  protected $required_create = [
-  ];
+    /**
+     * The possible values for filtering.
+     *
+     * @var array
+     */
+    protected $available_filters = [
+    ];
 
-
-  protected $required_update = [
-  ];
-
-
-  /**
-   * The possible values for filtering.
-   *
-   * @var array
-   */
-  protected $available_filters = [
-  ];
-
-
-  /**
-   * Override the REST path
-   */
-  protected $basePath = 'invoiceaccruals';
+    /**
+     * Override the REST path.
+     */
+    protected $basePath = 'invoiceaccruals';
 }

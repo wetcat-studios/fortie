@@ -1,4 +1,6 @@
-<?php namespace Wetcat\Fortie\Providers\CostCenters;
+<?php
+
+namespace Wetcat\Fortie\Providers\CostCenters;
 
 /*
 
@@ -18,7 +20,6 @@
 
 */
 
-use Wetcat\Fortie\FortieRequest;
 use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\Traits\CountTrait;
 use Wetcat\Fortie\Traits\CreateTrait;
@@ -27,55 +28,51 @@ use Wetcat\Fortie\Traits\FetchTrait;
 use Wetcat\Fortie\Traits\FindTrait;
 use Wetcat\Fortie\Traits\UpdateTrait;
 
-class Provider extends ProviderBase {
+class Provider extends ProviderBase
+{
+    use CountTrait,
+        CreateTrait,
+        DeleteTrait,
+        FetchTrait,
+        FindTrait,
+        UpdateTrait;
 
-  use CountTrait,
-      CreateTrait,
-      DeleteTrait,
-      FetchTrait,
-      FindTrait,
-      UpdateTrait;
+    protected $wrapper = 'CostCenter';
 
-  protected $wrapper = 'CostCenter';
-  protected $wrapperGroup = 'CostCenters';
+    protected $wrapperGroup = 'CostCenters';
 
-  protected $attributes = [
-    'Url',
-    'Code',
-    'Description',
-    'Note',
-    'Active',
-  ];
+    protected $attributes = [
+        'Url',
+        'Code',
+        'Description',
+        'Note',
+        'Active',
+    ];
 
+    protected $writeable = [
+        // 'Url',
+        'Code',
+        'Description',
+        'Note',
+        'Active',
+    ];
 
-  protected $writeable = [
-    // 'Url',
-    'Code',
-    'Description',
-    'Note',
-    'Active',
-  ];
+    protected $required_create = [
+    ];
 
+    protected $required_update = [
+    ];
 
-  protected $required_create = [
-  ];
+    /**
+     * The possible values for filtering.
+     *
+     * @var array
+     */
+    protected $available_filters = [
+    ];
 
-
-  protected $required_update = [
-  ];
-
-
-  /**
-   * The possible values for filtering.
-   *
-   * @var array
-   */
-  protected $available_filters = [
-  ];
-
-
-  /**
-   * Override the REST path
-   */
-  protected $basePath = 'costcenters';
+    /**
+     * Override the REST path.
+     */
+    protected $basePath = 'costcenters';
 }

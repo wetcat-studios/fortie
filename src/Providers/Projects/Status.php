@@ -1,4 +1,6 @@
-<?php namespace Wetcat\Fortie\Providers\Projects;
+<?php
+
+namespace Wetcat\Fortie\Providers\Projects;
 
 /*
 
@@ -18,23 +20,20 @@
 
 */
 
-class Status {
+class Status
+{
+    /**
+     * Project was not started yet.
+     */
+    const NOT_STARTED = 'NOTSTARTED';
 
-  /**
-   * Project was not started yet
-   */
-  const NOT_STARTED = 'NOTSTARTED';
+    /**
+     * Project was started, and is ongoing.
+     */
+    const ONGOING = 'ONGOING';
 
-
-  /**
-   * Project was started, and is ongoing
-   */
-  const ONGOING = 'ONGOING';
-
-
-  /**
-   * Project was completed
-   */
-  const COMPLETED = 'COMPLETED';
-
-};
+    /**
+     * Project was completed.
+     */
+    const COMPLETED = 'COMPLETED';
+}

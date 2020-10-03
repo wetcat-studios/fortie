@@ -1,4 +1,6 @@
-<?php namespace Wetcat\Fortie\Providers\SupplierInvoicePayments;
+<?php
+
+namespace Wetcat\Fortie\Providers\SupplierInvoicePayments;
 
 /*
 
@@ -18,180 +20,176 @@
 
 */
 
-use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\FortieRequest;
+use Wetcat\Fortie\Providers\ProviderBase;
 
-class Provider extends ProviderBase {
+class Provider extends ProviderBase
+{
+    protected $attributes = [
+        'Url',
+        'Amount',
+        'AmountCurrency',
+        'Booked',
+        'Currency',
+        'CurrencyRate',
+        'CurrencyUnit',
+        'Information',
+        'InvoiceNumber',
+        'InvoiceDueDate',
+        'InvoiceOCR',
+        'InvoiceSupplierName',
+        'InvoiceSupplierNumber',
+        'InvoiceTotal',
+        'ModeOfPayment',
+        'Number',
+        'PaymentDate',
+        'Source',
+        'VoucherNumber',
+        'VoucherSeries',
+        'VoucherYear',
+        'WriteOffs',
+    ];
 
-  protected $attributes = [
-    'Url',
-    'Amount',
-    'AmountCurrency',
-    'Booked',
-    'Currency',
-    'CurrencyRate',
-    'CurrencyUnit',
-    'Information',
-    'InvoiceNumber',
-    'InvoiceDueDate',
-    'InvoiceOCR',
-    'InvoiceSupplierName',
-    'InvoiceSupplierNumber',
-    'InvoiceTotal',
-    'ModeOfPayment',
-    'Number',
-    'PaymentDate',
-    'Source',
-    'VoucherNumber',
-    'VoucherSeries',
-    'VoucherYear',
-    'WriteOffs',
-  ];
+    protected $writeable = [
+        // 'Url',
+        'Amount',
+        'AmountCurrency',
+        // 'Booked',
+        // 'Currency',
+        'CurrencyRate',
+        // 'CurrencyUnit',
+        'Information',
+        'InvoiceNumber',
+        // 'InvoiceDueDate',
+        'InvoiceOCR',
+        // 'InvoiceSupplierName',
+        // 'InvoiceSupplierNumber',
+        // 'InvoiceTotal',
+        'ModeOfPayment',
+        // 'Number',
+        'PaymentDate',
+        // 'Source',
+        // 'VoucherNumber',
+        // 'VoucherSeries',
+        // 'VoucherYear',
+        'WriteOffs',
+    ];
 
+    protected $required_create = [
+    ];
 
-  protected $writeable = [
-    // 'Url',
-    'Amount',
-    'AmountCurrency',
-    // 'Booked',
-    // 'Currency',
-    'CurrencyRate',
-    // 'CurrencyUnit',
-    'Information',
-    'InvoiceNumber',
-    // 'InvoiceDueDate',
-    'InvoiceOCR',
-    // 'InvoiceSupplierName',
-    // 'InvoiceSupplierNumber',
-    // 'InvoiceTotal',
-    'ModeOfPayment',
-    // 'Number',
-    'PaymentDate',
-    // 'Source',
-    // 'VoucherNumber',
-    // 'VoucherSeries',
-    // 'VoucherYear',
-    'WriteOffs',
-  ];
+    protected $required_update = [
+    ];
 
+    /**
+     * Override the REST path.
+     */
+    protected $basePath = 'supplierinvoicepayments';
 
-  protected $required_create = [
-  ];
+    /**
+     * Retrieves a list of supplier invoice payments.
+     *
+     * @param null|mixed $page
+     *
+     * @return array
+     */
+    public function all($page = null)
+    {
+        $req = new FortieRequest();
+        $req->method('GET');
+        $req->path($this->basePath);
 
+        if (! is_null($page)) {
+            $req->param('page', $page);
+        }
 
-  protected $required_update = [
-  ];
-
-
-  /**
-   * Override the REST path
-   */
-  protected $basePath = 'supplierinvoicepayments';
-
-
-  /**
-   * Retrieves a list of supplier invoice payments.
-   *
-   * @return array
-   */
-  public function all ($page = null)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath);
-
-    if (!is_null($page)) {  
-      $req->param('page', $page);
+        return $this->send($req->build());
     }
 
-    return $this->send($req->build());
-  }
+    /**
+     * Retrieves a single supplier invoice payment.
+     *
+     * @param $number
+     *
+     * @return array
+     */
+    public function find($number)
+    {
+        $req = new FortieRequest();
+        $req->method('GET');
+        $req->path($this->basePath)->path($number);
 
+        return $this->send($req->build());
+    }
 
-  /**
-   * Retrieves a single supplier invoice payment.
-   *
-   * @param $number
-   * @return array
-   */
-  public function find ($number)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath)->path($number);
+    /**
+     * Creates a supplier invoice payment.
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    public function create(array $data)
+    {
+        $req = new FortieRequest();
+        $req->method('POST');
+        $req->path($this->basePath);
+        $req->wrapper('SupplierInvoicePayment');
+        $req->data($data);
+        $req->setRequired($this->required_create);
 
-    return $this->send($req->build());
-  }
+        return $this->send($req->build());
+    }
 
+    /**
+     * Updates a supplier invoice payment.
+     *
+     * @param $number
+     * @param array $data
+     *
+     * @return array
+     */
+    public function update($number, array $data)
+    {
+        $req = new FortieRequest();
+        $req->method('PUT');
+        $req->path($this->basePath)->path($number);
+        $req->wrapper('SupplierInvoicePayment');
+        $req->setRequired($this->required_update);
+        $req->data($data);
 
-  /**
-   * Creates a supplier invoice payment.
-   *
-   * @param array   $data
-   * @return array
-   */
-  public function create (array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('POST');
-    $req->path($this->basePath);
-    $req->wrapper('SupplierInvoicePayment');
-    $req->data($data);
-    $req->setRequired($this->required_create);
+        return $this->send($req->build());
+    }
 
-    return $this->send($req->build());
-  }
+    /**
+     * Removes a supplier invoice payment.
+     *
+     * @param $number
+     *
+     * @return null
+     */
+    public function delete($number)
+    {
+        $req = new FortieRequest();
+        $req->method('DELETE');
+        $req->path($this->basePath)->path($number);
 
+        return $this->send($req->build());
+    }
 
-  /**
-   * Updates a supplier invoice payment.
-   *
-   * @param $number
-   * @param array   $data
-   * @return array
-   */
-  public function update ($number, array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('PUT');
-    $req->path($this->basePath)->path($number);
-    $req->wrapper('SupplierInvoicePayment');
-    $req->setRequired($this->required_update);
-    $req->data($data);
+    /**
+     * Bookkeeps the supplier invoice payment.
+     *
+     * @param $number
+     *
+     * @return array
+     */
+    public function bookkeep($number)
+    {
+        $req = new FortieRequest();
+        $req->method('PUT');
+        $req->path($this->basePath)->path($number)->path('bookkeep');
 
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Removes a supplier invoice payment.
-   *
-   * @param $number
-   * @return null
-   */
-  public function delete ($number)
-  {
-    $req = new FortieRequest();
-    $req->method('DELETE');
-    $req->path($this->basePath)->path($number);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Bookkeeps the supplier invoice payment
-   *
-   * @param $number
-   * @return array
-   */
-  public function bookkeep ($number)
-  {
-    $req = new FortieRequest();
-    $req->method('PUT');
-    $req->path($this->basePath)->path($number)->path('bookkeep');
-
-    return $this->send($req->build());
-  }
-
+        return $this->send($req->build());
+    }
 }

@@ -1,4 +1,6 @@
-<?php namespace Wetcat\Fortie\Providers\SupplierInvoiceFileConnections;
+<?php
+
+namespace Wetcat\Fortie\Providers\SupplierInvoiceFileConnections;
 
 /*
 
@@ -18,110 +20,106 @@
 
 */
 
-use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\FortieRequest;
+use Wetcat\Fortie\Providers\ProviderBase;
 
-class Provider extends ProviderBase {
+class Provider extends ProviderBase
+{
+    protected $attributes = [
+        'Url',
+        'FileId',
+        'Name',
+        'SupplierInvoiceNumber',
+        'SupplierName',
+    ];
 
-  protected $attributes = [
-    'Url',
-    'FileId',
-    'Name',
-    'SupplierInvoiceNumber',
-    'SupplierName',
-  ];
+    protected $writeable = [
+        // 'Url',
+        'FileId',
+        // 'Name',
+        'SupplierInvoiceNumber',
+        // 'SupplierName',
+    ];
 
+    protected $required_create = [
+    ];
 
-  protected $writeable = [
-    // 'Url',
-    'FileId',
-    // 'Name',
-    'SupplierInvoiceNumber',
-    // 'SupplierName',
-  ];
+    protected $required_update = [
+    ];
 
+    /**
+     * Override the REST path.
+     */
+    protected $basePath = 'supplierinvoicefileconnections';
 
-  protected $required_create = [
-  ];
+    /**
+     * Retrieves a list of supplier invoice file connections.
+     *
+     * @param null|mixed $page
+     *
+     * @return array
+     */
+    public function all($page = null)
+    {
+        $req = new FortieRequest();
+        $req->method('GET');
+        $req->path($this->basePath);
 
+        if (! is_null($page)) {
+            $req->param('page', $page);
+        }
 
-  protected $required_update = [
-  ];
-
-
-  /**
-   * Override the REST path
-   */
-  protected $basePath = 'supplierinvoicefileconnections';
-
-
-  /**
-   * Retrieves a list of supplier invoice file connections.
-   *
-   * @return array
-   */
-  public function all ($page = null)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath);
-
-    if (!is_null($page)) {  
-      $req->param('page', $page);
+        return $this->send($req->build());
     }
 
-    return $this->send($req->build());
-  }
+    /**
+     * Retrieves a single supplier invoice file connection.
+     *
+     * @param $fileId
+     *
+     * @return array
+     */
+    public function find($fileId)
+    {
+        $req = new FortieRequest();
+        $req->method('GET');
+        $req->path($this->basePath)->path($fileId);
 
+        return $this->send($req->build());
+    }
 
-  /**
-   * Retrieves a single supplier invoice file connection.
-   *
-   * @param $fileId
-   * @return array
-   */
-  public function find ($fileId)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath)->path($fileId);
+    /**
+     * Creates an supplier invoice file connection.
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    public function create(array $data)
+    {
+        $req = new FortieRequest();
+        $req->method('POST');
+        $req->path($this->basePath);
+        $req->wrapper('SupplierInvoiceFileConnection');
+        $req->data($data);
+        $req->setRequired($this->required_create);
 
-    return $this->send($req->build());
-  }
+        return $this->send($req->build());
+    }
 
+    /**
+     * Removes an supplier invoice file connection.
+     *
+     * @param $fileId
+     *
+     * @return null
+     */
+    public function delete($fileId)
+    {
+        $req = new FortieRequest();
+        $req->method('DELETE');
+        $req->path($this->basePath)->path($fileId);
 
-  /**
-   * Creates an supplier invoice file connection.
-   *
-   * @param array   $data
-   * @return array
-   */
-  public function create (array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('POST');
-    $req->path($this->basePath);
-    $req->wrapper('SupplierInvoiceFileConnection');
-    $req->data($data);
-    $req->setRequired($this->required_create);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Removes an supplier invoice file connection.
-   *
-   * @param $fileId
-   * @return null
-   */
-  public function delete ($fileId)
-  {
-    $req = new FortieRequest();
-    $req->method('DELETE');
-    $req->path($this->basePath)->path($fileId);
-
-    return $this->send($req->build());
-  }
-
+        return $this->send($req->build());
+    }
 }

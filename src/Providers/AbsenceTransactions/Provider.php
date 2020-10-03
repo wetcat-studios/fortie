@@ -1,4 +1,6 @@
-<?php namespace Wetcat\Fortie\Providers\AbsenceTransactions;
+<?php
+
+namespace Wetcat\Fortie\Providers\AbsenceTransactions;
 
 /*
 
@@ -18,136 +20,134 @@
 
 */
 
-use Wetcat\Fortie\Providers\ProviderBase;
+use DateTimeInterface;
 use Wetcat\Fortie\FortieRequest;
+use Wetcat\Fortie\Providers\ProviderBase;
 
-class Provider extends ProviderBase {
+class Provider extends ProviderBase
+{
+    protected $attributes = [
+        'EmployeeId',
+        'CauseCode',
+        'Date',
+        'Extent',
+        'Hours',
+        'HolidayEntitling',
+    ];
 
-  protected $attributes = [
-    'EmployeeId',
-    'CauseCode',
-    'Date',
-    'Extent',
-    'Hours',
-    'HolidayEntitling'
-  ];
+    protected $writeable = [
+        'EmployeeId',
+        'CauseCode',
+        'Date',
+        'Extent',
+        'Hours',
+        'HolidayEntitling',
+    ];
 
+    protected $required_create = [
+    ];
 
-  protected $writeable = [
-    'EmployeeId',
-    'CauseCode',
-    'Date',
-    'Extent',
-    'Hours',
-    'HolidayEntitling'
-  ];
+    protected $required_update = [
+    ];
 
+    /**
+     * Override the REST path.
+     */
+    protected $basePath = 'absencetransactions';
 
-  protected $required_create = [
-  ];
+    /**
+     * Retrieves a list of accounts. The accounts are returned sorted
+     * by account number with the lowest number appearing first.
+     *
+     * @param null|mixed $page
+     *
+     * @return array
+     */
+    public function all($page = null)
+    {
+        $req = new FortieRequest();
+        $req->method('GET');
+        $req->path($this->basePath);
 
+        if (! is_null($page)) {
+            $req->param('page', $page);
+        }
 
-  protected $required_update = [
-  ];
-
-
-  /**
-   * Override the REST path
-   */
-  protected $basePath = 'absencetransactions';
-
-
-  /**
-   * Retrieves a list of accounts. The accounts are returned sorted 
-   * by account number with the lowest number appearing first.
-   *
-   * @return array
-   */
-  public function all ($page = null)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath);
-
-    if (!is_null($page)) {  
-      $req->param('page', $page);
+        return $this->send($req->build());
     }
 
-    return $this->send($req->build());
-  }
+    /**
+     * Retrieves the details of an account. You need to supply the unique
+     * account number that was returned when the account was created or
+     * retrieved from the list of accounts.
+     *
+     * @param $id
+     *
+     * @return array
+     */
+    public function find($id)
+    {
+        $req = new FortieRequest();
+        $req->method('GET');
+        $req->path($this->basePath)->path($id);
 
+        return $this->send($req->build());
+    }
 
-  /**
-   * Retrieves the details of an account. You need to supply the unique 
-   * account number that was returned when the account was created or 
-   * retrieved from the list of accounts.
-   *
-   * @param $id
-   * @return array
-   */
-  public function find ($id)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath)->path($id);
+    /**
+     * Creates a new absence transaction for an employee.
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    public function create(array $data)
+    {
+        $req = new FortieRequest();
+        $req->method('POST');
+        $req->path($this->basePath);
+        $req->wrapper('AbsenceTransaction');
+        $req->data($data);
+        $req->setRequired($this->required_create);
 
-    return $this->send($req->build());
-  }
+        return $this->send($req->build());
+    }
 
+    /**
+     * Updates an absence transaction.
+     *
+     * @param array $data
+     * @param mixed $id
+     *
+     * @return array
+     */
+    public function update($id, array $data)
+    {
+        $req = new FortieRequest();
+        $req->method('PUT');
+        $req->path($this->basePath)->path($id);
+        $req->wrapper('AbsenceTransaction');
+        $req->setRequired($this->required_update);
+        $req->data($data);
 
-  /**
-   * Creates a new absence transaction for an employee.
-   *
-   * @param array   $data
-   * @return array
-   */
-  public function create (array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('POST');
-    $req->path($this->basePath);
-    $req->wrapper('AbsenceTransaction');
-    $req->data($data);
-    $req->setRequired($this->required_create);
+        return $this->send($req->build());
+    }
 
-    return $this->send($req->build());
-  }
+    /**
+     * Removes an absence transaction.
+     *
+     * @param string $employeeId
+     * @param DateTimeInterface $date
+     * @param string $causeCode
+     *
+     * @return array
+     */
+    public function delete($employeeId, DateTimeInterface $date, $causeCode)
+    {
+        $req = new FortieRequest();
+        $req->method('DELETE');
+        $req->path($this->basePath)->path($employeeId)->path($date->format('Y-m-d'))->path($causeCode);
 
-
-  /**
-   * Updates an absence transaction.
-   *
-   * @param array   $data
-   * @return array
-   */
-  public function update ($id, array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('PUT');
-    $req->path($this->basePath)->path($id);
-    $req->wrapper('AbsenceTransaction');
-    $req->setRequired($this->required_update);
-    $req->data($data);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Removes an absence transaction.
-   *
-   * @param string $employeeId
-   * @param \DateTimeInterface $date
-   * @param string $causeCode
-   *
-   * @return array
-   */
-  public function delete ($employeeId, \DateTimeInterface $date, $causeCode)
-  {
-    $req = new FortieRequest();
-    $req->method('DELETE');
-    $req->path($this->basePath)->path($employeeId)->path($date->format('Y-m-d'))->path($causeCode);
-
-    return $this->send($req->build());
-  }
+        return $this->send($req->build());
+    }
 }

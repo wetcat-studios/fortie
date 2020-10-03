@@ -1,4 +1,8 @@
-<?php namespace Wetcat\Fortie\Exceptions;
+<?php
+
+namespace Wetcat\Fortie\Exceptions;
+
+use Exception;
 
 /*
 
@@ -18,8 +22,8 @@
 
 */
 
-class FortnoxException extends \Exception {
-
+class FortnoxException extends Exception
+{
     public $error;
 
     public $message;
@@ -36,5 +40,4 @@ class FortnoxException extends \Exception {
 
         $this->code = $code;
     }
-
 }

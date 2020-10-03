@@ -1,4 +1,6 @@
-<?php namespace Wetcat\Fortie\Providers\LockedPeriod;
+<?php
+
+namespace Wetcat\Fortie\Providers\LockedPeriod;
 
 /*
 
@@ -18,49 +20,43 @@
 
 */
 
-use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\FortieRequest;
+use Wetcat\Fortie\Providers\ProviderBase;
 
-class Provider extends ProviderBase {
+class Provider extends ProviderBase
+{
+    protected $attributes = [
+        'Url',
+        'EndDate',
+    ];
 
-  protected $attributes = [
-    'Url',
-    'EndDate',
-  ];
+    protected $writeable = [
+        // 'Url',
+        // 'EndDate',
+    ];
 
+    protected $required_create = [
+    ];
 
-  protected $writeable = [
-    // 'Url',
-    // 'EndDate',
-  ];
+    protected $required_update = [
+    ];
 
+    /**
+     * Override the REST path.
+     */
+    protected $basePath = 'settings/lockedperiod';
 
-  protected $required_create = [
-  ];
+    /**
+     * Retrieves the locked period. If no date is returned, no period is locked.
+     *
+     * @return array
+     */
+    public function get()
+    {
+        $req = new FortieRequest();
+        $req->method('GET');
+        $req->path($this->basePath);
 
-
-  protected $required_update = [
-  ];
-
-
-  /**
-   * Override the REST path
-   */
-  protected $basePath = 'settings/lockedperiod';
-
-
-  /**
-   * Retrieves the locked period. If no date is returned, no period is locked.
-   *
-   * @return array
-   */
-  public function get ()
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath);
-
-    return $this->send($req->build());
-  }
-
+        return $this->send($req->build());
+    }
 }

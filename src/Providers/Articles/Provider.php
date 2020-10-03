@@ -1,4 +1,6 @@
-<?php namespace Wetcat\Fortie\Providers\Articles;
+<?php
+
+namespace Wetcat\Fortie\Providers\Articles;
 
 /*
 
@@ -18,7 +20,6 @@
 
 */
 
-use Wetcat\Fortie\FortieRequest;
 use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\Traits\CountTrait;
 use Wetcat\Fortie\Traits\CreateTrait;
@@ -27,116 +28,112 @@ use Wetcat\Fortie\Traits\FetchTrait;
 use Wetcat\Fortie\Traits\FindTrait;
 use Wetcat\Fortie\Traits\UpdateTrait;
 
-class Provider extends ProviderBase {
+class Provider extends ProviderBase
+{
+    use CountTrait,
+        CreateTrait,
+        DeleteTrait,
+        FetchTrait,
+        FindTrait,
+        UpdateTrait;
 
-  use CountTrait,
-      CreateTrait,
-      DeleteTrait,
-      FetchTrait,
-      FindTrait,
-      UpdateTrait;
+    protected $wrapper = 'Article';
 
-  protected $wrapper = 'Article';
-  protected $wrapperGroup = 'Articles';
+    protected $wrapperGroup = 'Articles';
 
-  protected $attributes = [
-    'Url',
-    'ArticleNumber',
-    'Bulky',
-    'ConstructionAccount',
-    'Depth',
-    'Description',
-    'DisposableQuantity',
-    'EAN',
-    'EUAccount',
-    'EUVATAccount',
-    'ExportAccount',
-    'Height',
-    'Housework',
-    'HouseworkType',
-    'Manufacturer',
-    'ManufacturerArticleNumber',
-    'Note',
-    'PurchaseAccount',
-    'PurchasePrice',
-    'QuantityInStock',
-    'ReservedQuantity',
-    'SalesAccount',
-    'SalesPrice',
-    'StockGoods',
-    'StockPlace',
-    'StockValue',
-    'StockWarning',
-    'SupplierName',
-    'SupplierNumber',
-    'Type',
-    'Unit',
-    'VAT',
-    'WebshopArticle',
-    'Weight',
-    'Width',
-    'Expired',
-  ];
+    protected $attributes = [
+        'Url',
+        'ArticleNumber',
+        'Bulky',
+        'ConstructionAccount',
+        'Depth',
+        'Description',
+        'DisposableQuantity',
+        'EAN',
+        'EUAccount',
+        'EUVATAccount',
+        'ExportAccount',
+        'Height',
+        'Housework',
+        'HouseworkType',
+        'Manufacturer',
+        'ManufacturerArticleNumber',
+        'Note',
+        'PurchaseAccount',
+        'PurchasePrice',
+        'QuantityInStock',
+        'ReservedQuantity',
+        'SalesAccount',
+        'SalesPrice',
+        'StockGoods',
+        'StockPlace',
+        'StockValue',
+        'StockWarning',
+        'SupplierName',
+        'SupplierNumber',
+        'Type',
+        'Unit',
+        'VAT',
+        'WebshopArticle',
+        'Weight',
+        'Width',
+        'Expired',
+    ];
 
+    protected $writeable = [
+        'ArticleNumber',
+        'Bulky',
+        'ConstructionAccount',
+        'Depth',
+        'Description',
+        'EAN',
+        'EUAccount',
+        'EUVATAccount',
+        'ExportAccount',
+        'Height',
+        'Housework',
+        'HouseworkType',
+        'Manufacturer',
+        'ManufacturerArticleNumber',
+        'Note',
+        'PurchaseAccount',
+        'PurchasePrice',
+        'QuantityInStock',
+        'ReservedQuantity',
+        'SalesAccount',
+        'StockGoods',
+        'StockPlace',
+        'StockWarning',
+        'SupplierNumber',
+        'Type',
+        'Unit',
+        'VAT',
+        'WebshopArticle',
+        'Weight',
+        'Width',
+        'Expired',
+    ];
 
-  protected $writeable = [
-    'ArticleNumber',
-    'Bulky',
-    'ConstructionAccount',
-    'Depth',
-    'Description',
-    'EAN',
-    'EUAccount',
-    'EUVATAccount',
-    'ExportAccount',
-    'Height',
-    'Housework',
-    'HouseworkType',
-    'Manufacturer',
-    'ManufacturerArticleNumber',
-    'Note',
-    'PurchaseAccount',
-    'PurchasePrice',
-    'QuantityInStock',
-    'ReservedQuantity',
-    'SalesAccount',
-    'StockGoods',
-    'StockPlace',
-    'StockWarning',
-    'SupplierNumber',
-    'Type',
-    'Unit',
-    'VAT',
-    'WebshopArticle',
-    'Weight',
-    'Width',
-    'Expired',
-  ];
+    protected $required_create = [
+        'Description',
+    ];
 
+    protected $required_update = [
+        'ArticleNumber',
+    ];
 
-  protected $required_create = [
-    'Description', 
-  ];
+    /**
+     * The possible values for filtering the articles.
+     *
+     * @var array
+     */
+    protected $available_filters = [
+        'active',
+        'inactive',
+    ];
 
-
-  protected $required_update = [
-    'ArticleNumber', 
-  ];
-
-
-  /**
-   * The possible values for filtering the articles.
-   *
-   * @var array
-   */
-  protected $available_filters = [
-    'active',
-    'inactive'
-  ];
-
-
-  /**
-   * Override the REST path
-   */
-  protected $basePath = 'articles';
+    /**
+     * Override the REST path.
+     */
+    protected $basePath = 'articles';
 }

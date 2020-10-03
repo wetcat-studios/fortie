@@ -1,4 +1,6 @@
-<?php namespace Wetcat\Fortie\Providers\FinancialYears;
+<?php
+
+namespace Wetcat\Fortie\Providers\FinancialYears;
 
 /*
 
@@ -25,73 +27,70 @@ use Wetcat\Fortie\Traits\CreateTrait;
 use Wetcat\Fortie\Traits\FetchTrait;
 use Wetcat\Fortie\Traits\FindTrait;
 
-class Provider extends ProviderBase {
+class Provider extends ProviderBase
+{
+    use CountTrait,
+        CreateTrait,
+        FetchTrait,
+        FindTrait;
 
-  use CountTrait,
-      CreateTrait,
-      FetchTrait,
-      FindTrait;
+    protected $wrapper = 'FinancialYear';
 
-  protected $wrapper = 'FinancialYear';
-  protected $wrapperGroup = 'FinancialYears';
+    protected $wrapperGroup = 'FinancialYears';
 
-  protected $attributes = [
-    'Url',
-    'Id',
-    'FromDate',
-    'ToDate',
-    'AccountChartType',
-    'AccountingMethod',
-  ];
+    protected $attributes = [
+        'Url',
+        'Id',
+        'FromDate',
+        'ToDate',
+        'AccountChartType',
+        'AccountingMethod',
+    ];
 
+    protected $writeable = [
+        // 'Url',
+        // 'Id',
+        'FromDate',
+        'ToDate',
+        'AccountChartType',
+        'AccountingMethod',
+    ];
 
-  protected $writeable = [
-    // 'Url',
-    // 'Id',
-    'FromDate',
-    'ToDate',
-    'AccountChartType',
-    'AccountingMethod',
-  ];
+    protected $required_create = [
+    ];
 
-  protected $required_create = [
-  ];
+    protected $required_update = [
+    ];
 
+    /**
+     * The possible values for filtering.
+     *
+     * @var array
+     */
+    protected $available_filters = [
+    ];
 
-  protected $required_update = [
-  ];
+    /**
+     * Override the REST path.
+     */
+    protected $basePath = 'financialyears';
 
+    /**
+     * It is possible to find a financial year based on a date, this is done by
+     * a search with the parameter “date”.
+     *
+     * @param $code
+     * @param mixed $date
+     *
+     * @return array
+     */
+    public function search($date)
+    {
+        $req = new FortieRequest();
+        $req->method('GET');
+        $req->path($this->basePath)->path($id);
+        $req->param('date', $date);
 
-  /**
-   * The possible values for filtering.
-   *
-   * @var array
-   */
-  protected $available_filters = [
-  ];
-
-
-  /**
-   * Override the REST path
-   */
-  protected $basePath = 'financialyears';
-
-
-  /**
-   * It is possible to find a financial year based on a date, this is done by
-   * a search with the parameter “date”.
-   *
-   * @param $code
-   * @return array
-   */
-  public function search ($date)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath)->path($id);
-    $req->param('date', $date);
-
-    return $this->send($req->build());
-  }
-
+        return $this->send($req->build());
+    }
 }

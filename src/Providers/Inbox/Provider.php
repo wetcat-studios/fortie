@@ -1,4 +1,6 @@
-<?php namespace Wetcat\Fortie\Providers\Inbox;
+<?php
+
+namespace Wetcat\Fortie\Providers\Inbox;
 
 /*
 
@@ -18,170 +20,165 @@
 
 */
 
-use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\FortieRequest;
+use Wetcat\Fortie\Providers\ProviderBase;
 
-class Provider extends ProviderBase {
+class Provider extends ProviderBase
+{
+    protected $attributes_file = [
+        'Url',
+        'Comments',
+        'Id',
+        'Name',
+        'Path',
+        'Size',
+    ];
 
-  protected $attributes_file = [
-    'Url',
-    'Comments',
-    'Id',
-    'Name',
-    'Path',
-    'Size',
-  ];
+    protected $writeable_file = [
+    ];
 
+    protected $required_create_file = [
+    ];
 
-  protected $writeable_file = [
-  ];
+    protected $required_update_file = [
+    ];
 
+    protected $attributes_folder = [
+        'Url',
+        'Email',
+        'Files',
+        'Folders',
+        'Id',
+        'Name',
+    ];
 
-  protected $required_create_file = [
-  ];
+    protected $writeable_folder = [
+        // 'Url',
+        // 'Email',
+        // 'Files',
+        // 'Folders',
+        // 'Id',
+        'Name',
+    ];
 
+    protected $required_create_folder = [
+    ];
 
-  protected $required_update_file = [
-  ];
+    protected $required_update_folder = [
+    ];
 
+    /**
+     * Override the REST path.
+     */
+    protected $basePath = 'inbox';
 
-  protected $attributes_folder = [
-    'Url',
-    'Email',
-    'Files',
-    'Folders',
-    'Id',
-    'Name'
-  ];
+    /**
+     * Retrieves a list of files and folders.
+     *
+     * @param null|mixed $page
+     *
+     * @return array
+     */
+    public function all($page = null)
+    {
+        $req = new FortieRequest();
+        $req->method('GET');
+        $req->path($this->basePath);
 
+        if (! is_null($page)) {
+            $req->param('page', $page);
+        }
 
-  protected $writeable_folder = [
-    // 'Url',
-    // 'Email',
-    // 'Files',
-    // 'Folders',
-    // 'Id',
-    'Name'
-  ];
-
-
-  protected $required_create_folder = [
-  ];
-
-
-  protected $required_update_folder = [
-  ];
-
-
-  /**
-   * Override the REST path
-   */
-  protected $basePath = 'inbox';
-
-
-  /**
-   * Retrieves a list of files and folders.
-   *
-   * @return array
-   */
-  public function all ($page = null)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath);
-
-    if (!is_null($page)) {  
-      $req->param('page', $page);
+        return $this->send($req->build());
     }
 
-    return $this->send($req->build());
-  }
+    /**
+     * Retrieves a single file or folder.
+     *
+     * @param $id
+     *
+     * @return array
+     */
+    public function find($id)
+    {
+        $req = new FortieRequest();
+        $req->method('GET');
+        $req->path($this->basePath)->path($id);
 
+        return $this->send($req->build());
+    }
 
-  /**
-   * Retrieves a single file or folder.
-   *
-   * @param $id
-   * @return array
-   */
-  public function find ($id)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath)->path($id);
+    /**
+     * Upload a file to a specific subdirectory.
+     *
+     * @param $folderId
+     * @param $filePath
+     *
+     * @return array
+     */
+    public function upload($folderId, $filePath)
+    {
+        $req = new FortieRequest();
+        $req->method('POST');
+        $req->path($this->basePath);
+        $req->params(['folderid' => $folderId]);
+        $req->filePath($filePath);
 
-    return $this->send($req->build());
-  }
+        return $this->send($req->build());
+    }
 
+    /**
+     * Upload a file to a specific path.
+     *
+     * @param $folderId
+     * @param $filePath
+     * @param mixed $path
+     *
+     * @return array
+     */
+    public function uploadPath($path, $filePath)
+    {
+        $req = new FortieRequest();
+        $req->method('POST');
+        $req->path($this->basePath);
+        $req->params(['path' => $path]);
+        $req->filePath($filePath);
 
-  /**
-   * Upload a file to a specific subdirectory.
-   *
-   * @param $folderId
-   * @param $filePath
-   * @return array
-   */
-  public function upload ($folderId, $filePath)
-  {
-    $req = new FortieRequest();
-    $req->method('POST');
-    $req->path($this->basePath);
-    $req->params(['folderid' => $folderId]);
-    $req->filePath($filePath);
+        return $this->send($req->build());
+    }
 
-    return $this->send($req->build());
-  }
+    /**
+     * Removes a file or folder.
+     *
+     * @param array $data
+     * @param mixed $folderId
+     *
+     * @return array
+     */
+    public function delete($folderId)
+    {
+        $req = new FortieRequest();
+        $req->method('DELETE');
+        $req->path($this->basePath)->path($folderId);
 
+        return $this->send($req->build());
+    }
 
-  /**
-   * Upload a file to a specific path.
-   *
-   * @param $folderId
-   * @param $filePath
-   * @return array
-   */
-  public function uploadPath ($path, $filePath)
-  {
-    $req = new FortieRequest();
-    $req->method('POST');
-    $req->path($this->basePath);
-    $req->params(['path' => $path]);
-    $req->filePath($filePath);
+    /**
+     * Removes a file or folder.
+     *
+     * @param array $data
+     * @param mixed $path
+     *
+     * @return array
+     */
+    public function deletePath($path)
+    {
+        $req = new FortieRequest();
+        $req->method('DELETE');
+        $req->path($this->basePath);
+        $req->params(['path' => $path]);
 
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Removes a file or folder.
-   *
-   * @param array   $data
-   * @return array
-   */
-  public function delete ($folderId)
-  {
-    $req = new FortieRequest();
-    $req->method('DELETE');
-    $req->path($this->basePath)->path($folderId);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Removes a file or folder.
-   *
-   * @param array   $data
-   * @return array
-   */
-  public function deletePath ($path)
-  {
-    $req = new FortieRequest();
-    $req->method('DELETE');
-    $req->path($this->basePath);
-    $req->params(['path' => $path]);
-
-    return $this->send($req->build());
-  }
-
+        return $this->send($req->build());
+    }
 }

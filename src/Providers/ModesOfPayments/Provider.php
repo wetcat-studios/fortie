@@ -1,4 +1,6 @@
-<?php namespace Wetcat\Fortie\Providers\ModesOfPayments;
+<?php
+
+namespace Wetcat\Fortie\Providers\ModesOfPayments;
 
 /*
 
@@ -18,7 +20,6 @@
 
 */
 
-use Wetcat\Fortie\FortieRequest;
 use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\Traits\CountTrait;
 use Wetcat\Fortie\Traits\CreateTrait;
@@ -26,52 +27,48 @@ use Wetcat\Fortie\Traits\FetchTrait;
 use Wetcat\Fortie\Traits\FindTrait;
 use Wetcat\Fortie\Traits\UpdateTrait;
 
-class Provider extends ProviderBase {
+class Provider extends ProviderBase
+{
+    use CountTrait,
+        CreateTrait,
+        FetchTrait,
+        FindTrait,
+        UpdateTrait;
 
-  use CountTrait,
-      CreateTrait,
-      FetchTrait,
-      FindTrait,
-      UpdateTrait;
+    protected $wrapper = 'ModeOfPayment';
 
-  protected $wrapper = 'ModeOfPayment';
-  protected $wrapperGroup = 'ModesOfPayments';
+    protected $wrapperGroup = 'ModesOfPayments';
 
-  protected $attributes = [
-    'Url',
-    'Code',
-    'Description',
-    'AccountNumber',
-  ];
+    protected $attributes = [
+        'Url',
+        'Code',
+        'Description',
+        'AccountNumber',
+    ];
 
+    protected $writeable = [
+        // 'Url',
+        'Code',
+        'Description',
+        'AccountNumber',
+    ];
 
-  protected $writeable = [
-    // 'Url',
-    'Code',
-    'Description',
-    'AccountNumber',
-  ];
+    protected $required_create = [
+    ];
 
+    protected $required_update = [
+    ];
 
-  protected $required_create = [
-  ];
+    /**
+     * The possible values for filtering.
+     *
+     * @var array
+     */
+    protected $available_filters = [
+    ];
 
-
-  protected $required_update = [
-  ];
-
-
-  /**
-   * The possible values for filtering.
-   *
-   * @var array
-   */
-  protected $available_filters = [
-  ];
-
-
-  /**
-   * Override the REST path
-   */
-  protected $basePath = 'modesofpayments';
+    /**
+     * Override the REST path.
+     */
+    protected $basePath = 'modesofpayments';
 }

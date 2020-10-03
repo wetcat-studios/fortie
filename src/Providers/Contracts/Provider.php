@@ -1,4 +1,6 @@
-<?php namespace Wetcat\Fortie\Providers\Contracts;
+<?php
+
+namespace Wetcat\Fortie\Providers\Contracts;
 
 /*
 
@@ -26,211 +28,210 @@ use Wetcat\Fortie\Traits\FetchTrait;
 use Wetcat\Fortie\Traits\FindTrait;
 use Wetcat\Fortie\Traits\UpdateTrait;
 
-class Provider extends ProviderBase {
+class Provider extends ProviderBase
+{
+    use CountTrait,
+        CreateTrait,
+        FetchTrait,
+        FindTrait,
+        UpdateTrait;
 
-  use CountTrait,
-      CreateTrait,
-      FetchTrait,
-      FindTrait,
-      UpdateTrait;
+    protected $wrapper = 'Contract';
 
-  protected $wrapper = 'Contract';
-  protected $wrapperGroup = 'Contracts';
+    protected $wrapperGroup = 'Contracts';
 
-  protected $attributes = [
-    'Url',
-    'UrlTaxReductionList',
-    'Active',
-    'AdministrationFee',
-    'Comments',
-    'Continuous',
-    'ContractDate',
-    'ContractLength',
-    'ContributionPercent',
-    'ContributionValue',
-    'CostCenter',
-    'Currency',
-    'CustomerName',
-    'CustomerNumber',
-    'DocumentNumber',
-    'EmailInformation',
-    'ExternalInvoiceReference1',
-    'ExternalInvoiceReference2',
-    'Freight',
-    'Gross',
-    'HouseWork',
-    'InvoiceDiscount',
-    'InvoiceInterval',
-    'InvoiceRows',
-    'InvoicesRemaining',
-    'Language',
-    'LastInvoiceDate',
-    'Net',
-    'OurReference',
-    'PeriodEnd',
-    'PeriodStart',
-    'PriceList',
-    'Project',
-    'Remarks',
-    'TaxReduction',
-    'TemplateName',
-    'TemplateNumber',
-    'TermsOfDelivery',
-    'TermsOfPayment',
-    'Total',
-    'TotalToPay',
-    'TotalVAT',
-    'VATIncluded',
-    'WayOfDelivery',
-    'YourOrderNumber',
-    // Email information
-    'EmailAddressTo',
-    'EmailAddressCC',
-    'EmailAddressBCC',
-    'EmailSubject',
-    'EmailBody',
-    // Invoice row
-    'AccountNumber',
-    'ArticleNumber',
-    'ContributionPercent',
-    'ContributionValue',
-    'CostCenter',
-    'DeliveredQuantity',
-    'Description',
-    'Discount',
-    'DiscountType',
-    'HouseWork',
-    'Price',
-    'Project',
-    'Total',
-    'Unit',
-    'VAT',
-  ];
+    protected $attributes = [
+        'Url',
+        'UrlTaxReductionList',
+        'Active',
+        'AdministrationFee',
+        'Comments',
+        'Continuous',
+        'ContractDate',
+        'ContractLength',
+        'ContributionPercent',
+        'ContributionValue',
+        'CostCenter',
+        'Currency',
+        'CustomerName',
+        'CustomerNumber',
+        'DocumentNumber',
+        'EmailInformation',
+        'ExternalInvoiceReference1',
+        'ExternalInvoiceReference2',
+        'Freight',
+        'Gross',
+        'HouseWork',
+        'InvoiceDiscount',
+        'InvoiceInterval',
+        'InvoiceRows',
+        'InvoicesRemaining',
+        'Language',
+        'LastInvoiceDate',
+        'Net',
+        'OurReference',
+        'PeriodEnd',
+        'PeriodStart',
+        'PriceList',
+        'Project',
+        'Remarks',
+        'TaxReduction',
+        'TemplateName',
+        'TemplateNumber',
+        'TermsOfDelivery',
+        'TermsOfPayment',
+        'Total',
+        'TotalToPay',
+        'TotalVAT',
+        'VATIncluded',
+        'WayOfDelivery',
+        'YourOrderNumber',
+        // Email information
+        'EmailAddressTo',
+        'EmailAddressCC',
+        'EmailAddressBCC',
+        'EmailSubject',
+        'EmailBody',
+        // Invoice row
+        'AccountNumber',
+        'ArticleNumber',
+        'ContributionPercent',
+        'ContributionValue',
+        'CostCenter',
+        'DeliveredQuantity',
+        'Description',
+        'Discount',
+        'DiscountType',
+        'HouseWork',
+        'Price',
+        'Project',
+        'Total',
+        'Unit',
+        'VAT',
+    ];
 
+    protected $writeable = [
+        'Active',
+        'AdministrationFee',
+        'Comments',
+        'Continuous',
+        'ContractDate',
+        'ContractLength',
+        'CostCenter',
+        'Currency',
+        'CustomerName',
+        'CustomerNumber',
+        'DocumentNumber',
+        'EmailInformation',
+        'ExternalInvoiceReference1',
+        'ExternalInvoiceReference2',
+        'Freight',
+        'InvoiceDiscount',
+        'InvoiceInterval',
+        'InvoiceRows',
+        'Language',
+        'OurReference',
+        'PeriodEnd',
+        'PeriodStart',
+        'PriceList',
+        'Project',
+        'Remarks',
+        'TemplateNumber',
+        'TermsOfDelivery',
+        'TermsOfPayment',
+        'VATIncluded',
+        'WayOfDelivery',
+        'YourOrderNumber',
+        // Email information
+        'EmailAddressTo',
+        'EmailAddressCC',
+        'EmailAddressBCC',
+        'EmailSubject',
+        'EmailBody',
+        // Invoice row
+        'CostCenter',
+        'DeliveredQuantity',
+        'Description',
+        'Discount',
+        'DiscountType',
+        'HouseWork',
+        'Price',
+        'Project',
+        'Unit',
+        'VAT',
+    ];
 
-  protected $writeable = [
-    'Active',
-    'AdministrationFee',
-    'Comments',
-    'Continuous',
-    'ContractDate',
-    'ContractLength',
-    'CostCenter',
-    'Currency',
-    'CustomerName',
-    'CustomerNumber',
-    'DocumentNumber',
-    'EmailInformation',
-    'ExternalInvoiceReference1',
-    'ExternalInvoiceReference2',
-    'Freight',
-    'InvoiceDiscount',
-    'InvoiceInterval',
-    'InvoiceRows',
-    'Language',
-    'OurReference',
-    'PeriodEnd',
-    'PeriodStart',
-    'PriceList',
-    'Project',
-    'Remarks',
-    'TemplateNumber',
-    'TermsOfDelivery',
-    'TermsOfPayment',
-    'VATIncluded',
-    'WayOfDelivery',
-    'YourOrderNumber',
-    // Email information
-    'EmailAddressTo',
-    'EmailAddressCC',
-    'EmailAddressBCC',
-    'EmailSubject',
-    'EmailBody',
-    // Invoice row
-    'CostCenter',
-    'DeliveredQuantity',
-    'Description',
-    'Discount',
-    'DiscountType',
-    'HouseWork',
-    'Price',
-    'Project',
-    'Unit',
-    'VAT',
-  ];
+    protected $required_create = [
+        'ContractLength',
+        'CustomerNumber',
+        'InvoiceInterval',
+        'InvoiceRows',
+        'PeriodEnd',
+        'PeriodStart',
+        // 'Total',
+    ];
 
+    protected $required_update = [
+        'InvoiceRows',
+    ];
 
-  protected $required_create = [
-    'ContractLength',
-    'CustomerNumber',
-    'InvoiceInterval',
-    'InvoiceRows',
-    'PeriodEnd',
-    'PeriodStart',
-    // 'Total',
-  ];
+    /**
+     * The possible values for filtering.
+     *
+     * @var array
+     */
+    protected $available_filters = [
+        'active',
+        'inactive',
+        'finished',
+    ];
 
+    /**
+     * Override the REST path.
+     */
+    protected $basePath = 'contracts';
 
-  protected $required_update = [
-    'InvoiceRows'
-  ];
+    /**
+     * Set a contract as finished.
+     *
+     * @param mixed $id
+     */
+    public function finish($id)
+    {
+        $req = new FortieRequest();
+        $req->method('PUT');
+        $req->path($this->basePath)->path($id)->path('finish');
 
+        return $this->send($req->build());
+    }
 
-  /**
-   * The possible values for filtering.
-   *
-   * @var array
-   */
-  protected $available_filters = [
-    'active',
-    'inactive',
-    'finished'
-  ];
+    /**
+     * Create invoice from contract.
+     *
+     * @param mixed $id
+     */
+    public function create_invoice($id)
+    {
+        $req = new FortieRequest();
+        $req->method('PUT');
+        $req->path($this->basePath)->path($id);
+        $req->path('createinvoice');
 
+        return $this->send($req->build());
+    }
 
-  /**
-   * Override the REST path
-   */
-  protected $basePath = 'contracts';
+    /**
+     * Increases the invoice count without creating an invoice.
+     *
+     * @param mixed $id
+     */
+    public function increase_invoice_count($id)
+    {
+        $req = new FortieRequest();
+        $req->method('PUT');
+        $req->path($this->basePath)->path($id);
+        $req->path('increaseinvoicecount');
 
-
-  /**
-   * Set a contract as finished.
-   */
-  public function finish ($id)
-  {
-    $req = new FortieRequest();
-    $req->method('PUT');
-    $req->path($this->basePath)->path($id)->path('finish');
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Create invoice from contract.
-   */
-  public function create_invoice ($id)
-  {
-    $req = new FortieRequest();
-    $req->method('PUT');
-    $req->path($this->basePath)->path($id);
-    $req->path('createinvoice');
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Increases the invoice count without creating an invoice.
-   */
-  public function increase_invoice_count ($id)
-  {
-    $req = new FortieRequest();
-    $req->method('PUT');
-    $req->path($this->basePath)->path($id);
-    $req->path('increaseinvoicecount');
-
-    return $this->send($req->build());
-  }
+        return $this->send($req->build());
+    }
 }

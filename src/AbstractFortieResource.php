@@ -2,19 +2,17 @@
 
 namespace Wetcat\Fortie;
 
-use Wetcat\Fortie\AbstractFortieResourceMeta;
-
 abstract class AbstractFortieResource
 {
     protected $wrapper;
 
-    public function __construct(object $fortnoxResponse = null)
+    public function __construct(?object $fortnoxResponse = null)
     {
-        if (!empty($fortnoxResponse->MetaInformation)) {
+        if (! empty($fortnoxResponse->MetaInformation)) {
             $this->setMetaInformation($fortnoxResponse->MetaInformation);
         }
 
-        if (!empty($fortnoxResponse->{$this->wrapper})) {
+        if (! empty($fortnoxResponse->{$this->wrapper})) {
             $this->setItems($fortnoxResponse->{$this->wrapper});
         }
     }
@@ -25,7 +23,7 @@ abstract class AbstractFortieResource
             $MetaInformation->{'@TotalResources'},
             $MetaInformation->{'@TotalPages'},
             $MetaInformation->{'@CurrentPage'}
-          );
+        );
     }
 
     public function setItems(array $items)

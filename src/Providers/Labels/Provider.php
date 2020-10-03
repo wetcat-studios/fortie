@@ -1,4 +1,6 @@
-<?php namespace Wetcat\Fortie\Providers\Labels;
+<?php
+
+namespace Wetcat\Fortie\Providers\Labels;
 
 /*
 
@@ -18,7 +20,6 @@
 
 */
 
-use Wetcat\Fortie\FortieRequest;
 use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\Traits\CountTrait;
 use Wetcat\Fortie\Traits\CreateTrait;
@@ -26,48 +27,44 @@ use Wetcat\Fortie\Traits\DeleteTrait;
 use Wetcat\Fortie\Traits\FetchTrait;
 use Wetcat\Fortie\Traits\UpdateTrait;
 
-class Provider extends ProviderBase {
+class Provider extends ProviderBase
+{
+    use CountTrait,
+        CreateTrait,
+        DeleteTrait,
+        FetchTrait,
+        UpdateTrait;
 
-  use CountTrait,
-      CreateTrait,
-      DeleteTrait,
-      FetchTrait,
-      UpdateTrait;
+    protected $wrapper = 'Label';
 
-  protected $wrapper = 'Label';
-  protected $wrapperGroup = 'Labels';
+    protected $wrapperGroup = 'Labels';
 
-  protected $attributes = [
-    'Id',
-    'Description',
-  ];
+    protected $attributes = [
+        'Id',
+        'Description',
+    ];
 
+    protected $writeable = [
+        // 'Id',
+        'Description',
+    ];
 
-  protected $writeable = [
-    // 'Id',
-    'Description',
-  ];
+    protected $required_create = [
+    ];
 
+    protected $required_update = [
+    ];
 
-  protected $required_create = [
-  ];
+    /**
+     * The possible values for filtering.
+     *
+     * @var array
+     */
+    protected $available_filters = [
+    ];
 
-
-  protected $required_update = [
-  ];
-
-
-  /**
-   * The possible values for filtering.
-   *
-   * @var array
-   */
-  protected $available_filters = [
-  ];
-
-
-  /**
-   * Override the REST path
-   */
-  protected $basePath = 'labels';
+    /**
+     * Override the REST path.
+     */
+    protected $basePath = 'labels';
 }
