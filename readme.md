@@ -247,10 +247,52 @@ This package is built with the following dependencies.
 
 If you've got troubles with cURL errors (specifically `cURL error 56`) you can check (this)[http://stackoverflow.com/a/26538127/388320] answer at Stackoverflow.
 
+## Contributing
+
+Contributing to Fortie should be easy, and straight forward. Follow these instructions to get started.
+
+### Pre-requisites
+
+1. Make your own fork of the project
+2. Clone your forked repository.
+```
+git clone git@github.com:<your-github-user>/fortie.git
+```
+3. Add an `upstream` remote; you will use this to fetch the latest changes from the forite repo.
+```
+git remote add upstream https://github.com/wetcat-studios/fortie.git
+```
+
+### Request to fix an issue
+
+1. Make sure there is a ticket/issue reported in Github. If there is no issue for your reuqest, provide one.
+2. Checkout the latest release branch. For this to work you shouldn't commit changes to your local release branch.
+```
+git fetch upstream
+git checkout release/X.X
+git rebase upstream/release/X.X
+```
+3. Make a new local branch to work on an issue. Make it descriptive and try to include the issue number for clarity.
+```
+git checkout -b my-local-branch-name-123
+```
+4. Commit your changes, and push to your fork.
+
+### Release target
+
+If your fix is target for release branch, make a pull-request to the `release/X.X` branch.
+
+### Hotfix target
+
+If your target is for a hotfix, make a pull-request to a hotfix branch.
+
+## Release procedure
+
+TODO: [Add section in README about release procedure](https://github.com/wetcat-studios/fortie/issues/72)
 
 ## License
 
-Copyright 2015 Andreas Göransson
+Copyright The Fortie authors
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
