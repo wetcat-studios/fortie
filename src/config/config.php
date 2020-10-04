@@ -36,7 +36,7 @@ return [
         'accepts' => 'application/json',
 
         // The URL to the Fortnox API
-        'endpoint' => 'url-to-fortnox-api',
+        'endpoint' => 'https://api.fortnox.se/3/',
 
         // Rate limit (number of requests per second)
         'rate_limit' => 4,
