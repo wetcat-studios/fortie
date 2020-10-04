@@ -242,9 +242,6 @@ class FortieRequest
      */
     public function build()
     {
-        // Start building the URL
-        $this->URL = 'https://api.fortnox.se/3/';
-
         // Add the extra paths, if there are any
         if (! is_null($this->paths)) {
             // If array, add all paths
