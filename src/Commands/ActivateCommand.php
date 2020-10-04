@@ -81,6 +81,7 @@ class ActivateCommand extends Command
             ]);
             $res = $client->request('GET');
             $this->info($res->getBody()->getContents());
+        }
         catch (ClientException $e) {
             $response = $e->getResponse();
             $responseBodyAsString = $response->getBody()->getContents();
