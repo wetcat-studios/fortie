@@ -87,6 +87,7 @@ class Provider extends ProviderBase {
     'RoundOff',
     'Sent',
     'TaxReduction',
+    'TaxReductionType',
     'TermsOfDelivery',
     'TermsOfPayment',
     'Total',
@@ -119,6 +120,7 @@ class Provider extends ProviderBase {
     'Price',
     'Project',
     'Total',
+    'TaxReductionType',
     'Unit',
     'VAT',
   ];
