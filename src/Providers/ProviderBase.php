@@ -245,8 +245,18 @@ abstract class ProviderBase
         case 'POST':
           // If there's a file path available then we'll proceed with uploading that file
           if (!is_null($request->getFile())) {
-            $body = fopen($request->getFile(), 'r');
-            $response = $this->client->post($request->getUrl(), ['body' => $body]);
+            $response = $this->client->post(
+              $request->getUrl(),
+              [
+                'multipart' => [
+                  [
+                    'name' => $request->getFile(),
+                    'contents' => file_get_contents($request->getFile()),
+                    'filename' => $request->getFile(),
+                  ],
+                ],
+              ]
+            );
           }
 
           // otherwise assume it's normal POST
