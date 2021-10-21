@@ -132,4 +132,22 @@ class Provider extends ProviderBase {
     return $this->send($req->build());
   }
 
+
+  /**
+   * Removes an absence transaction.
+   *
+   * @param string $employeeId
+   * @param \DateTimeInterface $date
+   * @param string $causeCode
+   *
+   * @return array
+   */
+  public function delete ($employeeId, \DateTimeInterface $date, $causeCode)
+  {
+    $req = new FortieRequest();
+    $req->method('DELETE');
+    $req->path($this->basePath)->path($employeeId)->path($date->format('Y-m-d'))->path($causeCode);
+
+    return $this->send($req->build());
+  }
 }
