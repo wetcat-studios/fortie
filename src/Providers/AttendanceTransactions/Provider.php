@@ -135,18 +135,20 @@ class Provider extends ProviderBase {
 
 
   /**
-   * Deletes the article permanently.
+   * Removes an attendance transaction.
    *
-   * You need to supply the unique article number that was returned when the 
-   * article was created or retrieved from the list of articles.
+   * @param string $employeeId
+   * @param \DateTimeInterface $date
+   * @param string $causeCode
+   *
+   * @return array
    */
-  public function delete ($fileId)
+  public function delete ($employeeId, \DateTimeInterface $date, $causeCode)
   {
     $req = new FortieRequest();
     $req->method('DELETE');
-    $req->path($this->basePath)->path($fileId);
+    $req->path($this->basePath)->path($employeeId)->path($date->format('Y-m-d'))->path($causeCode);
 
     return $this->send($req->build());
   }
-
 }
