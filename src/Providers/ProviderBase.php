@@ -192,7 +192,7 @@ abstract class ProviderBase
    * This will perform filtering on the supplied data, used when uploading data
    * to Fortnox.
    */
-  protected function handleData ($requiredArr = null, $bodyWrapper, $data)
+  protected function handleData ($requiredArr, $bodyWrapper, $data)
   {
     // Filter invalid data
     $filtered = array_intersect_key($data, array_flip($this->attributes));;
