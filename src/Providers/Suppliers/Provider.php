@@ -22,7 +22,6 @@ use Wetcat\Fortie\FortieRequest;
 use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\Traits\CountTrait;
 use Wetcat\Fortie\Traits\CreateTrait;
-use Wetcat\Fortie\Traits\DeleteTrait;
 use Wetcat\Fortie\Traits\FetchTrait;
 use Wetcat\Fortie\Traits\FindTrait;
 use Wetcat\Fortie\Traits\UpdateTrait;
@@ -31,7 +30,6 @@ class Provider extends ProviderBase {
 
   use CountTrait,
       CreateTrait,
-      DeleteTrait,
       FetchTrait,
       FindTrait,
       UpdateTrait;
