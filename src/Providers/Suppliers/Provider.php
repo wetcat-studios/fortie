@@ -18,10 +18,27 @@
 
 */
 
-use Wetcat\Fortie\Providers\ProviderBase;
 use Wetcat\Fortie\FortieRequest;
+use Wetcat\Fortie\Providers\ProviderBase;
+use Wetcat\Fortie\Traits\CountTrait;
+use Wetcat\Fortie\Traits\CreateTrait;
+use Wetcat\Fortie\Traits\DeleteTrait;
+use Wetcat\Fortie\Traits\FetchTrait;
+use Wetcat\Fortie\Traits\FindTrait;
+use Wetcat\Fortie\Traits\UpdateTrait;
 
 class Provider extends ProviderBase {
+
+  use CountTrait,
+      CreateTrait,
+      DeleteTrait,
+      FetchTrait,
+      FindTrait,
+      UpdateTrait;
+
+
+  protected $wrapper = 'Supplier';
+  protected $wrapperGroup = 'Suppliers';
 
   protected $attributes = [
     'Url',
@@ -122,97 +139,18 @@ class Provider extends ProviderBase {
 
   protected $required_update = [
   ];
-
+  /**
+   * The possible values for filtering the suppliers.
+   *
+   * @var array
+   */
+  protected $available_filters = [
+    'active',
+    'inactive'
+  ];
 
   /**
    * Override the REST path
    */
   protected $basePath = 'suppliers';
-
-
-  /**
-   * Retrieves a list of suppliers.
-   *
-   * @return array
-   */
-  public function all ($page = null)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath);
-
-    if (!is_null($page)) {  
-      $req->param('page', $page);
-    }
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Retrieves a single supplier.
-   *
-   * @param $supplierNumber
-   * @return array
-   */
-  public function find ($supplierNumber)
-  {
-    $req = new FortieRequest();
-    $req->method('GET');
-    $req->path($this->basePath)->path($supplierNumber);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Creates a supplier.
-   *
-   * @param array   $data
-   * @return array
-   */
-  public function create (array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('POST');
-    $req->path($this->basePath);
-    $req->wrapper('Supplier');
-    $req->setRequired($this->required_create);
-    $req->data($data);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Updates a supplier.
-   *
-   * @param array   $data
-   * @return array
-   */
-  public function update ($id, array $data)
-  {
-    $req = new FortieRequest();
-    $req->method('PUT');
-    $req->path($this->basePath)->path($id);
-    $req->wrapper('Supplier');
-    $req->setRequired($this->required_update);
-    $req->data($data);
-
-    return $this->send($req->build());
-  }
-
-
-  /**
-   * Removes a supplier.
-   */
-  public function delete ($supplierNumber)
-  {
-    $req = new FortieRequest();
-    $req->method('DELETE');
-    $req->path($this->basePath)->path($supplierNumber);
-
-    return $this->send($req->build());
-  }
-
 }
