@@ -139,15 +139,7 @@ class Provider extends ProviderBase {
 
   protected $required_update = [
   ];
-  /**
-   * The possible values for filtering the suppliers.
-   *
-   * @var array
-   */
-  protected $available_filters = [
-    'active',
-    'inactive'
-  ];
+
 
   /**
    * Override the REST path
