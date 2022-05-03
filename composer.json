@@ -10,7 +10,8 @@
     }
   ],
   "require": {
-    "guzzlehttp/guzzle": "^6.2.3",
+    "php": "^7.2|^8.0",
+    "guzzlehttp/guzzle": "^7.0",
     "sabre/xml": "^1.2"
   },
   "require-dev": {

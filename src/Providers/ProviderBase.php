@@ -192,7 +192,7 @@ abstract class ProviderBase
    * This will perform filtering on the supplied data, used when uploading data
    * to Fortnox.
    */
-  protected function handleData ($requiredArr = null, $bodyWrapper, $data, $sanitize = true)
+  protected function handleData ($requiredArr, $bodyWrapper, $data)
   {
     // Filter invalid data
     $filtered = array_intersect_key($data, array_flip($this->attributes));;
@@ -203,14 +203,6 @@ abstract class ProviderBase
     // Make sure all required data are set
     if (! (count(array_intersect_key(array_flip($requiredArr), $writeable)) === count($requiredArr))) {
       throw new MissingRequiredAttributeException($requiredArr);
-    }
-
-    // Sanitize input 
-    // See: http://guzzle3.readthedocs.org/http-client/request.html#post-requests
-    if ($sanitize) {
-      foreach ($writeable as $key => $value) {
-        $value = str_replace('@', '', $value);
-      }
     }
 
     // Wrap the body as required by Fortnox
@@ -245,8 +237,18 @@ abstract class ProviderBase
         case 'POST':
           // If there's a file path available then we'll proceed with uploading that file
           if (!is_null($request->getFile())) {
-            $body = fopen($request->getFile(), 'r');
-            $response = $this->client->post($request->getUrl(), ['body' => $body]);
+            $response = $this->client->post(
+              $request->getUrl(),
+              [
+                'multipart' => [
+                  [
+                    'name' => $request->getFile(),
+                    'contents' => file_get_contents($request->getFile()),
+                    'filename' => $request->getFile(),
+                  ],
+                ],
+              ]
+            );
           }
 
           // otherwise assume it's normal POST
