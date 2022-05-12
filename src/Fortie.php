@@ -98,7 +98,9 @@ class Fortie
         'Access-Token'  => $access_token,
         'Client-Secret' => $client_secret,
         'Content-Type'  => $content_type,
-        'Accept'        => $accepts
+        'Accept'        => $accepts,
+        'Authorization' => "Bearer " . $access_token,
+
       ],
       'timeout'   => 3.0,
     ], $config));
