@@ -1,25 +1,34 @@
 {
-  "name": "wetcat/fortie",
-  "description": "Enable simple Fortnox integration",
-  "license": "Apache-2.0",
-  "keywords": ["fortie", "Fortnox", "Laravel", "Financial", "Economy", "Taxes", "Business", "Business system"],
-  "authors": [
-    {
-      "name": "Andreas Göransson",
-      "email": "andreasgoransson0@gmail.com"
-    }
-  ],
-  "require": {
-    "php": "^7.2|^8.0",
-    "guzzlehttp/guzzle": "^7.0",
-    "sabre/xml": "^1.2"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "4.0.*"
-  },
-  "autoload": {
-    "psr-4": {
-      "Wetcat\\Fortie\\": "src"
-    }
-  }
+	"name": "christiandarnell/fortie",
+	"description": "Enable simple Fortnox integration",
+	"license": "Apache-2.0",
+	"keywords": [
+		"fortie",
+		"Fortnox",
+		"Laravel",
+		"Financial",
+		"Economy",
+		"Taxes",
+		"Business",
+		"Business system"
+	],
+	"authors": [
+		{
+			"name": "Andreas Göransson",
+			"email": "andreasgoransson0@gmail.com"
+		}
+	],
+	"require": {
+		"php": "^7.2|^8.0",
+		"guzzlehttp/guzzle": "^7.0",
+		"sabre/xml": "^1.2"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "4.0.*"
+	},
+	"autoload": {
+		"psr-4": {
+			"Wetcat\\Fortie\\": "src"
+		}
+	}
 }
