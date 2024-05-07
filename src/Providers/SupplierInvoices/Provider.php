@@ -92,7 +92,7 @@ class Provider extends ProviderBase {
     'SupplierInvoiceRows',
     'SupplierNumber',
     // 'SupplierName',
-    // 'Total',
+    'Total',
     'VAT',
     'VATType',
     'YourReference',
